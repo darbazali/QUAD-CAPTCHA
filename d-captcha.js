@@ -529,6 +529,11 @@ function UIObject() {
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
+        if (window.innerWidth < 600) {
+            clearInterval(moveVInterval);
+        } else {
+            clearInterval(moveHInterval);
+        }
     }
 
 
@@ -646,6 +651,7 @@ const restartBtn    = userInterface.restartButton();
 const closeBtn      = userInterface.closeButton();
 
 const dcSubmit = document.getElementById('dcSubmit');
+dcSubmit.style.backgroundColor = '#999';
 
 // event ocuring with clicking on circles (game).
 function addEvent(elements) {
@@ -686,6 +692,8 @@ function addEvent(elements) {
                         checkBox.style.cursor = 'default';
                         
                         //enabel submint button
+                        dcSubmit.disabled = false;
+                        dcSubmit.style.backgroundColor = '#148b34';
                     }, 200);
 
                 }
@@ -755,14 +763,15 @@ function game() {
 
 anchor.onclick  = game
 
-restartBtn.onclick  = function() {
-    
+
+restartBtn.onclick = function () {
+
     if (window.innerWidth < 600) {
         clearInterval(moveVInterval);
     } else {
         clearInterval(moveHInterval);
     }
-    
+
     clearNode(container);
     game();
 }
