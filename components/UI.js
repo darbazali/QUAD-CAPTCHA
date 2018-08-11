@@ -238,7 +238,12 @@ function UIObject() {
 
         }
     }
-
+    
+    
+    // close button event
+    closeButton.onclick = function() {
+        document.body.removeChild(overlay);
+    }
 
 
     // return to objects
@@ -274,9 +279,7 @@ const close         = userInterface.closeButton();
 
 append(document.body, overlay);
 
-close.onclick = function(e) {
-    document.body.removeChild(overlay);
-}
+
 
 
 

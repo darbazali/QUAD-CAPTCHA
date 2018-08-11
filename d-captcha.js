@@ -83,8 +83,8 @@ function createRandomArray(srcArray, amount) {
 
 /* clearing a node from all child elements */
 function clearNode(nodeName) {
-    while (nodeName.hasChildNodes) {
-        nodeName.removeChild(nodeName.lastChild);
+    while (nodeName.firstChild) {
+        nodeName.removeChild(nodeName.firstChild);
     }
 }
 
@@ -143,12 +143,6 @@ function createCircles(object) {
 }
 
 
-// check the device type: function
-function checkDevice() {
-
-}
-
-
 /* removing px Suffix from a string */
 function removePX(str) {
     var number  = 0;
@@ -162,7 +156,7 @@ function moveH(element) {
 
     var pos = 0;
     var speed = 3;
-    var id = setInterval(frame, 100);
+    moveHInterval = setInterval(frame, 100);
 
     function frame() {
 
@@ -187,7 +181,7 @@ function moveV(element) {
     var pos = 0;
     var speed = 3;
 
-    var id = setInterval(frame, 100);
+    moveVInterval = setInterval(frame, 100);
 
     function frame() {
 
@@ -299,92 +293,246 @@ function Anchor() {
 }
 
 
-/* 2.2 - Overlay */
-function Overlay() {
-    const overlay   = document.createElement('div');
-    const canvas    = document.createElement('div');
-    const container = document.createElement('div');
+/* 2.2 - UI */
+function UIObject() {
 
-    append(overlay, canvas);
+    // colors
+    const mattBlack     = '#393653';
+    const darckGray     = '#49536C';
+    const white         = '#FFFFFF';
+    const violet        = '#8D57F5';
+    const redPink       = '#DB51BE';
+    const transparent   = 'rgba(255, 255, 255, 0)';
+
+    /* Private funcitons */
+    // common styles for buttons
+    function buttonCommonStyle(element) {
+
+        const style = element.style;
+
+        style.width             = '60px';
+        style.height            = '80px';
+        style.margin            = '0';
+        style.padding           = '0';
+        style.fontSize          = '40px';
+        style.fontWeight        = '800';
+        style.backgroundColor   = transparent;
+        style.border            = 'none';
+        style.cursor            = 'pointer';
+        style.color             = redPink;
+        style.transition        = 'all .2s ease-in-out';
+
+        const userAgent = window.navigator.userAgent;
+        if (userAgent.match('Firefox')) {
+            style.fontSize  = '58px';
+            style.color     = white;
+            style.fontFamily = 'Arial';
+        }
+
+
+        /* remove outline whene element is fucuesd */
+        element.onfocus = function () {
+            this.style.outline = 'none';
+        }
+
+        /* scale buttons with hover event */
+        element.onmouseover = function() {
+            this.style.transform = 'scale(1.2)';
+        }
+
+        element.onmouseout = function() {
+            this.style.transform = 'scale(1)';
+
+        }
+
+    }
+
+
+    // style an element with some properties
+    function commonStyle(element) {
+        const style = element.style;
+
+        style.padding       = '0';
+        style.margin        = '0';
+        style.boxSizing     = 'border-box';
+        style.borderRadius  = '5px';
+    }
+
+
+    // creating elements
+    const overlay         = document.createElement('div');
+    const wrapper         = document.createElement('div');
+    const canvas          = document.createElement('div');
+    const container       = document.createElement('div');
+
+    // header section
+    const header          = document.createElement('div');
+    const title           = document.createElement('div');
+    const closeButton     = document.createElement('input');
+    const restartButton   = document.createElement('input');
+
+
+    // text for the title
+    title.textContent = 'Please remember the numbers ' +
+    'in the Ascending Order.';
+
+    // setting attributes
+    closeButton.setAttribute('type', 'button');
+    closeButton.setAttribute('value', '\u2715');
+
+    restartButton.setAttribute('type', 'button');
+    restartButton.setAttribute('value', '\u27F3');
+
+
+    // Assembling
+    append(overlay, wrapper);
+    append(wrapper, header);
+    append(wrapper, canvas);
+
+    append(header, title);
+    append(header, restartButton);
+    append(header, closeButton);
+
     append(canvas, container);
 
-    // assigning element styles to variables
-    const style         = overlay.style;
+
+
+    // assigning element styles
+    const overStyle     = overlay.style;
+    const wrapStyle     = wrapper.style;
     const canvStyle     = canvas.style;
-    const con_style     = container.style;
+    const contStyle     = container.style;
+
+    const headStyle     = header.style;
+    const titlStyle     = title.style;
+    const closeStyle    = closeButton.style;
+    const restStyle     = restartButton.style;
 
 
-    style.position          = 'absolute';
-    style.width             = window.innerWidth + 'px';
-    style.height            = window.innerHeight + 'px';
-    style.backgroundColor   = 'rgba(0, 0, 0, 0.65)';
-//    style.backgroundColor   = 'transparent';
-    style.color             = '#fff';
-    style.top               = window.pageYOffset + 'px';
-    style.left              = window.pageXOffset + 'px';
-    style.textAlign         = 'center';
-    style.padding           = '0';
-    style.margin            = '0';
-    style.display           = 'flex';
-    style.justifyContent    = 'center';
-    style.alignItems        = 'center';
+
+    /* STYLING COMPONETNS */
+
+    // overlay Style
+    overStyle.position          = 'absolute';
+    overStyle.width             = window.innerWidth  + 'px';
+    overStyle.height            = window.innerHeight + 'px';
+    overStyle.top               = window.pageYOffset + 'px';
+    overStyle.left              = window.pageXOffset + 'px';
+    overStyle.backgroundColor   = transparent;
+    overStyle.color             = white;
+    overStyle.display           = 'flex';
+    overStyle.justifyContent    = 'center';
+    overStyle.alignItems        = 'center';
+    overStyle.fontFamily        = 'Arial';
+    commonStyle(overlay);
+
+
+    // wrapper style
+    wrapStyle.width             = '600px';
+    wrapStyle.height            = '400px';
+    wrapStyle.backgroundColor   = mattBlack;
+    wrapStyle.boxShadow         = '0 0 30px #000';
+    commonStyle(wrapper);
+
+
+
+    /* HEADER SECTION */
+    // header style
+    headStyle.width             = '600px';
+    headStyle.height            = '80px';
+    headStyle.display           = 'flex';
+    headStyle.justifyContent    = 'flex-start';
+
+
+    // title style
+    titlStyle.width             = '80%';
+    titlStyle.maxHeight         = '80px';
+    titlStyle.padding           = '7px';
+    titlStyle.fontSize          = '28px';
+    titlStyle.borderRight       = '1px solid ' + white;
+
+
+    // restart button style
+    buttonCommonStyle(restartButton);
+
+
+    // close button style
+    buttonCommonStyle(closeButton);
+
 
 
     // canvas style
     canvStyle.width             = '600px';
-    canvStyle.height            = '330';
+    canvStyle.height            = '320';
     canvStyle.minWidth          = '320px';
     canvStyle.minHeight         = '320px';
-//    canvStyle.border            = '2px solid #999';
-    canvStyle.borderRadius      = '30px';
     canvStyle.position          = 'relative';
-    canvStyle.boxSizing         = 'border-box';
-    canvStyle.backgroundColor   = '#999';
-    canvStyle.margin            = '0';
-    canvStyle.padding           = '0';
-    canvStyle.boxShadow         = '0 0 20px #999';
+    canvStyle.backgroundColor   = transparent;
+    canvStyle.borderBottomLeftRadius    = '5px';
+    canvStyle.borderBottomRightRadius   = '5px';
 
-    if (window.innerWidth < 600 ) {
-        canvStyle.width     = '320px';
-        canvStyle.height    = '450px';
-        con_style.top       = 'calc(450 - 320)';
-    }
 
 
     // container style
-    con_style.width             = '320px';
-    con_style.height            = '320px';
-    con_style.backgroundColor   = '#ccc';
-    con_style.padding           = '0';
-    con_style.margin            = '0 auto';
-    con_style.borderRadius      = '30px';
-    con_style.position          = 'absolute';
-    con_style.boxSizing         = 'border-box';
-    con_style.transition        = 'left 0.5s, top 0.5s';
-//    con_style.top               = '0';
-    con_style.left              = '150px';
+    contStyle.width             = '320px';
+    contStyle.height            = '320px';
+    contStyle.backgroundColor   = mattBlack;
+    contStyle.margin            = '0 auto';
+    contStyle.position          = 'absolute';
+    contStyle.transition        = 'all 0.3s';
+    contStyle.left              = '140px';
+    commonStyle(container);
+
+
+
+    /* Mobile version */
+    if (window.innerWidth < 600 ) {
+
+        wrapStyle.width     = '320px';
+        wrapStyle.height    = '500px';
+
+        canvStyle.width     = '320px';
+        canvStyle.height    = '420px';
+
+        contStyle.left      = '0';
+        contStyle.top       = '50px';
+
+        headStyle.width     = '320px';
+        headStyle.height    = '80px';
+
+        titlStyle.fontSize  = '20px';
+
+    }
 
 
 
     // Centering with scroll event
-    window.addEventListener('scroll', function() {
+    window.onscroll = function() {
         if  (overlay) {
-            style.top   = window.pageYOffset + 'px';
-            style.left  = window.pageXOffset + 'px';
+            overStyle.top   = window.pageYOffset + 'px';
+            overStyle.left  = window.pageXOffset + 'px';
         }
-    }, false);
+    }
 
 
     // Centering with resize event
-    window.addEventListener('resize', function() {
+    window.onresize = function() {
 
         if (overlay) {
-            style.width     = window.innerWidth + 'px';
-            style.height    = window.innerHeight + 'px';
+            overStyle.width     = window.innerWidth + 'px';
+            overStyle.height    = window.innerHeight + 'px';
+
         }
-    }, false);
+    }
+    
+    
+    // close button event
+    closeButton.onclick = function() {
+        document.body.removeChild(overlay);
+    }
 
 
+    // return to objects
     return {
         overlay: function() {
             return overlay;
@@ -396,8 +544,16 @@ function Overlay() {
 
         container: function() {
             return container;
+        },
+
+        closeButton: function() {
+            return closeButton;
+        },
+
+        restartButton: function() {
+            return restartButton;
         }
-    }
+    } // return
 
 }
 
@@ -469,32 +625,27 @@ SECTION 3: set up
 **************************************/
 
 
-const overLay   = new Overlay();
-const overlay   = overLay.overlay();
-const canvas    = overLay.canvas();
-const container = overLay.container();
 
 
 
-
-const width = canvas.clientWidth    - container.clientWidth;
-const heigh = canvas.clientHeight   - container.clientHeight;
-
-
-
-
+// embedding anchor
 const ancHor        = new Anchor();
 const anchor        = ancHor.anchor();
 const checkBox      = ancHor.checkBox();
-
-const target = document.getElementById('d-captcha');
-
-
+const target        = document.getElementById('d-captcha');
 
 append(target, anchor);
 
 
+// get user interface ready
+const userInterface = new UIObject();
+const overlay       = userInterface.overlay();
+const container     = userInterface.container();
+const canvs         = userInterface.canvas();
+const restartBtn    = userInterface.restartButton();
+const closeBtn      = userInterface.closeButton();
 
+const dcSubmit = document.getElementById('dcSubmit');
 
 // event ocuring with clicking on circles (game).
 function addEvent(elements) {
@@ -533,7 +684,9 @@ function addEvent(elements) {
                         checkBox.removeEventListener('click', game);
                         checkBox.style.backgroundColor = '#00db00';
                         checkBox.style.cursor = 'default';
-                    }, 300);
+                        
+                        //enabel submint button
+                    }, 200);
 
                 }
 
@@ -550,7 +703,11 @@ function addEvent(elements) {
                     this.style.opacity = '0.9';
                 }
 
-                // restart the game
+                if (window.innerWidth < 600) {
+                    clearInterval(moveVInterval);
+                } else {
+                    clearInterval(moveHInterval);
+                }
             }
 
 
@@ -563,10 +720,9 @@ function addEvent(elements) {
 }
 
 
-
 function game() {
 
-
+    clearNode(container);
     const circles = createCircles(Circle);
     randomCircls = createRandomArray(circles, 5);
 
@@ -582,9 +738,13 @@ function game() {
 
         addEvent(randomCircls);
 
-        setTimeout(function() {
-            animate(container)
-        }, 500);
+//        setTimeout(function() {
+//            animate(container)
+//        }, 500);
+        
+         myAnimate = setTimeout(function() {
+            animate(container);
+        }, 500)
 
     }, 3000);
 
@@ -593,22 +753,19 @@ function game() {
 }
 
 
+anchor.onclick  = game
 
-
-checkBox.addEventListener('click', game, false);
-checkBox.addEventListener('click', function() {
-    println(window.innerHeight);
-}, false);
-
-
-
-// Task: create a restart function
-
-// Task: creat a restart button
-
-// Task: create a close button
-
-
+restartBtn.onclick  = function() {
+    
+    if (window.innerWidth < 600) {
+        clearInterval(moveVInterval);
+    } else {
+        clearInterval(moveHInterval);
+    }
+    
+    clearNode(container);
+    game();
+}
 
 
 
