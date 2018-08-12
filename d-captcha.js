@@ -1,6 +1,7 @@
 /*
 
 Software Name   : dCAPTCHA
+Version         : 1.0
 Author          : Darbaz Ali
 Date            : july / 2018
 Location        : Kurdistan / Iraq
@@ -91,9 +92,9 @@ function clearNode(nodeName) {
 
 /* changing the style of an element */
 function changeStyle(element) {
-      element.style.fontSize = '58px';
-      element.style.cursor = 'default';
-      element.style.opacity = '0.9';
+      element.style.fontSize        = '58px';
+      element.style.cursor          = 'default';
+      element.style.opacity         = '0.9';
       element.style.backgroundColor = '#045d04';
 }
 
@@ -114,7 +115,7 @@ function createCircles(object) {
         // object
         var RandomX = Math.floor(Math.random() * 260);
         var RandomY = Math.floor(Math.random() * 260);
-        var circle = new object(i, RandomX, RandomY);
+        var circle  = new object(i, RandomX, RandomY);
 
         // looping throught all existing locations
         var overLapping = false;
@@ -222,7 +223,7 @@ function clearIntervals() {
     }
 }
 
-
+/* get the value of circles and put them inside an array */
 function getCircleValues(elements) {
     // getting random array value and put it in an array
     const numberArray = [];
@@ -236,8 +237,6 @@ function getCircleValues(elements) {
 
                             /* END OF SECTION 1 */
 /***************************************************************************/
-
-
 
 
 
@@ -628,12 +627,9 @@ function Circle(value, randomX, randomY) {
 /***************************************************************************/
 
 
-
-
 /**************************************
 SECTION 3: set up
 **************************************/
-
 
 
 // embedding anchor
@@ -684,12 +680,12 @@ function addEvent(elements) {
                         println(isHuman);
 
                         checkBox.removeEventListener('click', game);
-                        checkBox.style.backgroundColor = '#00db00';
-                        checkBox.style.cursor = 'default';
+                        checkBox.style.backgroundColor  = '#00db00';
+                        checkBox.style.cursor           = 'default';
                         
                         //enabel submint button
-                        dcSubmit.disabled = false;
-                        dcSubmit.style.backgroundColor = '#148b34';
+                        dcSubmit.disabled               = false;
+                        dcSubmit.style.backgroundColor  = '#148b34';
                         
                     }, 200);
                     
@@ -711,10 +707,10 @@ function addEvent(elements) {
 
                 clearIntervals();
                 
-                setTimeout(function() {
-                    clearIntervals()
-                    game();
-                }, 2000);
+//                setTimeout(function() {
+//                    clearIntervals()
+//                    game();
+//                }, 2000);
             }
 
 
@@ -757,8 +753,8 @@ function game() {
     }, 3000);
 }
 
-
-checkBox.addEventListener('click', game, false) // start the game
+/* START THE GAME when the checkbox is clicked */
+checkBox.addEventListener('click', game, false);
 
 // restart, whene things go wrong
 restartBtn.onclick = function () {
