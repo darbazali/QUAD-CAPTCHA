@@ -154,7 +154,7 @@ function removePX(str) {
 /* move element Horizontaly */
 function moveH(element) {
 
-    var pos = 0;
+    var pos = removePX(element.style.left);
     var speed = 3;
     moveHInterval = setInterval(frame, 100);
 
@@ -164,7 +164,7 @@ function moveH(element) {
         element.style.left = pos + 'px';
         pos = pos + speed;
 
-        if (pos > 300) {
+        if (pos > 280) {
             speed = -3;
         }
 
@@ -178,7 +178,7 @@ function moveH(element) {
 
 /* move element Vertically */
 function moveV(element) {
-    var pos = 0;
+    var pos = removePX(element.style.top);
     var speed = 3;
 
     moveVInterval = setInterval(frame, 100);
@@ -189,11 +189,11 @@ function moveV(element) {
         element.style.top = pos + 'px';
         pos = pos + speed;
 
-        if (pos > 130) {
+        if (pos > 100) {
             speed = -3;
         }
 
-        if (pos == 0) {
+        if (pos < 5) {
             speed = 3;
         }
 
@@ -213,6 +213,26 @@ function animate(element) {
 }
 
 
+/* clear moving intervals */
+function clearIntervals() {
+    if (window.innerWidth < 600) {
+        clearInterval(moveVInterval);
+    } else {
+        clearInterval(moveHInterval);
+    }
+}
+
+
+function getCircleValues(elements) {
+    // getting random array value and put it in an array
+    const numberArray = [];
+
+    elements.forEach(function (item) {
+        numberArray.push(parseInt(item.getAttribute('value')));
+    });
+
+    return numberArray.sort()
+}
 
                             /* END OF SECTION 1 */
 /***************************************************************************/
@@ -240,13 +260,13 @@ function Anchor() {
 
 
     // styles
-    style = anchor.style;
-    checkBox_style = checkbox.style;
-    title_style = title.style;
+    style           = anchor.style;
+    checkBox_style  = checkbox.style;
+    title_style     = title.style;
 
     // anchor style
-    style.width           = '220px';
-    style.height          = '40px';
+    style.width           = '300px';
+    style.height          = '80px';
     style.boxSizing       = 'border-box';
     style.backgroundColor = '#cecece';
     style.color           = '#0a4bfc';
@@ -254,7 +274,7 @@ function Anchor() {
     style.borderRadius    = '3px';
     style.display         = 'flex';
     style.fontSize        = '20px';
-    style.padding         = '8px';
+    style.padding         = '20px 10px';
     style.marginBottom	  = '10px';
 
 
@@ -267,15 +287,6 @@ function Anchor() {
     checkBox_style.marginRight     = '10px';
     checkBox_style.cursor          = 'pointer';
     checkBox_style.transition      = 'background-color 0.3s';
-
-    // hover effect for the checkbox
-//    checkbox.addEventListener('mouseover', function (e) {
-//        checkBox_style.backgroundColor = '#b7bee2';
-//    }, false);
-//
-//    checkbox.addEventListener('mouseout', function (e) {
-//        checkBox_style.backgroundColor = '#fff';
-//    }, false);
 
 
     // title stile
@@ -467,7 +478,7 @@ function UIObject() {
     canvStyle.minWidth          = '320px';
     canvStyle.minHeight         = '320px';
     canvStyle.position          = 'relative';
-    canvStyle.backgroundColor   = transparent;
+    canvStyle.backgroundColor   = '#999';
     canvStyle.borderBottomLeftRadius    = '5px';
     canvStyle.borderBottomRightRadius   = '5px';
 
@@ -476,7 +487,7 @@ function UIObject() {
     // container style
     contStyle.width             = '320px';
     contStyle.height            = '320px';
-    contStyle.backgroundColor   = mattBlack;
+    contStyle.backgroundColor   = transparent;
     contStyle.margin            = '0 auto';
     contStyle.position          = 'absolute';
     contStyle.transition        = 'all 0.3s';
@@ -529,11 +540,7 @@ function UIObject() {
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
-        if (window.innerWidth < 600) {
-            clearInterval(moveVInterval);
-        } else {
-            clearInterval(moveHInterval);
-        }
+        clearIntervals();
     }
 
 
@@ -561,7 +568,6 @@ function UIObject() {
     } // return
 
 }
-
 
 
 /* 2.3 - Circle Object */
@@ -599,19 +605,18 @@ function Circle(value, randomX, randomY) {
     style.transition        = 'box-shadow 0.3s';
 
      // hover effect for the circle
-    circle.addEventListener('mouseover', function (e) {
+    circle.onmouseover = function() {
         style.boxShadow = '0 0 10px #000';
-    }, false);
-
-    circle.addEventListener('mouseout', function (e) {
+    }
+    
+    circle.onmouseout = function() {
         style.boxShadow = 'none';
-    }, false);
-
-
+    }
+    
     // removeing border on focus
-    circle.addEventListener('focus', function(event) {
+    circle.onfocus = function() {
         style.outline = 'none';
-    }, false);
+    }
 
 
     return circle
@@ -628,8 +633,6 @@ function Circle(value, randomX, randomY) {
 /**************************************
 SECTION 3: set up
 **************************************/
-
-
 
 
 
@@ -656,16 +659,8 @@ dcSubmit.style.backgroundColor = '#999';
 // event ocuring with clicking on circles (game).
 function addEvent(elements) {
     var isHuman = false;
-
-    // getting random array value and put it in an array
-    const numberArray = [];
-
-    elements.forEach(function (item) {
-        numberArray.push(parseInt(item.getAttribute('value')));
-    });
-
-    // sorting the array of values
-    const sortedNumberArray = numberArray.sort();
+    
+    const sortedNumberArray = getCircleValues(elements);
 
 
     for (var i = 0; i < elements.length; i++) {
@@ -684,6 +679,7 @@ function addEvent(elements) {
 
                     setTimeout(function() {
                            // exit the game, done.
+                        clearIntervals();
                         document.body.removeChild(overlay);
                         println(isHuman);
 
@@ -694,7 +690,9 @@ function addEvent(elements) {
                         //enabel submint button
                         dcSubmit.disabled = false;
                         dcSubmit.style.backgroundColor = '#148b34';
+                        
                     }, 200);
+                    
 
                 }
 
@@ -704,18 +702,19 @@ function addEvent(elements) {
                     circleIndex = elements[j];
 
                     circleIndex.setAttribute('disabled', 'disabled');
-                    circleIndex.style.fontSize = '58px';
-                    circleIndex.style.cursor = 'default';
-                    circleIndex.style.opacity = '0.6';
-                    this.style.backgroundColor = '#f80101';
-                    this.style.opacity = '0.9';
+                    circleIndex.style.fontSize  = '58px';
+                    circleIndex.style.cursor    = 'default';
+                    circleIndex.style.opacity   = '0.6';
+                    this.style.backgroundColor  = '#f80101';
+                    this.style.opacity          = '0.9';
                 }
 
-                if (window.innerWidth < 600) {
-                    clearInterval(moveVInterval);
-                } else {
-                    clearInterval(moveHInterval);
-                }
+                clearIntervals();
+                
+                setTimeout(function() {
+                    clearIntervals()
+                    game();
+                }, 2000);
             }
 
 
@@ -723,58 +722,54 @@ function addEvent(elements) {
 
     }
 
-
     return isHuman;
 }
 
 
 function game() {
-
+    /* clear container before start */
     clearNode(container);
+    
+    /* create the circles */
     const circles = createCircles(Circle);
     randomCircls = createRandomArray(circles, 5);
-
-
+    
+    /* pop up the UI */
     append(document.body, overlay);
-
-
+    
+    /* deplory circles to the container. */
     multiAppend(container, randomCircls);
-
-    const hide = setTimeout(function() {
+    
+    /* start the game */
+    const hide = setTimeout(function () {
+        
+        /* hide valuse of the circles */
         hideValue(randomCircls);
-
-
+        
+        /* start the animation */
+        myAnimate = setTimeout(function () {
+            animate(container);
+        }, 500);
+        
+        /* ready the circles to be playd with */
         addEvent(randomCircls);
 
-//        setTimeout(function() {
-//            animate(container)
-//        }, 500);
-        
-         myAnimate = setTimeout(function() {
-            animate(container);
-        }, 500)
-
     }, 3000);
-
-
-
 }
 
 
-anchor.onclick  = game
+checkBox.addEventListener('click', game, false) // start the game
 
-
+// restart, whene things go wrong
 restartBtn.onclick = function () {
 
-    if (window.innerWidth < 600) {
-        clearInterval(moveVInterval);
-    } else {
-        clearInterval(moveHInterval);
-    }
+    clearIntervals();
 
     clearNode(container);
     game();
+    
 }
+
 
 
 
