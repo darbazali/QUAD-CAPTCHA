@@ -157,6 +157,9 @@ function moveH(element) {
 
     var pos = removePX(element.style.left);
     var speed = 3;
+    const rightEdge = element.parentElement.clientWidth 
+    - element.clientWidth;
+    
     moveHInterval = setInterval(frame, 100);
 
     function frame() {
@@ -165,11 +168,12 @@ function moveH(element) {
         element.style.left = pos + 'px';
         pos = pos + speed;
 
-        if (pos > 280) {
-            speed = -3;
+        if (pos > rightEdge) {
+            speed = -3
+            
         }
 
-        if (pos < 5) {
+        if (pos < 0) {
             speed = 3;
         }
 
@@ -181,6 +185,9 @@ function moveH(element) {
 function moveV(element) {
     var pos = removePX(element.style.top);
     var speed = 3;
+    
+    const buttomEdge = element.parentElement.clientHeight 
+    - element.clientHeight;
 
     moveVInterval = setInterval(frame, 100);
 
@@ -190,11 +197,11 @@ function moveV(element) {
         element.style.top = pos + 'px';
         pos = pos + speed;
 
-        if (pos > 100) {
+        if (pos > buttomEdge) {
             speed = -3;
         }
 
-        if (pos < 5) {
+        if (pos < 0) {
             speed = 3;
         }
 
@@ -234,6 +241,7 @@ function getCircleValues(elements) {
 
     return numberArray.sort()
 }
+
 
                             /* END OF SECTION 1 */
 /***************************************************************************/
@@ -486,7 +494,7 @@ function UIObject() {
     // container style
     contStyle.width             = '320px';
     contStyle.height            = '320px';
-    contStyle.backgroundColor   = transparent;
+    contStyle.backgroundColor   = '#ccc';
     contStyle.margin            = '0 auto';
     contStyle.position          = 'absolute';
     contStyle.transition        = 'all 0.3s';
@@ -514,8 +522,6 @@ function UIObject() {
 
     }
 
-
-
     // Centering with scroll event
     window.onscroll = function() {
         if  (overlay) {
@@ -533,15 +539,13 @@ function UIObject() {
             overStyle.height    = window.innerHeight + 'px';
 
         }
-    }
-    
+    }    
     
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
         clearIntervals();
     }
-
 
     // return to objects
     return {
@@ -641,13 +645,15 @@ const target        = document.getElementById('d-captcha');
 append(target, anchor);
 
 
-// get user interface ready
+// getting User interface ready
 const userInterface = new UIObject();
 const overlay       = userInterface.overlay();
 const container     = userInterface.container();
 const canvs         = userInterface.canvas();
 const restartBtn    = userInterface.restartButton();
 const closeBtn      = userInterface.closeButton();
+
+
 
 const dcSubmit = document.getElementById('dcSubmit');
 dcSubmit.style.backgroundColor = '#999';
@@ -689,7 +695,6 @@ function addEvent(elements) {
                         
                     }, 200);
                     
-
                 }
 
             } else {
@@ -706,13 +711,7 @@ function addEvent(elements) {
                 }
 
                 clearIntervals();
-                
-//                setTimeout(function() {
-//                    clearIntervals()
-//                    game();
-//                }, 2000);
             }
-
 
         }, false);
 
@@ -722,13 +721,14 @@ function addEvent(elements) {
 }
 
 
+
 function game() {
     /* clear container before start */
     clearNode(container);
     
     /* create the circles */
     const circles = createCircles(Circle);
-    randomCircls = createRandomArray(circles, 5);
+    const randomCircls = createRandomArray(circles, 5);
     
     /* pop up the UI */
     append(document.body, overlay);
