@@ -152,83 +152,106 @@ function removePX(str) {
 }
 
 
-/* move element Horizontaly */
-function moveH(element) {
+/* move element H or V or Both */
+function moveElement(element, H, V) {
 
-    var pos = removePX(element.style.left);
-    var speed = 3;
-    const rightEdge = element.parentElement.clientWidth 
-    - element.clientWidth;
-    
-    moveHInterval = setInterval(frame, 100);
+    // frame per second
+    const FPS  = 60;
 
-    function frame() {
+    // ball size
+    var ballSize = element.clientWidth;
 
-        pos++;
-        element.style.left = pos + 'px';
-        pos = pos + speed;
+    // ball x position, y Position
+    var ballXPos;
+    var ballYPos;
 
-        if (pos > rightEdge) {
-            speed = -3
-            
+    // ball X speed, Y speed
+    var Xspeed;
+    var Yspeed;
+
+    // edges
+    var width   = element.parentElement.clientWidth   - ballSize ;
+    var height  = element.parentElement.clientHeight  - ballSize;
+    var left    = element.parentElement.clientLeft;
+
+
+
+    // ball starting position
+    ballXPos = removePX(element.style.left);
+    ballYPos = removePX(element.style.top);
+
+    // ball speed
+    Xspeed = 20 / FPS;
+    Yspeed = 20 / FPS;
+
+    // random direction
+    if (Math.floor(Math.random() * 2 ) == 0 ) {
+        Xspeed = -Xspeed;
+    }
+
+    if (Math.floor(Math.random() * 2 ) == 0) {
+        Yspeed = -Yspeed;
+    }
+
+
+    // UPDATE FUNCTION
+    function update() {
+
+        function moveH() {
+            ballXPos += Xspeed;
+            element.style.left = ballXPos + 'px';
+
+            if (ballXPos < 0 && Xspeed < 0) {
+                Xspeed = -Xspeed;
+            }
+
+            if (ballXPos > width && Xspeed > 0) {
+                Xspeed = -Xspeed;
+            }
+        }// move H
+
+        function moveV() {
+            ballYPos += Yspeed;
+            element.style.top = ballYPos + 'px';
+
+            if (ballYPos < 0 && Yspeed < 0) {
+                Yspeed = -Yspeed;
+            }
+
+            if (ballYPos > height && Yspeed > 0) {
+                Yspeed = -Yspeed;
+            }
+        } // moveV
+
+        // H move
+        if (H) {
+            moveH()
         }
 
-        if (pos < 0) {
-            speed = 3;
+        // V move
+        if (V) {
+           moveV();
         }
 
+        if (!H && !V) {
+            moveH()
+            moveV();
+        }
+
+    } // update
+
+    return {
+        startMove: function() {
+            // set up interval
+            moveInterval = setInterval(update, 1000 / FPS);
+        },
+
+        stopMove: function() {
+            clearInterval(moveInterval);
+        }
     }
 }
 
-
-/* move element Vertically */
-function moveV(element) {
-    var pos = removePX(element.style.top);
-    var speed = 3;
-    
-    const buttomEdge = element.parentElement.clientHeight 
-    - element.clientHeight;
-
-    moveVInterval = setInterval(frame, 100);
-
-    function frame() {
-
-        pos++;
-        element.style.top = pos + 'px';
-        pos = pos + speed;
-
-        if (pos > buttomEdge) {
-            speed = -3;
-        }
-
-        if (pos < 0) {
-            speed = 3;
-        }
-
-    }
-}
-
-
-/* call a move function with a condition */
-function animate(element) {
-
-    if (window.innerWidth < 600 ) {
-        moveV(element);
-    } else {
-        moveH(element)
-    }
-
-}
-
-
-/* clear moving intervals */
-function clearIntervals() {
-    if (window.innerWidth < 600) {
-        clearInterval(moveVInterval);
-    } else {
-        clearInterval(moveHInterval);
-    }
-}
 
 /* get the value of circles and put them inside an array */
 function getCircleValues(elements) {
@@ -497,7 +520,6 @@ function UIObject() {
     contStyle.backgroundColor   = '#ccc';
     contStyle.margin            = '0 auto';
     contStyle.position          = 'absolute';
-    contStyle.transition        = 'all 0.3s';
     contStyle.left              = '140px';
     commonStyle(container);
 
@@ -544,7 +566,7 @@ function UIObject() {
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
-        clearIntervals();
+        moveElement(container).stopMove();
     }
 
     // return to objects
@@ -681,7 +703,7 @@ function addEvent(elements) {
 
                     setTimeout(function() {
                            // exit the game, done.
-                        clearIntervals();
+                        ;
                         document.body.removeChild(overlay);
                         println(isHuman);
 
@@ -710,7 +732,7 @@ function addEvent(elements) {
                     this.style.opacity          = '0.9';
                 }
 
-                clearIntervals();
+                stopCircls(elements);
             }
 
         }, false);
@@ -720,6 +742,17 @@ function addEvent(elements) {
     return isHuman;
 }
 
+function moveCircls(circles) {
+    circles.forEach(function (item) {
+        moveElement(item).startMove();
+    });
+}
+
+function stopCircls(circles) {
+    circles.forEach(function (item) {
+        moveElement(item).stopMove();
+    });
+}
 
 
 function game() {
@@ -728,7 +761,7 @@ function game() {
     
     /* create the circles */
     const circles = createCircles(Circle);
-    const randomCircls = createRandomArray(circles, 5);
+    const randomCircls = createRandomArray(circles, 4);
     
     /* pop up the UI */
     append(document.body, overlay);
@@ -736,19 +769,21 @@ function game() {
     /* deplory circles to the container. */
     multiAppend(container, randomCircls);
     
+    moveElement(container).startMove();
+
     /* start the game */
-    const hide = setTimeout(function () {
+    setTimeout(function () {
         
         /* hide valuse of the circles */
         hideValue(randomCircls);
         
         /* start the animation */
-        myAnimate = setTimeout(function () {
-            animate(container);
-        }, 500);
         
         /* ready the circles to be playd with */
         addEvent(randomCircls);
+
+
+        moveCircls(randomCircls);
 
     }, 3000);
 }
@@ -759,7 +794,7 @@ checkBox.addEventListener('click', game, false);
 // restart, whene things go wrong
 restartBtn.onclick = function () {
 
-    clearIntervals();
+    ;
 
     clearNode(container);
     game();

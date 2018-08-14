@@ -181,7 +181,7 @@ function UIObject() {
     canvStyle.minWidth          = '320px';
     canvStyle.minHeight         = '320px';
     canvStyle.position          = 'relative';
-    canvStyle.backgroundColor   = darckGray;
+    canvStyle.backgroundColor   = '#afacac';
     canvStyle.borderBottomLeftRadius    = '5px';
     canvStyle.borderBottomRightRadius   = '5px';
 
@@ -190,9 +190,9 @@ function UIObject() {
     // container style
     contStyle.width             = '320px';
     contStyle.height            = '320px';
-    contStyle.backgroundColor   = mattBlack;
+    contStyle.backgroundColor   = '#818080';
     contStyle.margin            = '0 auto';
-    contStyle.position          = 'absolute';
+    contStyle.position          = 'relative';
     contStyle.transition        = 'left 0.5s, top 0.5s';
     contStyle.left              = '140px';
     commonStyle(container);
