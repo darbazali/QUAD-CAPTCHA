@@ -174,6 +174,8 @@ function moveElement(element, H, V) {
     var height  = element.parentElement.clientHeight  - ballSize;
     var left    = element.parentElement.clientLeft;
 
+    // set up interval
+    const moveInterval = setInterval(update, 1000 / FPS);
 
 
     // ball starting position
@@ -238,18 +240,19 @@ function moveElement(element, H, V) {
             moveV();
         }
 
+
     } // update
 
-    return {
-        startMove: function() {
-            // set up interval
-            moveInterval = setInterval(update, 1000 / FPS);
-        },
-
-        stopMove: function() {
-            clearInterval(moveInterval);
-        }
-    }
+//    return {
+//        startMove: function() {
+//            // set up interval
+//            moveInterval = setInterval(update, 1000 / FPS);
+//        },
+//
+//        stopMove: function() {
+//            clearInterval(moveInterval);
+//        }
+//    }
 }
 
 
@@ -265,7 +268,12 @@ function getCircleValues(elements) {
     return numberArray.sort()
 }
 
-
+/* clear all intervals */
+function clearIntervals() {
+    for (i = 0; i < 200; i++) {
+        window.clearInterval(i);
+    }
+}
                             /* END OF SECTION 1 */
 /***************************************************************************/
 
@@ -321,6 +329,7 @@ function Anchor() {
 
     // title stile
     title_style.cursor = 'default';
+    title_style.color   = '#06a806'
 
     return {
         anchor: function() {
@@ -508,7 +517,7 @@ function UIObject() {
     canvStyle.minWidth          = '320px';
     canvStyle.minHeight         = '320px';
     canvStyle.position          = 'relative';
-    canvStyle.backgroundColor   = '#999';
+    canvStyle.backgroundColor   = '#868585';
     canvStyle.borderBottomLeftRadius    = '5px';
     canvStyle.borderBottomRightRadius   = '5px';
 
@@ -517,7 +526,7 @@ function UIObject() {
     // container style
     contStyle.width             = '320px';
     contStyle.height            = '320px';
-    contStyle.backgroundColor   = '#ccc';
+    contStyle.backgroundColor   = '#999';
     contStyle.margin            = '0 auto';
     contStyle.position          = 'absolute';
     contStyle.left              = '140px';
@@ -566,7 +575,7 @@ function UIObject() {
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
-        moveElement(container).stopMove();
+        clearIntervals();
     }
 
     // return to objects
@@ -701,9 +710,9 @@ function addEvent(elements) {
                 if (sortedNumberArray.length === 0) {
                     isHuman = true;
 
+                    clearIntervals();
                     setTimeout(function() {
                            // exit the game, done.
-                        ;
                         document.body.removeChild(overlay);
                         println(isHuman);
 
@@ -717,6 +726,7 @@ function addEvent(elements) {
                         
                     }, 200);
                     
+
                 }
 
             } else {
@@ -730,9 +740,10 @@ function addEvent(elements) {
                     circleIndex.style.opacity   = '0.6';
                     this.style.backgroundColor  = '#f80101';
                     this.style.opacity          = '0.9';
+
                 }
 
-                stopCircls(elements);
+                clearIntervals();
             }
 
         }, false);
@@ -758,10 +769,11 @@ function stopCircls(circles) {
 function game() {
     /* clear container before start */
     clearNode(container);
+    clearIntervals();
     
     /* create the circles */
     const circles = createCircles(Circle);
-    const randomCircls = createRandomArray(circles, 4);
+    const randomCircls = createRandomArray(circles, 5);
     
     /* pop up the UI */
     append(document.body, overlay);
@@ -769,7 +781,13 @@ function game() {
     /* deplory circles to the container. */
     multiAppend(container, randomCircls);
     
-    moveElement(container).startMove();
+
+
+    if (window.innerWidth < 600) {
+        moveElement(container, false, true);
+    } else {
+        moveElement(container, true, false);
+    }
 
     /* start the game */
     setTimeout(function () {
@@ -782,27 +800,31 @@ function game() {
         /* ready the circles to be playd with */
         addEvent(randomCircls);
 
-
-        moveCircls(randomCircls);
+        randomCircls.forEach(function(itme) {
+            moveElement(itme);
+        })
 
     }, 3000);
 }
 
 /* START THE GAME when the checkbox is clicked */
-checkBox.addEventListener('click', game, false);
+checkBox.onclick = game;
 
 // restart, whene things go wrong
 restartBtn.onclick = function () {
 
-    ;
-
+    clearIntervals();
     clearNode(container);
     game();
     
 }
 
 
+// TASK: create a function to clear all intervals: DONE
 
+// TASK: create a pop up message for the title.
+
+// TASK: create a restart function without pop up message.
 
 
 
