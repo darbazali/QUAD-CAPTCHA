@@ -158,33 +158,33 @@ function moveElement(element, H, V) {
     // frame per second
     const FPS  = 60;
 
-    // ball size
-    var ballSize = element.clientWidth;
+    // element size
+    var elementSize = element.clientWidth;
 
-    // ball x position, y Position
-    var ballXPos;
-    var ballYPos;
+    // element x position, y Position
+    var elementXPos;
+    var elementYPos;
 
-    // ball X speed, Y speed
+    // element X speed, Y speed
     var Xspeed;
     var Yspeed;
 
     // edges
-    var width   = element.parentElement.clientWidth   - ballSize ;
-    var height  = element.parentElement.clientHeight  - ballSize;
+    var width   = element.parentElement.clientWidth - elementSize ;
+    var height  = element.parentElement.clientHeight - elementSize;
     var left    = element.parentElement.clientLeft;
 
     // set up interval
-    const moveInterval = setInterval(update, 1000 / FPS);
+    const moveInterval = setInterval(update, 800 / FPS);
 
 
-    // ball starting position
-    ballXPos = removePX(element.style.left);
-    ballYPos = removePX(element.style.top);
+    // element starting position
+    elementXPos = removePX(element.style.left);
+    elementYPos = removePX(element.style.top);
 
-    // ball speed
-    Xspeed = 20 / FPS;
-    Yspeed = 20 / FPS;
+    // element speed
+    Xspeed = 15 / FPS;
+    Yspeed = 15 / FPS;
 
     // random direction
     if (Math.floor(Math.random() * 2 ) == 0 ) {
@@ -200,27 +200,27 @@ function moveElement(element, H, V) {
     function update() {
 
         function moveH() {
-            ballXPos += Xspeed;
-            element.style.left = ballXPos + 'px';
+            elementXPos += Xspeed;
+            element.style.left = elementXPos + 'px';
 
-            if (ballXPos < 0 && Xspeed < 0) {
+            if (elementXPos < 0 && Xspeed < 0) {
                 Xspeed = -Xspeed;
             }
 
-            if (ballXPos > width && Xspeed > 0) {
+            if (elementXPos > width && Xspeed > 0) {
                 Xspeed = -Xspeed;
             }
         }// move H
 
         function moveV() {
-            ballYPos += Yspeed;
-            element.style.top = ballYPos + 'px';
+            elementYPos += Yspeed;
+            element.style.top = elementYPos + 'px';
 
-            if (ballYPos < 0 && Yspeed < 0) {
+            if (elementYPos < 0 && Yspeed < 0) {
                 Yspeed = -Yspeed;
             }
 
-            if (ballYPos > height && Yspeed > 0) {
+            if (elementYPos > height && Yspeed > 0) {
                 Yspeed = -Yspeed;
             }
         } // moveV
@@ -242,17 +242,6 @@ function moveElement(element, H, V) {
 
 
     } // update
-
-//    return {
-//        startMove: function() {
-//            // set up interval
-//            moveInterval = setInterval(update, 1000 / FPS);
-//        },
-//
-//        stopMove: function() {
-//            clearInterval(moveInterval);
-//        }
-//    }
 }
 
 
@@ -753,17 +742,6 @@ function addEvent(elements) {
     return isHuman;
 }
 
-function moveCircls(circles) {
-    circles.forEach(function (item) {
-        moveElement(item).startMove();
-    });
-}
-
-function stopCircls(circles) {
-    circles.forEach(function (item) {
-        moveElement(item).stopMove();
-    });
-}
 
 
 function game() {
@@ -778,25 +756,27 @@ function game() {
     /* pop up the UI */
     append(document.body, overlay);
     
+    // add a pop up message here
+
     /* deplory circles to the container. */
     multiAppend(container, randomCircls);
     
+//    setTimeout(function () {
+////        /* start the animation */
+////        if (window.innerWidth < 600) {
+////            moveElement(container, false, true);
+////        } else {
+////            moveElement(container, true, false);
+////        }
+////    }, 1000);
 
-
-    if (window.innerWidth < 600) {
-        moveElement(container, false, true);
-    } else {
-        moveElement(container, true, false);
-    }
 
     /* start the game */
     setTimeout(function () {
         
         /* hide valuse of the circles */
         hideValue(randomCircls);
-        
-        /* start the animation */
-        
+
         /* ready the circles to be playd with */
         addEvent(randomCircls);
 
