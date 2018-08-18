@@ -6,11 +6,11 @@ Author          : Darbaz Ali
 Date            : july / 2018
 Location        : Kurdistan / Iraq
 Technology      : javascript, Web
-Target          : Internet Bot
+Aim             : Internet Bot
 
 Description:
 
-dCAPTCHA is a brand new, GAME based  CAPTCHA system that focuses on human thinking and memorizing.
+dCAPTCHA is a brand new, GAME based  CAPTCHA system that focuses on human thinking, movement tracking and memorizing.
 
 */
 
@@ -18,11 +18,6 @@ dCAPTCHA is a brand new, GAME based  CAPTCHA system that focuses on human thinki
 /**************************************
 SECTION 1: general purpose functions
 **************************************/
-
-
-/* printing to the console, debugging purpose */
-const println = console.log;
-
 
 /* appending an element to a node, general purpose */
 function append(node, element) {
@@ -42,12 +37,8 @@ function multiAppend(nodeName, elements) {
 
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
-
-    const W1 = 60; // element 1 width
-    const W2 = 60; // element 2 width
-
-    const H1 = 60; // element 1 height
-    const H2 = 60; // element 2 height
+    // size of the rectangle
+    var rectSize = 60;
 
     const X1 = parseInt(element1.style.left);
     const X2 = parseInt(element2.style.left);
@@ -56,10 +47,10 @@ function isColliding(element1, element2) {
     const Y2 = parseInt(element2.style.top);
 
 
-    if (X1 + W1 >= X2 &&
-        X1 <= X2 + W2 &&
-        Y1 + H1 >= Y2 &&
-        Y1 <= Y2 + H2) {
+    if (X1 + rectSize >= X2 &&
+        X1 <= X2 + rectSize &&
+        Y1 + rectSize >= Y2 &&
+        Y1 <= Y2 + rectSize) {
         return true;
     } else {
         return false;
@@ -92,10 +83,11 @@ function clearNode(nodeName) {
 
 /* changing the style of an element */
 function changeStyle(element) {
-      element.style.fontSize        = '58px';
-      element.style.cursor          = 'default';
-      element.style.opacity         = '0.9';
-      element.style.backgroundColor = '#045d04';
+    const style = element.style;
+    style.fontSize = '58px';
+    style.cursor = 'default';
+    style.opacity = '0.9';
+    style.backgroundColor = '#045d04';
 }
 
 
@@ -119,19 +111,17 @@ function createCircles(object) {
 
         // looping throught all existing locations
         var overLapping = false;
-        for (let j = 0; j < circles.length; j++) {
+        for (var j = 0; j < circles.length; j++) {
             var other = circles[j];
-            var check = isColliding(circle, other);
+            var overlap = isColliding(circle, other);
 
-            if (check) {
+            if (overlap) {
                 overLapping = true;
                 i--; // start again
                 break; // break the loop
             }
 
         }
-
-
 
         if (!overLapping) {
 
@@ -153,7 +143,7 @@ function removePX(str) {
 
 
 /* move element H or V or Both */
-function moveElement(element, H, V) {
+function moveElement(element) {
 
     // frame per second
     const FPS  = 60;
@@ -172,7 +162,6 @@ function moveElement(element, H, V) {
     // edges
     var width   = element.parentElement.clientWidth - elementSize ;
     var height  = element.parentElement.clientHeight - elementSize;
-    var left    = element.parentElement.clientLeft;
 
     // set up interval
     const moveInterval = setInterval(update, 800 / FPS);
@@ -199,47 +188,30 @@ function moveElement(element, H, V) {
     // UPDATE FUNCTION
     function update() {
 
-        function moveH() {
-            elementXPos += Xspeed;
-            element.style.left = elementXPos + 'px';
 
-            if (elementXPos < 0 && Xspeed < 0) {
-                Xspeed = -Xspeed;
-            }
+        elementXPos += Xspeed;
+        elementYPos += Yspeed;
 
-            if (elementXPos > width && Xspeed > 0) {
-                Xspeed = -Xspeed;
-            }
-        }// move H
+        element.style.left = elementXPos + 'px';
+        element.style.top = elementYPos + 'px';
 
-        function moveV() {
-            elementYPos += Yspeed;
-            element.style.top = elementYPos + 'px';
-
-            if (elementYPos < 0 && Yspeed < 0) {
-                Yspeed = -Yspeed;
-            }
-
-            if (elementYPos > height && Yspeed > 0) {
-                Yspeed = -Yspeed;
-            }
-        } // moveV
-
-        // H move
-        if (H) {
-            moveH()
+        // Horizontal movement
+        if (elementXPos < 0 && Xspeed < 0) {
+            Xspeed = -Xspeed;
         }
 
-        // V move
-        if (V) {
-           moveV();
+        if (elementXPos > width && Xspeed > 0) {
+            Xspeed = -Xspeed;
         }
 
-        if (!H && !V) {
-            moveH()
-            moveV();
+        // Vertical movement
+        if (elementYPos < 0 && Yspeed < 0) {
+            Yspeed = -Yspeed;
         }
 
+        if (elementYPos > height && Yspeed > 0) {
+            Yspeed = -Yspeed;
+        }
 
     } // update
 }
@@ -263,6 +235,7 @@ function clearIntervals() {
         window.clearInterval(i);
     }
 }
+
                             /* END OF SECTION 1 */
 /***************************************************************************/
 
@@ -349,21 +322,23 @@ function UIObject() {
 
         const style = element.style;
 
-        style.width             = '60px';
-        style.height            = '80px';
-        style.margin            = '0';
-        style.padding           = '0';
-        style.fontSize          = '40px';
-        style.fontWeight        = '800';
+        style.width             = '15%';
+        style.height            = '50px';
+        style.margin            = '0 15px';
+        style.padding           = '0 5px';
+        style.fontSize          = '36px';
+        style.fontWeight        = '400';
         style.backgroundColor   = transparent;
+        style.display           = 'inline-block';
+        style.float             = 'left'
         style.border            = 'none';
         style.cursor            = 'pointer';
-        style.color             = redPink;
+        style.color             = white;
         style.transition        = 'all .2s ease-in-out';
 
         const userAgent = window.navigator.userAgent;
         if (userAgent.match('Firefox')) {
-            style.fontSize  = '58px';
+//            style.fontSize  = '58px';
             style.color     = white;
             style.fontFamily = 'Arial';
         }
@@ -377,6 +352,7 @@ function UIObject() {
         /* scale buttons with hover event */
         element.onmouseover = function() {
             this.style.transform = 'scale(1.2)';
+//            this.style.transform = 'rotate(45deg)'
         }
 
         element.onmouseout = function() {
@@ -390,62 +366,66 @@ function UIObject() {
     // style an element with some properties
     function commonStyle(element) {
         const style = element.style;
-
         style.padding       = '0';
         style.margin        = '0';
         style.boxSizing     = 'border-box';
-        style.borderRadius  = '5px';
     }
 
 
     // creating elements
     const overlay         = document.createElement('div');
     const wrapper         = document.createElement('div');
-    const canvas          = document.createElement('div');
     const container       = document.createElement('div');
-
-    // header section
-    const header          = document.createElement('div');
     const title           = document.createElement('div');
+
+    const buttonWrapp     = document.createElement('div');
     const closeButton     = document.createElement('input');
     const restartButton   = document.createElement('input');
+    const infoButton      = document.createElement('input');
+    const zoomButton      = document.createElement('input');
 
 
     // text for the title
-    title.textContent = 'Please remember the numbers ' +
-    'in the Ascending Order.';
+    title.innerHTML = '<p>Memorize the numbers<br/> in the <span style="font-weight: 700">Ascending Order</span></p>';
 
     // setting attributes
     closeButton.setAttribute('type', 'button');
-    closeButton.setAttribute('value', '\u2715');
+    closeButton.setAttribute('value', '⊗');
 
+    // restart button
     restartButton.setAttribute('type', 'button');
-    restartButton.setAttribute('value', '\u27F3');
+    restartButton.setAttribute('value', '⟳');
+
+    infoButton.setAttribute('type', 'button');
+    infoButton.setAttribute('value', 'ℹ︎');
+
+    //zoom button
+    zoomButton.setAttribute('type', 'button');
+    zoomButton.setAttribute('value', '⊕');
 
 
     // Assembling
     append(overlay, wrapper);
-    append(wrapper, header);
-    append(wrapper, canvas);
+    append(wrapper, title);
+    append(wrapper, container);
+    append(wrapper, buttonWrapp);
 
-    append(header, title);
-    append(header, restartButton);
-    append(header, closeButton);
-
-    append(canvas, container);
+    append(buttonWrapp, infoButton);
+    append(buttonWrapp, zoomButton);
+    append(buttonWrapp, restartButton);
+    append(buttonWrapp, closeButton);
 
 
 
     // assigning element styles
     const overStyle     = overlay.style;
     const wrapStyle     = wrapper.style;
-    const canvStyle     = canvas.style;
     const contStyle     = container.style;
 
-    const headStyle     = header.style;
     const titlStyle     = title.style;
     const closeStyle    = closeButton.style;
     const restStyle     = restartButton.style;
+    const btnWrapStyle  = buttonWrapp.style;
 
 
 
@@ -453,6 +433,7 @@ function UIObject() {
 
     // overlay Style
     overStyle.position          = 'absolute';
+    overStyle.boxSizing         = 'border-box';
     overStyle.width             = window.innerWidth  + 'px';
     overStyle.height            = window.innerHeight + 'px';
     overStyle.top               = window.pageYOffset + 'px';
@@ -463,84 +444,78 @@ function UIObject() {
     overStyle.justifyContent    = 'center';
     overStyle.alignItems        = 'center';
     overStyle.fontFamily        = 'Arial';
-    commonStyle(overlay);
+//    commonStyle(overlay);
 
 
     // wrapper style
-    wrapStyle.width             = '600px';
-    wrapStyle.height            = '400px';
-    wrapStyle.backgroundColor   = mattBlack;
-    wrapStyle.boxShadow         = '0 0 30px #000';
-    commonStyle(wrapper);
-
-
-
-    /* HEADER SECTION */
-    // header style
-    headStyle.width             = '600px';
-    headStyle.height            = '80px';
-    headStyle.display           = 'flex';
-    headStyle.justifyContent    = 'flex-start';
+    wrapStyle.width             = '320px';
+    wrapStyle.height            = '480px';
+//    wrapStyle.border            = '3px solid #fff';
+    wrapStyle.borderRadius      = '15px';
+    wrapStyle.backgroundColor   = '#177cff';
+    wrapStyle.boxShadow         = '0 0 20px #000';
+    wrapStyle.boxSizing         = 'inherit';
 
 
     // title style
-    titlStyle.width             = '80%';
-    titlStyle.maxHeight         = '80px';
-    titlStyle.padding           = '7px';
-    titlStyle.fontSize          = '28px';
-    titlStyle.borderRight       = '1px solid ' + white;
+    titlStyle.width             = '100%';
+    titlStyle.height            = '80px';
+    titlStyle.display           = 'inline-block'
+    titlStyle.margin            = '0';
+    titlStyle.padding           = '5px 10px';
+    titlStyle.fontSize          = '26px';
+
+    const paragraph = title.firstChild
+    paragraph.style.padding = '10px';
+    paragraph.style.margin = '0';
+
+//    titlStyle.textAlign         = 'center';
+
+
+    // button wrapp style
+    btnWrapStyle.width = '100%';
+    btnWrapStyle.height = '50px';
+    btnWrapStyle.padding = '5px 0';
 
 
     // restart button style
     buttonCommonStyle(restartButton);
-
+//    restStyle.marginTop = '-3px';
+    restStyle.fontSize = '32px';
 
     // close button style
     buttonCommonStyle(closeButton);
+//    closeStyle.fontSize = '43px';
+
+    buttonCommonStyle(infoButton);
 
 
-
-    // canvas style
-    canvStyle.width             = '600px';
-    canvStyle.height            = '320';
-    canvStyle.minWidth          = '320px';
-    canvStyle.minHeight         = '320px';
-    canvStyle.position          = 'relative';
-    canvStyle.backgroundColor   = '#868585';
-    canvStyle.borderBottomLeftRadius    = '5px';
-    canvStyle.borderBottomRightRadius   = '5px';
-
-
+    buttonCommonStyle(zoomButton);
 
     // container style
     contStyle.width             = '320px';
     contStyle.height            = '320px';
-    contStyle.backgroundColor   = '#999';
+    contStyle.backgroundColor   = '#5C5C5C';
     contStyle.margin            = '0 auto';
-    contStyle.position          = 'absolute';
-    contStyle.left              = '140px';
-    commonStyle(container);
+    contStyle.position          = 'relative';
+    contStyle.transition        = 'left 0.5s, top 0.5s';
+//    contStyle.border            = '2px solid #fff';
+    contStyle.boxSizing         = 'inherit';
 
 
 
     /* Mobile version */
-    if (window.innerWidth < 600 ) {
 
-        wrapStyle.width     = '320px';
-        wrapStyle.height    = '500px';
-
-        canvStyle.width     = '320px';
-        canvStyle.height    = '420px';
-
-        contStyle.left      = '0';
-        contStyle.top       = '50px';
-
-        headStyle.width     = '320px';
-        headStyle.height    = '80px';
-
-        titlStyle.fontSize  = '20px';
-
+    if (window.innerWidth > 600) {
+//        wrapStyle.transform = 'scale(1.2)'
     }
+
+    if (window.innerWidth < 700) {
+//        zoomButton.style.visibility = 'hidden';
+        zoomButton.style.display = 'none';
+    }
+
+
 
     // Centering with scroll event
     window.onscroll = function() {
@@ -559,22 +534,24 @@ function UIObject() {
             overStyle.height    = window.innerHeight + 'px';
 
         }
-    }    
+    }
+
     
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
-        clearIntervals();
     }
+
+    zoomButton.onclick = function() {
+        overStyle.transform = 'scale(1.2)';
+    }
+
+
 
     // return to objects
     return {
         overlay: function() {
             return overlay;
-        },
-
-        canvas: function() {
-            return canvas;
         },
 
         container: function() {
@@ -597,13 +574,11 @@ function UIObject() {
 function Circle(value, randomX, randomY) {
 
     // Prototyping
-
     this.value      = value;
     this.randomX    = randomX;
     this.randomY    = randomY;
 
-
-    let circle = document.createElement('input');
+    const circle = document.createElement('input');
 
     circle.setAttribute('type', 'button');
     circle.setAttribute('value', value);
@@ -621,7 +596,7 @@ function Circle(value, randomX, randomY) {
     style.backgroundColor   = '#1028ac';
     style.color             = '#fff';
     style.border            = 'none';
-    style.cursor            = 'pointer';
+    style.cursor            = 'default';
     style.position          = 'absolute';
     style.left              = randomX + 'px';
     style.top               = randomY + 'px';
@@ -640,7 +615,6 @@ function Circle(value, randomX, randomY) {
     circle.onfocus = function() {
         style.outline = 'none';
     }
-
 
     return circle
 }
@@ -669,10 +643,8 @@ append(target, anchor);
 const userInterface = new UIObject();
 const overlay       = userInterface.overlay();
 const container     = userInterface.container();
-const canvs         = userInterface.canvas();
 const restartBtn    = userInterface.restartButton();
 const closeBtn      = userInterface.closeButton();
-
 
 
 const dcSubmit = document.getElementById('dcSubmit');
@@ -703,8 +675,6 @@ function addEvent(elements) {
                     setTimeout(function() {
                            // exit the game, done.
                         document.body.removeChild(overlay);
-                        println(isHuman);
-
                         checkBox.removeEventListener('click', game);
                         checkBox.style.backgroundColor  = '#00db00';
                         checkBox.style.cursor           = 'default';
@@ -733,6 +703,7 @@ function addEvent(elements) {
                 }
 
                 clearIntervals();
+                setTimeout(game, 2000);
             }
 
         }, false);
@@ -741,7 +712,6 @@ function addEvent(elements) {
 
     return isHuman;
 }
-
 
 
 function game() {
@@ -760,16 +730,6 @@ function game() {
 
     /* deplory circles to the container. */
     multiAppend(container, randomCircls);
-    
-//    setTimeout(function () {
-////        /* start the animation */
-////        if (window.innerWidth < 600) {
-////            moveElement(container, false, true);
-////        } else {
-////            moveElement(container, true, false);
-////        }
-////    }, 1000);
-
 
     /* start the game */
     setTimeout(function () {
@@ -800,11 +760,29 @@ restartBtn.onclick = function () {
 }
 
 
-// TASK: create a function to clear all intervals: DONE
 
 // TASK: create a pop up message for the title.
 
 // TASK: create a restart function without pop up message.
+
+
+
+function start() {
+    // first try
+    // game with instruction pop up
+}
+
+
+// restart with restart button
+function manualRestart() {
+    // game without any pop up
+}
+
+// auto restart after wrong playing
+function autoRestart() {
+    // game with error pop up
+}
+
 
 
 
