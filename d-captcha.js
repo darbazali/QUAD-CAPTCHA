@@ -10,7 +10,8 @@ Aim             : Internet Bot
 
 Description:
 
-dCAPTCHA is a brand new, GAME based  CAPTCHA system that focuses on human thinking, movement tracking and memorizing.
+dCAPTCHA is a brand new, GAME based  CAPTCHA system that focuses on human thinking,
+movement tracking and memorizing.
 
 */
 
@@ -312,8 +313,6 @@ function UIObject() {
     const mattBlack     = '#393653';
     const darckGray     = '#49536C';
     const white         = '#FFFFFF';
-    const violet        = '#8D57F5';
-    const redPink       = '#DB51BE';
     const transparent   = 'rgba(255, 255, 255, 0)';
 
     /* Private funcitons */
@@ -615,6 +614,7 @@ function Circle(value, randomX, randomY) {
     circle.onfocus = function() {
         style.outline = 'none';
     }
+
 
     return circle
 }

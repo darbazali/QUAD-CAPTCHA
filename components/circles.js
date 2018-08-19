@@ -38,6 +38,10 @@ function Circle(value, randomX, randomY) {
         // change the style here
     }, false);
 
+    this.hideValue = function() {
+        return this.style.fontSize = '0px';
+    }
+
 
     return circle
 }

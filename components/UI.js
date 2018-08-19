@@ -6,6 +6,43 @@ function append(nodeName, element) {
     return nodeName.appendChild(element);
 }
 
+// left: 37, up: 38, right: 39, down: 40,
+// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+const keys = {37: 1, 38: 1, 39: 1, 40: 1};
+
+function preventDefault(e) {
+  e = e || window.event;
+  if (e.preventDefault)
+      e.preventDefault();
+  e.returnValue = false;
+}
+
+function preventDefaultForScrollKeys(e) {
+    if (keys[e.keyCode]) {
+        preventDefault(e);
+        return false;
+    }
+}
+
+function disableScroll() {
+  if (window.addEventListener) // older FF
+      window.addEventListener('DOMMouseScroll', preventDefault, false);
+  window.onwheel = preventDefault; // modern standard
+  window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+  window.ontouchmove  = preventDefault; // mobile
+  document.onkeydown  = preventDefaultForScrollKeys;
+}
+
+function enableScroll() {
+    if (window.removeEventListener)
+        window.removeEventListener('DOMMouseScroll', preventDefault, false);
+    window.onmousewheel = document.onmousewheel = null;
+    window.onwheel = null;
+    window.ontouchmove = null;
+    document.onkeydown = null;
+}
+
+
 
 /* the user interface */
 function UIObject() {
@@ -93,8 +130,11 @@ function UIObject() {
     title.innerHTML = '<p>Memorize the numbers<br/> in the <span style="font-weight: 700">Ascending Order</span></p>';
 
     // text for pop up message
-    popUp.innerHTML = '<p>look at the circles for (3 sec), ' +
-        'after the numbers disapeard click them in the <span style="font-weight: 700">Ascending Order</span></p>';
+    const message  = '<p><span style="font-weight: 800">look at the' +
+        ' circles for<br/> 3 seconds. </span><br/>' +
+        'after the numbers disapeard, try to memorize them in the ' +
+        '<span style="font-weight: 700">Ascending Order</span></p>';
+    popUp.innerHTML = message;
 
     // setting attributes
     closeButton.setAttribute('type', 'button');
@@ -149,11 +189,8 @@ function UIObject() {
     overStyle.height            = window.innerHeight + 'px';
     overStyle.top               = window.pageYOffset + 'px';
     overStyle.left              = window.pageXOffset + 'px';
-    overStyle.backgroundColor   = transparent;
+    overStyle.backgroundColor   = 'rgba(72, 72, 72, 0.8)';
     overStyle.color             = white;
-    overStyle.display           = 'flex';
-    overStyle.justifyContent    = 'center';
-    overStyle.alignItems        = 'center';
     overStyle.fontFamily        = 'Arial';
 //    commonStyle(overlay);
 
@@ -167,18 +204,23 @@ function UIObject() {
     wrapStyle.boxShadow         = '0 0 20px #000';
     wrapStyle.boxSizing         = 'inherit';
     wrapStyle.position          = 'relative';
+    wrapStyle.left               = '50%';
+    wrapStyle.top                = '50%';
+    wrapStyle.transform          = 'translate(-50%, -50%)';
 
 
     // pop up style
     popStyle.position           = 'absolute';
-    popStyle.left               = '0';
-    popStyle.top                = '90px';
-    popStyle.backgroundColor    = 'rgba(93, 93, 93, 0.62)';
-    popStyle.width              = '320px';
-    popStyle.height             = '320px';
-    popStyle.fontSize           = '28px';
-    commonStyle(popUp);
-    popStyle.padding            = '60px 10px';
+    popStyle.left               = '50%';
+    popStyle.top                = '50%';
+    popStyle.transform          = 'translate(-50%, -50%)'
+    popStyle.backgroundColor    = 'rgba(0, 144, 105, 0.8)';
+    popStyle.width              = '300px';
+    popStyle.height             = '170px';
+    popStyle.fontSize           = '22px';
+    popStyle.textAlign          = 'center';
+    popStyle.marginTop          = '10px';
+    popStyle.borderRadius       = '15px';
 
 
     // title style
@@ -195,6 +237,7 @@ function UIObject() {
     paragraph.style.margin      = '0';
     paragraph.style.marginTop   = '5px';
     paragraph.style.marginLeft  = '5px';
+    paragraph.style.cursor      = 'default';
 
 //    titlStyle.textAlign         = 'center';
 
@@ -228,7 +271,6 @@ function UIObject() {
     contStyle.margin            = '0 auto';
     contStyle.position          = 'relative';
     contStyle.transition        = 'left 0.5s, top 0.5s';
-//    contStyle.border            = '2px solid #fff';
     contStyle.boxSizing         = 'inherit';
 
 
@@ -240,16 +282,6 @@ function UIObject() {
         zoomButton.disabled = true;
         zoomButton.style.cursor = 'default';
         zoomButton.style.opacity = '0.5';
-    }
-
-
-
-    // Centering with scroll event
-    window.onscroll = function() {
-        if  (overlay) {
-            overStyle.top   = window.pageYOffset + 'px';
-            overStyle.left  = window.pageXOffset + 'px';
-        }
     }
 
 
@@ -267,10 +299,11 @@ function UIObject() {
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
+        enableScroll()
     }
 
     zoomButton.onclick = function() {
-        overStyle.transform = 'scale(1.2)';
+        overStyle.transform = 'scale(1.3)';
     }
 
 
@@ -303,7 +336,7 @@ const overlay       = userInterface.overlay()
 const close         = userInterface.closeButton();
 
 append(document.body, overlay);
-
+disableScroll();
 
 
 
