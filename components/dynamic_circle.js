@@ -1,5 +1,4 @@
 
-const println = console.log;
 
 /* append an element to a spesific node */
 function append(nodeName, element) {
@@ -12,19 +11,15 @@ function multiAppend(nodeName, elements) {
     // loop through the elements
     // elements should be an array of html elements
     elements.forEach(function(element) {
-        nodeName.appendChild(element);
+        nodeName.appendChild(element.draw());
     });
 }
 
 
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
-
-    const W1 = 60; // element 1 width
-    const W2 = 60; // element 2 width
-
-    const H1 = 60; // element 1 height
-    const H2 = 60; // element 2 height
+    // size of the element
+    const size = 60;
 
     const X1 = parseInt(element1.style.left);
     const X2 = parseInt(element2.style.left);
@@ -33,10 +28,10 @@ function isColliding(element1, element2) {
     const Y2 = parseInt(element2.style.top);
 
 
-    if (X1 + W1 >= X2 &&
-        X1 <= X2 + W2 &&
-        Y1 + H1 >= Y2 &&
-        Y1 <= Y2 + H2) {
+    if (X1 + size >= X2 &&
+        X1 <= X2 + size &&
+        Y1 + size >= Y2 &&
+        Y1 <= Y2 + size) {
         return true;
     } else {
         return false;
@@ -45,7 +40,7 @@ function isColliding(element1, element2) {
 
 
 /* generating a random array from another array, algorithm */
-function createRandomArray(srcArray, amount) {
+function randomizeCircles(srcArray, amount) {
     var rndArray = []; // random array
 
     while (rndArray.length < amount) { // how many random items?
@@ -59,22 +54,54 @@ function createRandomArray(srcArray, amount) {
 }
 
 
-/* removing px Suffix from a string */
-function removePX(str) {
-    var number  = 0;
-    number = parseInt(str.slice(0,-2));
-    return number;
+
+/* handling sroll bar */
+function Scroll() {
+
+    // left: 37, up: 38, right: 39, down: 40,
+    // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+    const keys = {
+        37: 1,
+        38: 1,
+        39: 1,
+        40: 1
+    };
+
+    function preventDefault(e) {
+        e = e || window.event;
+        if (e.preventDefault)
+            e.preventDefault();
+        e.returnValue = false;
+    }
+
+    function preventDefaultForScrollKeys(e) {
+        if (keys[e.keyCode]) {
+            preventDefault(e);
+            return false;
+        }
+    }
+
+    return {
+        disable: function () {
+            if (window.addEventListener) // older FF
+                window.addEventListener('DOMMouseScroll', preventDefault, false);
+            window.onwheel = preventDefault; // modern standard
+            window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+            window.ontouchmove = preventDefault; // mobile
+            document.onkeydown = preventDefaultForScrollKeys;
+        },
+
+        enable: function () {
+            if (window.removeEventListener)
+                window.removeEventListener('DOMMouseScroll', preventDefault, false);
+            window.onmousewheel = document.onmousewheel = null;
+            window.onwheel = null;
+            window.ontouchmove = null;
+            document.onkeydown = null;
+        }
+    }
+
 }
-
-
-/* hiding value of the circles */
-function hideValue(elements) {
-    elements.forEach(function(item) {
-        item.style.fontSize = '0px';
-    });
-
-}
-
 
 
 /* the user interface */
@@ -94,21 +121,23 @@ function UIObject() {
 
         const style = element.style;
 
-        style.width             = '60px';
-        style.height            = '80px';
-        style.margin            = '0';
-        style.padding           = '0';
+        style.width             = '15%';
+        style.height            = '50px';
+        style.margin            = '5px 15px';
+        style.padding           = '0 5px';
         style.fontSize          = '40px';
-        style.fontWeight        = '800';
+        style.fontWeight        = '400';
         style.backgroundColor   = transparent;
+        style.display           = 'inline-block';
+        style.float             = 'left'
         style.border            = 'none';
         style.cursor            = 'pointer';
-        style.color             = redPink;
+        style.color             = white;
         style.transition        = 'all .2s ease-in-out';
 
         const userAgent = window.navigator.userAgent;
         if (userAgent.match('Firefox')) {
-            style.fontSize  = '58px';
+//            style.fontSize  = '58px';
             style.color     = white;
             style.fontFamily = 'Arial';
         }
@@ -121,7 +150,7 @@ function UIObject() {
 
         /* scale buttons with hover event */
         element.onmouseover = function() {
-            this.style.transform = 'scale(1.2)';
+            this.style.transform = 'scale(1.3)';
         }
 
         element.onmouseout = function() {
@@ -135,7 +164,7 @@ function UIObject() {
     // style an element with some properties
     function commonStyle(element) {
         const style = element.style;
-
+        style.fontFamily    = 'Arial';
         style.padding       = '0';
         style.margin        = '0';
         style.boxSizing     = 'border-box';
@@ -146,51 +175,68 @@ function UIObject() {
     // creating elements
     const overlay         = document.createElement('div');
     const wrapper         = document.createElement('div');
-    const canvas          = document.createElement('div');
     const container       = document.createElement('div');
-
-    // header section
-    const header          = document.createElement('div');
     const title           = document.createElement('div');
+    const popUp           = document.createElement('div');
+
+    const buttonWrapp     = document.createElement('div');
     const closeButton     = document.createElement('input');
     const restartButton   = document.createElement('input');
+    const infoButton      = document.createElement('input');
+    const zoomButton      = document.createElement('input');
 
 
-    // text for the title
-    title.textContent = 'Please remember the numbers ' +
-    'in the Ascending Order.';
+    // text for title
+    title.innerHTML = '<p>Memorize the numbers<br/> in the <span style="font-weight: 700">Ascending Order</span></p>';
+
+    // text for pop up message
+    const message  = '<p><span style="font-weight: 800">look at the' +
+        ' circles for<br/> 3 seconds. </span><br/>' +
+        'after the numbers disapeard, try to memorize them in the ' +
+        '<span style="font-weight: 700">Ascending Order</span></p>';
+    popUp.innerHTML = message;
 
     // setting attributes
     closeButton.setAttribute('type', 'button');
-    closeButton.setAttribute('value', '\u2715');
+    closeButton.setAttribute('value', '⊗');
 
+    // restart button
     restartButton.setAttribute('type', 'button');
-    restartButton.setAttribute('value', '\u27F3');
+    restartButton.setAttribute('value', '⟳');
+
+    infoButton.setAttribute('type', 'button');
+    infoButton.setAttribute('value', 'ℹ︎');
+
+    //zoom button
+    zoomButton.setAttribute('type', 'button');
+    zoomButton.setAttribute('value', '⊕');
 
 
     // Assembling
     append(overlay, wrapper);
-    append(wrapper, header);
-    append(wrapper, canvas);
+    append(wrapper, title);
+    append(wrapper, container);
+//    append(wrapper, popUp);
+    append(wrapper, buttonWrapp);
 
-    append(header, title);
-    append(header, restartButton);
-    append(header, closeButton);
-
-    append(canvas, container);
+    append(buttonWrapp, zoomButton);
+    append(buttonWrapp, infoButton);
+    append(buttonWrapp, restartButton);
+    append(buttonWrapp, closeButton);
 
 
 
     // assigning element styles
     const overStyle     = overlay.style;
     const wrapStyle     = wrapper.style;
-    const canvStyle     = canvas.style;
     const contStyle     = container.style;
+    const popStyle      = popUp.style;
 
-    const headStyle     = header.style;
     const titlStyle     = title.style;
     const closeStyle    = closeButton.style;
     const restStyle     = restartButton.style;
+    const btnWrapStyle  = buttonWrapp.style;
+
 
 
 
@@ -198,104 +244,100 @@ function UIObject() {
 
     // overlay Style
     overStyle.position          = 'absolute';
+    overStyle.boxSizing         = 'border-box';
     overStyle.width             = window.innerWidth  + 'px';
     overStyle.height            = window.innerHeight + 'px';
     overStyle.top               = window.pageYOffset + 'px';
     overStyle.left              = window.pageXOffset + 'px';
-    overStyle.backgroundColor   = transparent;
+    overStyle.backgroundColor   = 'rgba(72, 72, 72, 0.8)';
     overStyle.color             = white;
-    overStyle.display           = 'flex';
-    overStyle.justifyContent    = 'center';
-    overStyle.alignItems        = 'center';
     overStyle.fontFamily        = 'Arial';
-    commonStyle(overlay);
+//    commonStyle(overlay);
 
 
     // wrapper style
-    wrapStyle.width             = '600px';
-    wrapStyle.height            = '400px';
-    wrapStyle.backgroundColor   = mattBlack;
-    wrapStyle.boxShadow         = '0 0 30px #000';
-    commonStyle(wrapper);
+    wrapStyle.width             = '320px';
+    wrapStyle.height            = '480px';
+    wrapStyle.borderRadius      = '15px';
+    wrapStyle.backgroundColor   = '#177cff';
+    wrapStyle.boxShadow         = '0 0 20px #333333';
+    wrapStyle.boxSizing         = 'inherit';
+    wrapStyle.position          = 'relative';
+    wrapStyle.left              = '50%';
+    wrapStyle.top               = '50%';
+    wrapStyle.transform         = 'translate(-50%, -50%)';
 
 
-
-    /* HEADER SECTION */
-    // header style
-    headStyle.width             = '600px';
-    headStyle.height            = '80px';
-    headStyle.display           = 'flex';
-    headStyle.justifyContent    = 'flex-start';
+    // pop up style
+    popStyle.position           = 'absolute';
+    popStyle.left               = '50%';
+    popStyle.top                = '50%';
+    popStyle.transform          = 'translate(-50%, -50%)'
+    popStyle.backgroundColor    = 'rgba(0, 144, 105, 0.8)';
+    popStyle.width              = '300px';
+    popStyle.height             = '170px';
+    popStyle.fontSize           = '22px';
+    popStyle.textAlign          = 'center';
+    popStyle.marginTop          = '10px';
+    popStyle.borderRadius       = '15px';
 
 
     // title style
-    titlStyle.width             = '80%';
-    titlStyle.maxHeight         = '80px';
-    titlStyle.padding           = '7px';
-    titlStyle.fontSize          = '28px';
-    titlStyle.borderRight       = '1px solid ' + white;
+    titlStyle.width             = '100%';
+    titlStyle.height            = '80px';
+    titlStyle.display           = 'inline-block'
+    titlStyle.margin            = '0';
+    titlStyle.padding           = '5px 10px';
+    titlStyle.fontSize          = '26px';
+    titlStyle.backgroundColor   = transparent;
+
+    const paragraph = title.firstChild
+    paragraph.style.padding     = '0';
+    paragraph.style.margin      = '0';
+    paragraph.style.marginTop   = '5px';
+    paragraph.style.marginLeft  = '5px';
+    paragraph.style.cursor      = 'default';
+
+    // button wrapp style
+    btnWrapStyle.width              = '100%';
+    btnWrapStyle.height             = '50px';
+    btnWrapStyle.padding            = '5px 0';
+    btnWrapStyle.backgroundColor    = transparent;
 
 
     // restart button style
     buttonCommonStyle(restartButton);
-
+//    restStyle.marginTop = '-3px';
+    restStyle.fontSize = '32px';
 
     // close button style
     buttonCommonStyle(closeButton);
+//    closeStyle.color = '#e03400';
 
 
-
-    // canvas style
-    canvStyle.width             = '600px';
-    canvStyle.height            = '320';
-    canvStyle.minWidth          = '320px';
-    canvStyle.minHeight         = '320px';
-    canvStyle.position          = 'relative';
-    canvStyle.backgroundColor   = '#afacac';
-    canvStyle.borderBottomLeftRadius    = '5px';
-    canvStyle.borderBottomRightRadius   = '5px';
+    buttonCommonStyle(infoButton);
 
 
+    buttonCommonStyle(zoomButton);
 
     // container style
     contStyle.width             = '320px';
     contStyle.height            = '320px';
-    contStyle.backgroundColor   = '#818080';
+    contStyle.backgroundColor   = '#5C5C5C';
     contStyle.margin            = '0 auto';
     contStyle.position          = 'relative';
-//    contStyle.transition        = 'left 0.5s, top 0.5s';
-    contStyle.left              = '140px';
-    commonStyle(container);
+    contStyle.transition        = 'left 0.5s, top 0.5s';
+    contStyle.boxSizing         = 'inherit';
 
 
 
     /* Mobile version */
-    if (window.innerWidth < 600 ) {
-
-        wrapStyle.width     = '320px';
-        wrapStyle.height    = '500px';
-
-        canvStyle.width     = '320px';
-        canvStyle.height    = '420px';
-
-        contStyle.left      = '0';
-        contStyle.top       = '50px';
-
-        headStyle.width     = '320px';
-        headStyle.height    = '80px';
-
-        titlStyle.fontSize  = '20px';
-
-    }
 
 
-
-    // Centering with scroll event
-    window.onscroll = function() {
-        if  (overlay) {
-            overStyle.top   = window.pageYOffset + 'px';
-            overStyle.left  = window.pageXOffset + 'px';
-        }
+    if (window.innerWidth < 700) {
+        zoomButton.disabled = true;
+        zoomButton.style.cursor = 'default';
+        zoomButton.style.opacity = '0.5';
     }
 
 
@@ -313,17 +355,19 @@ function UIObject() {
     // close button event
     closeButton.onclick = function() {
         document.body.removeChild(overlay);
+        scroll.enable();
     }
+
+    zoomButton.onclick = function() {
+        overStyle.transform = 'scale(1.3)';
+    }
+
 
 
     // return to objects
     return {
         overlay: function() {
             return overlay;
-        },
-
-        canvas: function() {
-            return canvas;
         },
 
         container: function() {
@@ -341,17 +385,27 @@ function UIObject() {
 
 }
 
+
+
+
+
+
+
 // Objcet: returns a circle button
 function Circle(value, randomX, randomY) {
 
     // Prototyping
 
-    this.value = value;
-    this.randomX = randomX;
-    this.randomY = randomY;
+    this.value      = value;
+    this.randomX    = randomX;
+    this.randomY    = randomY;
+
+    var moveCircle;
 
 
-    let circle = document.createElement('input');
+    var circle = document.createElement('input');
+
+    this.draw = document.createElement('input');
 
     circle.setAttribute('type', 'button');
     circle.setAttribute('value', value);
@@ -361,51 +415,155 @@ function Circle(value, randomX, randomY) {
     // circle style
     style.width             = '60px';
     style.height            = '60px';
-    style.fontSize          = '55px';
+    style.maxWidth          = '60px';
+    style.maxHeight         = '60px';
+    style.fontSize          = '54px';
     style.borderRadius      = '100%';
     style.textDecoration    = 'none';
     style.backgroundColor   = '#1028ac';
     style.color             = '#fff';
     style.border            = 'none';
     style.cursor            = 'pointer';
-    style.transition        = 'none';
-
     style.position          = 'absolute';
     style.left              = randomX + 'px';
     style.top               = randomY + 'px';
+    style.transition        = 'box-shadow 0.3s';
 
-     // hover effect for the circle
-    circle.addEventListener('mouseover', function (e) {
-        // change the style here
-    }, false);
 
-    circle.addEventListener('mouseout', function (e) {
-        // change the style here
-    }, false);
+    /* chage style with hover effect */
+    circle.onmouseover = function() {
+        style.boxShadow = '0px 0px 10px #000';
+    }
+
+    circle.onmouseout = function() {
+        style.boxShadow = 'none';
+    }
 
     circle.onfocus = function() {
         style.outline = 'none';
     }
 
 
-    return circle
+
+    /* removing px Suffix from a string */
+    function removePX(str) {
+        var number = 0;
+        number = parseInt(str.slice(0, -2));
+        return number;
+    }
+
+    /* move element H or V or Both */
+//    function moveElement(element) {
+
+        // frame per second
+        const FPS = 60;
+
+        // element size
+        var elementSize = '60px';
+
+        // element x position, y Position
+        var elementXPos;
+        var elementYPos;
+
+        // element X speed, Y speed
+        var Xspeed;
+        var Yspeed;
+
+        // edges
+        var width   = 260;
+        var height  = 260;
+
+        // element starting position
+        elementXPos = removePX(circle.style.left);
+        elementYPos = removePX(circle.style.top);
+
+        // element speed
+        Xspeed = 15 / FPS;
+        Yspeed = 15 / FPS;
+
+        // random direction
+        if (Math.floor(Math.random() * 2) == 0) {
+            Xspeed = -Xspeed;
+        }
+
+        if (Math.floor(Math.random() * 2) == 0) {
+            Yspeed = -Yspeed;
+        }
+
+
+        // UPDATE FUNCTION
+        function update() {
+
+
+            elementXPos += Xspeed;
+            elementYPos += Yspeed;
+
+            circle.style.left = elementXPos + 'px';
+            circle.style.top = elementYPos + 'px';
+
+            // Horizontal movement
+            if (elementXPos < 0 && Xspeed < 0) {
+                Xspeed = -Xspeed;
+            }
+
+            if (elementXPos > width && Xspeed > 0) {
+                Xspeed = -Xspeed;
+            }
+
+            // Vertical movement
+            if (elementYPos < 0 && Yspeed < 0) {
+                Yspeed = -Yspeed;
+            }
+
+            if (elementYPos > height && Yspeed > 0) {
+                Yspeed = -Yspeed;
+            }
+
+        } // update
+
+
+    // methodes for the circle
+    return {
+        draw: function() {
+            return circle;
+        },
+
+        hideValue: function() {
+            style.fontSize = '0px';
+        },
+
+        showValue: function() {
+            style.fontSize = '54px';
+        },
+
+        move: function() {
+            moveCircle = setInterval(update, 800 / FPS);
+        },
+
+        stop: function() {
+            for (var i = 0; i < 5; i++) {
+                window.clearInterval(moveCircle);
+            }
+        }
+    }
 }
 
 
-function createArray() {
+
+function createCircles(object) {
     const circles = [];
     var i = 0;
     while (circles.length < 10) {
         // object
         var RandomX = Math.floor(Math.random() * 260);
         var RandomY = Math.floor(Math.random() * 260);
-        var rect = new Circle(i, RandomX, RandomY);
+        var circle = new object(i, RandomX, RandomY);
 
         // looping throught all existing locations
         var overLapping = false;
         for (let j = 0; j < circles.length; j++) {
             var other = circles[j];
-            var check = isColliding(rect, other);
+            var check = isColliding(circle.draw(), other.draw());
 
             if (check) {
                 overLapping = true;
@@ -416,7 +574,7 @@ function createArray() {
 
         if (!overLapping) {
 
-            circles.push(rect);
+            circles.push(circle);
         }
 
         i++;
@@ -424,352 +582,61 @@ function createArray() {
     return circles;
 }
 
-const circleArray = createArray(Circle);
+const circleArray = createCircles(Circle);
 
-const singleArray = createRandomArray(circleArray, 4);
-const rect = singleArray[0];
-const rect2 = singleArray[1];
-const rect3 = singleArray[2];
-const rect4 = singleArray[3];
+const singleArray = randomizeCircles(circleArray, 4);
+
 
 
 
 const userInterface = new UIObject();
 const overlay       = userInterface.overlay()
-const container     = userInterface.container();
 const close         = userInterface.closeButton();
+const container     = userInterface.container();
+
+const scroll = new Scroll();
 
 append(document.body, overlay);
+scroll.disable();
 
-multiAppend(container ,singleArray);
+multiAppend(container, singleArray)
 
+setTimeout(function(){
+    singleArray.forEach(function(item) {
+        // do your stuff here
+        item.move();
+    })
+}, 1000);
 
+setTimeout(function(){
+    singleArray.forEach(function(item) {
+        // do your stuff here
+        item.hideValue();
+    })
+}, 2000);
 
-/* move element Horizontaly */
-function moveH(element) {
+setTimeout(function(){
+    singleArray.forEach(function(item) {
+        // do your stuff here
+        item.stop();
+    })
+}, 10000);
 
-    var posX = removePX(element.style.left);
-    var posY = removePX(element.style.top);
+setTimeout(function(){
+    singleArray.forEach(function(item) {
+        // do your stuff here
+        item.showValue();
+    })
+}, 4000);
 
-    var speedX = 3;
-    var speedY = 3;
 
-    const width = element.clientWidth;
-    const left  = element.clientLeft;
-    const top   = element.clientTop;
 
-    const rightEdge = element.parentElement.clientWidth - width;
-    const leftEdge = element.parentElement.clientLeft;
-    const topEdge = element.parentElement.clientTop;
 
-    moveHInterval = setInterval(frame, 50);
 
-    function frame() {
 
-        posX++;
-        posY++;
 
-        element.style.left = posX + 'px';
-        element.style.top = posY + 'px';
 
-        posX = posX + speedX;
-        posY = posY + speedY;
 
 
-        // return from right edge
-        if (posX > rightEdge) {
-            speedX = -3;
-            speedY = 3;
 
-            println(rightEdge);
 
-        }
-
-        // return from buttom edge
-        if (posY > rightEdge) {
-            speedX = -3;
-            speedY = -3;
-        }
-
-
-        // return from left edge
-        if (posX < leftEdge) {
-            speedX = 3;
-            speedY = -3;
-        }
-
-        // return from top edge
-        if (posY < topEdge) {
-            speedX = 3;
-            speedY = 3;
-        }
-
-    }
-}
-
-
-// move element version 2
-function move(element) {
-
-    // frame per second
-    const FPS  = 60;
-
-    // ball size
-    var ballSize = element.clientWidth;
-
-    // ball x position, y Position
-    var ballXPos;
-    var ballYPos;
-
-    // ball X speed, Y speed
-    var Xspeed;
-    var Yspeed;
-
-    // edges
-    var width   = element.parentElement.clientWidth   - ballSize ;
-    var height  = element.parentElement.clientHeight  - ballSize;
-
-    // set up interval
-    setInterval(update, 1000 / FPS);
-
-    // ball starting position
-    ballXPos = removePX(element.style.left);
-    ballYPos = removePX(element.style.top);
-
-    // ball speed
-    Xspeed = 20 / FPS;
-    Yspeed = 20 / FPS;
-
-    // random direction
-    if (Math.floor(Math.random() * 2 ) == 0 ) {
-        Xspeed = -Xspeed;
-    }
-
-    if (Math.floor(Math.random() * 2 ) == 0) {
-        Yspeed = -Yspeed;
-    }
-
-
-    // UPDATE FUNCTION
-    function update() {
-        // move the ball
-        ballXPos += Xspeed;
-        ballYPos += Yspeed;
-
-        element.style.left = ballXPos + 'px';
-        element.style.top = ballYPos + 'px';
-
-        // bounce the ball for each wall
-        if (ballXPos < 0 && Xspeed < 0 ) {
-            Xspeed = -Xspeed;
-        }
-
-        if (ballXPos  > width && Xspeed > 0) {
-            Xspeed = -Xspeed;
-        }
-
-        if (ballYPos  < 0 && Yspeed < 0) {
-            Yspeed = -Yspeed;
-        }
-
-        if (ballYPos > height && Yspeed > 0) {
-            Yspeed = -Yspeed;
-        }
-
-        // bounce the ball wile colliding
-
-
-
-    }
-}
-
-
-function moveContainer(element) {
-
-    // frame per second
-    const FPS  = 60;
-
-    // ball size
-    var ballSize = element.clientWidth;
-
-    // ball x position, y Position
-    var ballXPos;
-    var ballYPos;
-
-    // ball X speed, Y speed
-    var Xspeed;
-    var Yspeed;
-
-    // edges
-    var width   = element.parentElement.clientWidth - ballSize ;
-    var left    = element.parentElement.clientLeft;
-//    var height  = element.parentElement.clientHeight  - ballSize;
-
-    // set up interval
-    setInterval(update, 1000 / FPS);
-
-    // ball starting position
-    ballXPos = removePX(element.style.left);
-//    ballYPos = removePX(element.style.top);
-
-    // ball speed
-    Xspeed = 20 / FPS;
-//    Yspeed = 20 / FPS;
-
-    // random direction
-    if (Math.floor(Math.random() * 2 ) == 0 ) {
-        Xspeed = -Xspeed;
-    }
-
-//    if (Math.floor(Math.random() * 2 ) == 0) {
-//        Yspeed = -Yspeed;
-//    }
-
-
-    // UPDATE FUNCTION
-    function update() {
-        // move the ball
-        ballXPos += Xspeed;
-//        ballYPos += Yspeed;
-
-        element.style.left = ballXPos + 'px';
-//        element.style.top = ballYPos + 'px';
-
-        // bounce the ball for each wall
-        if (ballXPos < 0 && Xspeed < 0 ) {
-            Xspeed = -Xspeed;
-        }
-
-        if (ballXPos  > width && Xspeed > 0) {
-            Xspeed = -Xspeed;
-        }
-
-//        if (ballYPos  < 0 && Yspeed < 0) {
-//            Yspeed = -Yspeed;
-//        }
-//
-//        if (ballYPos > height && Yspeed > 0) {
-//            Yspeed = -Yspeed;
-//        }
-
-        // bounce the ball wile colliding
-
-
-
-    }
-}
-
-function moveElement(element, H, V) {
-
-    // frame per second
-    const FPS  = 60;
-
-    // ball size
-    var ballSize = element.clientWidth;
-
-    // ball x position, y Position
-    var ballXPos;
-    var ballYPos;
-
-    // ball X speed, Y speed
-    var Xspeed;
-    var Yspeed;
-
-    // edges
-    var width   = element.parentElement.clientWidth   - ballSize ;
-    var height  = element.parentElement.clientHeight  - ballSize;
-    var left    = element.parentElement.clientLeft;
-
-    // set up interval
-    setInterval(update, 1000 / FPS);
-
-    // ball starting position
-    ballXPos = removePX(element.style.left);
-    ballYPos = removePX(element.style.top);
-
-    // ball speed
-    Xspeed = 20 / FPS;
-    Yspeed = 20 / FPS;
-
-    // random direction
-    if (Math.floor(Math.random() * 2 ) == 0 ) {
-        Xspeed = -Xspeed;
-    }
-
-    if (Math.floor(Math.random() * 2 ) == 0) {
-        Yspeed = -Yspeed;
-    }
-
-
-    // UPDATE FUNCTION
-    function update() {
-
-        function moveH() {
-            ballXPos += Xspeed;
-            element.style.left = ballXPos + 'px';
-
-            if (ballXPos < 0 && Xspeed < 0) {
-                Xspeed = -Xspeed;
-            }
-
-            if (ballXPos > width && Xspeed > 0) {
-                Xspeed = -Xspeed;
-            }
-        }// move H
-
-        function moveV() {
-            ballYPos += Yspeed;
-            element.style.top = ballYPos + 'px';
-
-            if (ballYPos < 0 && Yspeed < 0) {
-                Yspeed = -Yspeed;
-            }
-
-            if (ballYPos > height && Yspeed > 0) {
-                Yspeed = -Yspeed;
-            }
-        } // moveV
-
-        // H move
-        if (H) {
-            moveH()
-        }
-
-        // V move
-        if (V) {
-           moveV();
-        }
-
-        if (!H && !V) {
-            moveH()
-            moveV();
-        }
-
-    } // update
-}
-
-
-
-
-function startAnimate() {
-    if (overlay) {
-        // move container imediately
-        moveElement(container, false);
-
-        // move balls after 3s and hide values
-        setTimeout(function () {
-
-            moveElement(rect);
-            moveElement(rect2);
-            moveElement(rect3);
-            moveElement(rect4);
-
-            hideValue(singleArray)
-
-        }, 3000);
-    }
-}
-
-//startAnimate()
-
-// TASK: add animation for container: DONE
