@@ -26,6 +26,14 @@ function append(node, element) {
 }
 
 
+/* appending multiple elements to a node */
+function multiAppend(nodeName, elements) {
+    elements.forEach(function(element) {
+        nodeName.appendChild(element.draw());
+    });
+}
+
+
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
     // size of the rectangle
@@ -49,15 +57,7 @@ function isColliding(element1, element2) {
 }
 
 
-/* appending multiple elements to a node */
-function multiAppend(nodeName, elements) {
-    elements.forEach(function(element) {
-        nodeName.appendChild(element.draw());
-    });
-}
-
-
-/* generating a random array from another array, algorithm */
+/* Randomize(shuffle) and array, algorithm */
 function randomizeCircles(srcArray, amount) {
     var rndArray = []; // random array
 
@@ -72,7 +72,7 @@ function randomizeCircles(srcArray, amount) {
 }
 
 
-/* create circles from Circle object */
+/* create circles from Circle object, algorithm */
 function createCircles(object) {
     const circles = [];
     var value = 0;
@@ -191,6 +191,10 @@ function Anchor() {
     append(anchor, checkbox);
     append(anchor, title);
 
+    const target        = document.getElementById('d-captcha-div');
+    append(target, anchor);
+
+
 
     // styles
     style           = anchor.style;
@@ -223,8 +227,13 @@ function Anchor() {
 
 
     // title stile
-    title_style.cursor = 'default';
+    title_style.cursor  = 'default';
     title_style.color   = '#06a806'
+
+    checkbox.onclick = function() {
+        game();
+        scroll.disable();
+    }
 
     return {
         anchor: function() {
@@ -489,6 +498,13 @@ function UIObject() {
         scroll.enable();
     }
 
+    // restart button action
+    restartButton.onclick = function() {
+        UI.clearContainer;
+        game();
+    }
+
+
     zoomButton.onclick = function() {
         overStyle.transform = 'scale(1.3)';
     }
@@ -701,6 +717,11 @@ function Circle(value, randomX, randomY) {
             style.opacity = '0.5';
             style.backgroundColor = '#e50000'
             style.cursor = 'default';
+        },
+
+        disable: function () {
+            circle.setAttribute('disabled', 'disabled');
+            style.opacity = '0.5';
         }
     }
 }
@@ -716,25 +737,14 @@ function Circle(value, randomX, randomY) {
 SECTION 3: set up
 **************************************/
 
-
-// embedding anchor
-const ANCHOR        = new Anchor();
-const anchor        = ANCHOR.anchor();
-const checkBox      = ANCHOR.checkBox();
-const target        = document.getElementById('d-captcha');
-
-append(target, anchor);
-
+const ANCHOR = new Anchor();
 
 // getting User interface ready
 const UI            = new UIObject();
-const overlay       = UI.overlay();
 const container     = UI.container();
-const restartBtn    = UI.restartButton();
-const closeBtn      = UI.closeButton();
 
 
-const dcSubmit = document.getElementById('dcSubmit');
+const dcSubmit = document.getElementById('d-captcha-submit');
 dcSubmit.style.backgroundColor = '#999';
 
 // event ocuring with clicking on circles (game).
@@ -761,6 +771,7 @@ function addEvent(elements) {
                     isHuman = true;
                     
                     UI.close();
+                    dcSubmit.disabled = false;
 
                 }
 
@@ -816,20 +827,18 @@ function game() {
 
 }
 
-/* START THE GAME when the checkbox is clicked */
-checkBox.onclick = function() {
-    game();
-    scroll.disable();
-}
-
-// restart, whene things go wrong
-restartBtn.onclick = function () {
 
 
-    UI.clearContainer();
-    game();
-    
-}
+
+
+
+
+
+
+
+
+
+
 
 
 function start() {
