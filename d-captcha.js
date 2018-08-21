@@ -36,8 +36,8 @@ function multiAppend(nodeName, elements) {
 
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
-    // size of the rectangle
-    var rectSize = 60;
+    // size of the element
+    var size = 60;
 
     const X1 = parseInt(element1.style.left);
     const X2 = parseInt(element2.style.left);
@@ -46,10 +46,10 @@ function isColliding(element1, element2) {
     const Y2 = parseInt(element2.style.top);
 
 
-    if (X1 + rectSize >= X2 &&
-        X1 <= X2 + rectSize &&
-        Y1 + rectSize >= Y2 &&
-        Y1 <= Y2 + rectSize) {
+    if (X1 + size >= X2 &&
+        X1 <= X2 + size &&
+        Y1 + size >= Y2 &&
+        Y1 <= Y2 + size) {
         return true;
     } else {
         return false;
@@ -84,7 +84,7 @@ function createCircles(object) {
 
         // looping throught all existing locations
         var overLapping = false;
-        for (let j = 0; j < circles.length; j++) {
+        for (var j = 0; j < circles.length; j++) {
             var other = circles[j];
             var check = isColliding(circle.draw(), other.draw());
 
@@ -169,7 +169,6 @@ function getCircleValues(elements) {
 }
 
 
-                            /* END OF SECTION 1 */
 /***************************************************************************/
 
 
@@ -310,6 +309,15 @@ function UIObject() {
     }
 
 
+    // clear all intervals
+      function clearIntervals() {
+          for (var i = 0; i < 100; i++) {
+              window.clearInterval(i);
+          }
+
+      }
+
+
     // creating elements
     const overlay         = document.createElement('div');
     const wrapper         = document.createElement('div');
@@ -324,15 +332,47 @@ function UIObject() {
     const zoomButton      = document.createElement('input');
 
 
-    // text for title
-    title.innerHTML = '<p>Memorize the numbers<br/> in the <span style="font-weight: 700">Ascending Order</span></p>';
+/*
+    implementing pop up messages
+    how many messages do we need
+    1. instruction message
+    2. wrong playing message
+    3. success message
 
-    // text for pop up message
-    const message  = '<p><span style="font-weight: 800">look at the' +
+    1. this pop up should appear with first start and
+        when user clicks on info button
+
+    2. this pop up should appear when user plays wrong playing
+
+    3. this pop up should appear when user plays right playing
+*/
+
+    /* 1. instruction message */
+    const infoMSG =
+
+        '<p><span style="font-weight: 800">look at the' +
         ' circles for<br/> 3 seconds. </span><br/>' +
         'after the numbers disapeard, try to memorize them in the ' +
         '<span style="font-weight: 700">Ascending Order</span></p>';
-    popUp.innerHTML = message;
+
+
+    /* 2. retry message */
+    const retryMSG =
+          '<h3>Wrong!</h3><br/>' +
+          '<h4>Try again...</h4>';
+
+    /* 3. success message */
+    const successMSG = '<h3>Succsess!<h3>';
+
+
+
+
+
+    // text for title
+    title.innerHTML =
+        '<p>Memorize the numbers<br/>' +
+        ' in the <span style="font-weight: 700">Ascending Order</span></p>';
+
 
     // setting attributes
     closeButton.setAttribute('type', 'button');
@@ -461,7 +501,6 @@ function UIObject() {
     contStyle.backgroundColor   = '#5C5C5C';
     contStyle.margin            = '0 auto';
     contStyle.position          = 'relative';
-    contStyle.transition        = 'left 0.5s, top 0.5s';
     contStyle.boxSizing         = 'inherit';
 
 
@@ -491,15 +530,14 @@ function UIObject() {
     closeButton.onclick = function() {
 
         // at this point we have to clear all intervals
-        for (var i = 0; i < 100; i++) {
-            window.clearInterval(i);
-        }
+        clearIntervals();
         UI.close();
         scroll.enable();
     }
 
     // restart button action
     restartButton.onclick = function() {
+        clearIntervals();
         UI.clearContainer;
         game();
     }
@@ -509,9 +547,16 @@ function UIObject() {
         overStyle.transform = 'scale(1.3)';
     }
 
+    infoButton.onclick = function() {
+        clearIntervals();
+        UI.clearContainer();
+        popUp.innerHTML = infoMSG;
+        append(wrapper, popUp);
+    }
 
 
-    // return to objects
+
+    // Methodes
     return {
         overlay: function() {
             return overlay;
@@ -561,10 +606,7 @@ function Circle(value, randomX, randomY) {
 
     var moveCircle;
 
-
     var circle = document.createElement('input');
-
-    this.draw = document.createElement('input');
 
     circle.setAttribute('type', 'button');
     circle.setAttribute('value', value);
@@ -586,21 +628,29 @@ function Circle(value, randomX, randomY) {
     style.position          = 'absolute';
     style.left              = randomX + 'px';
     style.top               = randomY + 'px';
-    style.transition        = 'box-shadow 0.3s';
+    style.transition        = 'box-shadow 0.3s, background-color 0.3s';
 
 
     /* chage style with hover effect */
-    circle.onmouseover = function() {
+    circle.onmouseover  = function() {
         style.boxShadow = '0px 0px 10px #000';
     }
 
-    circle.onmouseout = function() {
+    circle.onmouseout   = function() {
         style.boxShadow = 'none';
     }
 
-    circle.onfocus = function() {
+    circle.onfocus      = function() {
         style.outline = 'none';
     }
+
+
+    // disable circle
+     function disable() {
+         circle.setAttribute('disabled', 'disabled');
+         style.opacity = '0.7';
+         style.cursor = 'default';
+     }
 
 
 
@@ -611,8 +661,6 @@ function Circle(value, randomX, randomY) {
         return number;
     }
 
-    /* move element H or V or Both */
-//    function moveElement(element) {
 
         // frame per second
         const FPS = 60;
@@ -706,30 +754,22 @@ function Circle(value, randomX, randomY) {
         },
 
         rightPlay: function() {
-            circle.setAttribute('disabled', 'disabled');
-            style.opacity = '0.5';
-            style.backgroundColor = '#00db00'
-            style.cursor = 'default';
+            disable()
+            style.backgroundColor = '#1f9103';
         },
 
         wrongPlay: function() {
-            circle.setAttribute('disabled', 'disabled');
-            style.opacity = '0.5';
-            style.backgroundColor = '#e50000'
-            style.cursor = 'default';
+            disable();
+            style.backgroundColor = '#cc0000'
         },
 
         disable: function () {
-            circle.setAttribute('disabled', 'disabled');
-            style.opacity = '0.5';
+            disable();
         }
     }
 }
 
 
-
-
-                            /* END OF SECTION 2 */
 /***************************************************************************/
 
 
@@ -738,9 +778,9 @@ SECTION 3: set up
 **************************************/
 
 const ANCHOR = new Anchor();
+const UI     = new UIObject();
 
-// getting User interface ready
-const UI            = new UIObject();
+// container for the circles(playground).
 const container     = UI.container();
 
 
@@ -779,6 +819,7 @@ function addEvent(elements) {
                 elements.forEach(function(element) {
                     element.stop();
                     element.showValue();
+                    element.disable();
                 });
 
                 element.wrongPlay();
@@ -806,7 +847,6 @@ function game() {
     
     /* open the UI */
     UI.open()
-    // add a pop up message here
 
     /* deplory circles to the container. */
     multiAppend(container, circles);
@@ -826,39 +866,5 @@ function game() {
     }, 3000);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function start() {
-    // first try
-    // game with instruction pop up
-}
-
-
-// restart with restart button
-function manualRestart() {
-    // game without any pop up
-}
-
-// auto restart after wrong playing
-function autoRestart() {
-    // game with error pop up
-}
-
-
-
-
 
 
