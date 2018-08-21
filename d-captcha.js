@@ -49,54 +49,11 @@ function isColliding(element1, element2) {
 }
 
 
-/* clearing a node from all child elements */
-function clearNode(nodeName) {
-    while (nodeName.firstChild) {
-        nodeName.removeChild(nodeName.firstChild);
-    }
-}
-
-
-/* changing the style of an element */
-function changeStyle(element) {
-    const style = element.style;
-    style.fontSize = '58px';
-    style.cursor = 'default';
-    style.opacity = '0.9';
-    style.backgroundColor = '#045d04';
-}
-
-
 /* appending multiple elements to a node */
 function multiAppend(nodeName, elements) {
-    // loop through the elements
-    // elements should be an array of html elements
     elements.forEach(function(element) {
         nodeName.appendChild(element.draw());
     });
-}
-
-
-/* collision detection (rect - rect) true or false, algorithm */
-function isColliding(element1, element2) {
-    // size of the element
-    const size = 60;
-
-    const X1 = parseInt(element1.style.left);
-    const X2 = parseInt(element2.style.left);
-
-    const Y1 = parseInt(element1.style.top);
-    const Y2 = parseInt(element2.style.top);
-
-
-    if (X1 + size >= X2 &&
-        X1 <= X2 + size &&
-        Y1 + size >= Y2 &&
-        Y1 <= Y2 + size) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 
@@ -104,9 +61,9 @@ function isColliding(element1, element2) {
 function randomizeCircles(srcArray, amount) {
     var rndArray = []; // random array
 
-    while (rndArray.length < amount) { // how many random items?
+    while (rndArray.length < amount) {
         const random_index = Math.floor(Math.random() * srcArray.length);
-        if (!rndArray.includes(random_index)) {
+        if (!rndArray.indexOf(random_index) >= 0) {
             rndArray.push(srcArray[random_index]);
             srcArray.splice(random_index, 1);
         }
@@ -118,12 +75,12 @@ function randomizeCircles(srcArray, amount) {
 /* create circles from Circle object */
 function createCircles(object) {
     const circles = [];
-    var i = 0;
+    var value = 0;
     while (circles.length < 10) {
         // object
         var RandomX = Math.floor(Math.random() * 260);
         var RandomY = Math.floor(Math.random() * 260);
-        var circle = new object(i, RandomX, RandomY);
+        var circle = new object(value, RandomX, RandomY);
 
         // looping throught all existing locations
         var overLapping = false;
@@ -133,7 +90,7 @@ function createCircles(object) {
 
             if (check) {
                 overLapping = true;
-                i--; // start again
+                value--; // start again
                 break; // break the loop
             }
         }
@@ -143,7 +100,7 @@ function createCircles(object) {
             circles.push(circle);
         }
 
-        i++;
+        value++;
     }
     return circles;
 }
@@ -196,6 +153,7 @@ function Scroll() {
     }
 
 }
+const scroll = new Scroll();
 
 
 /* get the value of circles and put them inside an array */
@@ -279,16 +237,11 @@ function Anchor() {
     }
 }
 
-
 /* 2.2 - UI */
 function UIObject() {
 
     // colors
-    const mattBlack     = '#393653';
-    const darckGray     = '#49536C';
     const white         = '#FFFFFF';
-    const violet        = '#8D57F5';
-    const redPink       = '#DB51BE';
     const transparent   = 'rgba(255, 255, 255, 0)';
 
     /* Private funcitons */
@@ -392,7 +345,6 @@ function UIObject() {
     append(overlay, wrapper);
     append(wrapper, title);
     append(wrapper, container);
-//    append(wrapper, popUp);
     append(wrapper, buttonWrapp);
 
     append(buttonWrapp, zoomButton);
@@ -483,12 +435,10 @@ function UIObject() {
 
     // restart button style
     buttonCommonStyle(restartButton);
-//    restStyle.marginTop = '-3px';
     restStyle.fontSize = '32px';
 
     // close button style
     buttonCommonStyle(closeButton);
-//    closeStyle.color = '#e03400';
 
 
     buttonCommonStyle(infoButton);
@@ -530,7 +480,12 @@ function UIObject() {
 
     // close button event
     closeButton.onclick = function() {
-        document.body.removeChild(overlay);
+
+        // at this point we have to clear all intervals
+        for (var i = 0; i < 100; i++) {
+            window.clearInterval(i);
+        }
+        UI.close();
         scroll.enable();
     }
 
@@ -556,6 +511,24 @@ function UIObject() {
 
         restartButton: function() {
             return restartButton;
+        },
+
+        open: function() {
+            return document.body.appendChild(overlay);
+        },
+
+        close: function() {
+            return document.body.removeChild(overlay);
+        },
+
+        popUp: function() {
+            return append(wrapper, popUp)
+        },
+
+        clearContainer: function () {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
+            }
         }
     } // return
 
@@ -711,9 +684,23 @@ function Circle(value, randomX, randomY) {
         },
 
         stop: function() {
-            for (var i = 0; i < 5; i++) {
+            for (var i = 0; i < 100; i++) {
                 window.clearInterval(moveCircle);
             }
+        },
+
+        rightPlay: function() {
+            circle.setAttribute('disabled', 'disabled');
+            style.opacity = '0.5';
+            style.backgroundColor = '#00db00'
+            style.cursor = 'default';
+        },
+
+        wrongPlay: function() {
+            circle.setAttribute('disabled', 'disabled');
+            style.opacity = '0.5';
+            style.backgroundColor = '#e50000'
+            style.cursor = 'default';
         }
     }
 }
@@ -731,20 +718,20 @@ SECTION 3: set up
 
 
 // embedding anchor
-const ancHor        = new Anchor();
-const anchor        = ancHor.anchor();
-const checkBox      = ancHor.checkBox();
+const ANCHOR        = new Anchor();
+const anchor        = ANCHOR.anchor();
+const checkBox      = ANCHOR.checkBox();
 const target        = document.getElementById('d-captcha');
 
 append(target, anchor);
 
 
 // getting User interface ready
-const userInterface = new UIObject();
-const overlay       = userInterface.overlay();
-const container     = userInterface.container();
-const restartBtn    = userInterface.restartButton();
-const closeBtn      = userInterface.closeButton();
+const UI            = new UIObject();
+const overlay       = UI.overlay();
+const container     = UI.container();
+const restartBtn    = UI.restartButton();
+const closeBtn      = UI.closeButton();
 
 
 const dcSubmit = document.getElementById('dcSubmit');
@@ -754,61 +741,45 @@ dcSubmit.style.backgroundColor = '#999';
 function addEvent(elements) {
     var isHuman = false;
     
-    const sortedNumberArray = getCircleValues(elements);
+    /* a model for sorted circles */
+    const sortedModel = getCircleValues(elements);
 
+    elements.forEach(function(element) {
+        element.draw().onclick = function(event) {
+            // value of the current circle
+            const value = this.getAttribute('value');
 
-    for (var i = 0; i < elements.length; i++) {
-        elements[i].draw().addEventListener('click', function (e) {
-            var value = this.getAttribute('value');
+            // compare the value to the sortedModel first index
+            // if the selected circle is the base circle
+            if (value == sortedModel[0]) {
+                sortedModel.shift();
+                element.rightPlay();
+                element.stop();
+                element.showValue();
 
-            if (value == sortedNumberArray[0]) {
-
-                this.setAttribute('disabled', 'disabled');
-                changeStyle(this);
-
-                sortedNumberArray.shift(); // remove the taged number in the array
-
-                if (sortedNumberArray.length === 0) {
+                if (sortedModel.length === 0 ) {
                     isHuman = true;
-
-                    clearIntervals();
-                    setTimeout(function() {
-                           // exit the game, done.
-                        document.body.removeChild(overlay);
-                        checkBox.removeEventListener('click', game);
-                        checkBox.style.backgroundColor  = '#00db00';
-                        checkBox.style.cursor           = 'default';
-                        
-                        //enabel submint button
-                        dcSubmit.disabled               = false;
-                        dcSubmit.style.backgroundColor  = '#148b34';
-                        
-                    }, 200);
                     
+                    UI.close();
 
                 }
 
             } else {
-                for (var j = 0; j < elements.length; j++) {
+                elements.forEach(function(element) {
+                    element.stop();
+                    element.showValue();
+                });
 
-                    circleIndex = elements[j];
+                element.wrongPlay();
 
-                    circleIndex.setAttribute('disabled', 'disabled');
-                    circleIndex.style.fontSize  = '58px';
-                    circleIndex.style.cursor    = 'default';
-                    circleIndex.style.opacity   = '0.6';
-                    this.style.backgroundColor  = '#f80101';
-                    this.style.opacity          = '0.9';
+                setTimeout(function() {
+                    game();
+                }, 2000)
 
-                }
-
-                clearIntervals();
-                setTimeout(game, 2000);
             }
+        }
+    });
 
-        }, false);
-
-    }
 
     return isHuman;
 }
@@ -816,15 +787,14 @@ function addEvent(elements) {
 
 function game() {
     /* clear container before start */
-    clearNode(container);
+    UI.clearContainer();
     
     /* create the circles */
     const allCirlces    = createCircles(Circle);
     const circles       = randomizeCircles(allCirlces, 5);
     
-    /* pop up the UI */
-    append(document.body, overlay);
-    
+    /* open the UI */
+    UI.open()
     // add a pop up message here
 
     /* deplory circles to the container. */
@@ -839,29 +809,27 @@ function game() {
 
         circles.forEach(function(itme) {
             itme.move();
+            itme.hideValue();
         })
 
     }, 3000);
+
 }
 
 /* START THE GAME when the checkbox is clicked */
-checkBox.onclick = game;
+checkBox.onclick = function() {
+    game();
+    scroll.disable();
+}
 
 // restart, whene things go wrong
 restartBtn.onclick = function () {
 
 
-    clearNode(container);
+    UI.clearContainer();
     game();
     
 }
-
-
-
-// TASK: create a pop up message for the title.
-
-// TASK: create a restart function without pop up message.
-
 
 
 function start() {
