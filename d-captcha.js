@@ -20,6 +20,9 @@ movement tracking and memorizing.
 SECTION 1: general purpose functions
 **************************************/
 
+/* simplyfing console.log */
+const println = console.log;
+
 /* appending an element to a node, general purpose */
 function append(node, element) {
     return node.appendChild(element);
@@ -190,7 +193,7 @@ function Anchor() {
     append(anchor, checkbox);
     append(anchor, title);
 
-    const target        = document.getElementById('d-captcha-div');
+    const target = document.getElementById('d-captcha-div');
     append(target, anchor);
 
 
@@ -230,7 +233,7 @@ function Anchor() {
     title_style.color   = '#06a806'
 
     checkbox.onclick = function() {
-        game();
+        buildGame();
         scroll.disable();
     }
 
@@ -539,7 +542,7 @@ function UIObject() {
     restartButton.onclick = function() {
         clearIntervals();
         UI.clearContainer;
-        game();
+        buildGame();
     }
 
 
@@ -628,7 +631,7 @@ function Circle(value, randomX, randomY) {
     style.position          = 'absolute';
     style.left              = randomX + 'px';
     style.top               = randomY + 'px';
-    style.transition        = 'box-shadow 0.3s, background-color 0.3s';
+    style.transition        = 'box-shadow 0.3s, background-color 0.5s';
 
 
     /* chage style with hover effect */
@@ -780,15 +783,13 @@ SECTION 3: set up
 const ANCHOR = new Anchor();
 const UI     = new UIObject();
 
-// container for the circles(playground).
-const container     = UI.container();
 
 
 const dcSubmit = document.getElementById('d-captcha-submit');
 dcSubmit.style.backgroundColor = '#999';
 
-// event ocuring with clicking on circles (game).
-function addEvent(elements) {
+// start playing game by the circles.
+function game(elements) {
     var isHuman = false;
     
     /* a model for sorted circles */
@@ -799,8 +800,14 @@ function addEvent(elements) {
             // value of the current circle
             const value = this.getAttribute('value');
 
-            // compare the value to the sortedModel first index
-            // if the selected circle is the base circle
+
+            /*
+                if user clicks on the right circle
+                    stop current circle
+                    show the value
+                    change the color of the cirlce
+                    remove current index from Sorted Model array
+            */
             if (value == sortedModel[0]) {
                 sortedModel.shift();
                 element.rightPlay();
@@ -815,7 +822,18 @@ function addEvent(elements) {
 
                 }
 
-            } else {
+            }
+
+
+            /*
+                if user clicks on the wrong circle:
+                    end the game
+                    show the values of the circles
+                    stop the intervals
+                    show a retry message for 2s
+                    then restart the game
+            */
+            else {
                 elements.forEach(function(element) {
                     element.stop();
                     element.showValue();
@@ -825,46 +843,74 @@ function addEvent(elements) {
                 element.wrongPlay();
 
                 setTimeout(function() {
-                    game();
+                    buildGame();
                 }, 2000)
 
             }
         }
     });
-
-
-    return isHuman;
 }
 
 
-function game() {
+/* getting game ready */
+function buildGame() {
+
+    // container for the circles(playground).
+    const container = UI.container();
+
     /* clear container before start */
     UI.clearContainer();
-    
+
     /* create the circles */
-    const allCirlces    = createCircles(Circle);
-    const circles       = randomizeCircles(allCirlces, 5);
-    
+    const allCirlces = createCircles(Circle);
+    const circles = randomizeCircles(allCirlces, 5);
+
     /* open the UI */
     UI.open()
 
-    /* deplory circles to the container. */
+    /* deploy circles to the container. */
     multiAppend(container, circles);
 
     /* start the game */
     setTimeout(function () {
 
-
-        /* ready the circles to be playd with */
-        addEvent(circles);
-
-        circles.forEach(function(itme) {
-            itme.move();
+        circles.forEach(function (itme) {
             itme.hideValue();
-        })
+        });
+
+        setTimeout(function () {
+
+            /* ready the circles to be playd with */
+            circles.forEach(function (itme) {
+                itme.move();
+            });
+
+            game(circles);
+
+        }, 200);
 
     }, 3000);
 
 }
+
+
+//setTimeout(function () {
+//    println('one');
+//
+//    setTimeout(function () {
+//        println('tow');
+//    }, 1000);
+//
+//}, 2000);
+
+
+
+
+
+
+
+
+
+
 
 
