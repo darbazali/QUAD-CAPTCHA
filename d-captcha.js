@@ -230,21 +230,12 @@ function Anchor() {
 
     // title stile
     title_style.cursor  = 'default';
-    title_style.color   = '#06a806'
+    title_style.color   = '#0a4bfc';
 
     checkbox.onclick = function() {
+        UI.open();
         buildGame();
         scroll.disable();
-    }
-
-    return {
-        anchor: function() {
-            return anchor;
-        },
-
-        checkBox: function() {
-            return checkbox;
-        }
     }
 }
 
@@ -334,7 +325,7 @@ function UIObject() {
     const infoButton      = document.createElement('input');
     const zoomButton      = document.createElement('input');
 
-
+// TODO: complet this task.
 /*
     implementing pop up messages
     how many messages do we need
@@ -368,7 +359,7 @@ function UIObject() {
     const successMSG = '<h3>Succsess!<h3>';
 
 
-
+//    popUp.innerHTML = infoMSG;
 
 
     // text for title
@@ -536,13 +527,22 @@ function UIObject() {
         clearIntervals();
         UI.close();
         scroll.enable();
+
+        if (wrapper.lastChild == popUp) {
+            wrapper.removeChild(popUp);
+        }
     }
 
     // restart button action
     restartButton.onclick = function() {
         clearIntervals();
         UI.clearContainer;
-        buildGame();
+
+        if (wrapper.lastChild == popUp) {
+            wrapper.removeChild(popUp);
+        }
+
+        reStart();
     }
 
 
@@ -554,27 +554,21 @@ function UIObject() {
         clearIntervals();
         UI.clearContainer();
         popUp.innerHTML = infoMSG;
-        append(wrapper, popUp);
-    }
 
+        if (wrapper.lastChild == popUp) {
+            wrapper.removeChild(popUp);
+            buildGame();
+        } else {
+            append(wrapper, popUp);
+        }
+    }
 
 
     // Methodes
     return {
-        overlay: function() {
-            return overlay;
-        },
 
         container: function() {
             return container;
-        },
-
-        closeButton: function() {
-            return closeButton;
-        },
-
-        restartButton: function() {
-            return restartButton;
         },
 
         open: function() {
@@ -586,12 +580,24 @@ function UIObject() {
         },
 
         popUp: function() {
-            return append(wrapper, popUp)
+            popUp.innerHTML = infoMSG;
+            append(wrapper, popUp)
+        },
+
+        popUpRetry: function() {
+            popUp.innerHTML = retryMSG;
+            append(wrapper, popUp);
         },
 
         clearContainer: function () {
             while (container.firstChild) {
                 container.removeChild(container.firstChild);
+            }
+        },
+
+        removePopUp: function() {
+            if (wrapper.lastChild == popUp) {
+                wrapper.removeChild(popUp);
             }
         }
     } // return
@@ -731,6 +737,7 @@ function Circle(value, randomX, randomY) {
 
         } // update
 
+// TODO: refactor this block.
 
     // methodes for the circle
     return {
@@ -754,6 +761,8 @@ function Circle(value, randomX, randomY) {
             for (var i = 0; i < 100; i++) {
                 window.clearInterval(moveCircle);
             }
+
+            disable();
         },
 
         rightPlay: function() {
@@ -788,7 +797,7 @@ const UI     = new UIObject();
 const dcSubmit = document.getElementById('d-captcha-submit');
 dcSubmit.style.backgroundColor = '#999';
 
-// start playing game by the circles.
+// start playing game with the circles.
 function game(elements) {
     var isHuman = false;
     
@@ -808,6 +817,8 @@ function game(elements) {
                     change the color of the cirlce
                     remove current index from Sorted Model array
             */
+
+            // TODO: refactor this block
             if (value == sortedModel[0]) {
                 sortedModel.shift();
                 element.rightPlay();
@@ -841,9 +852,9 @@ function game(elements) {
                 });
 
                 element.wrongPlay();
-
+                UI.popUpRetry();
                 setTimeout(function() {
-                    buildGame();
+                    reStart();
                 }, 2000)
 
             }
@@ -852,7 +863,7 @@ function game(elements) {
 }
 
 
-/* getting game ready */
+/* set up the game */
 function buildGame() {
 
     // container for the circles(playground).
@@ -865,46 +876,86 @@ function buildGame() {
     const allCirlces = createCircles(Circle);
     const circles = randomizeCircles(allCirlces, 5);
 
-    /* open the UI */
-    UI.open()
 
-    /* deploy circles to the container. */
-    multiAppend(container, circles);
+    /* show the instruction message then start the game */
+
+    UI.popUp();
+
 
     /* start the game */
     setTimeout(function () {
+        /* deploy circles to the container. */
+        multiAppend(container, circles);
 
-        circles.forEach(function (itme) {
-            itme.hideValue();
-        });
+        /* remove pop up */
+        UI.removePopUp();
 
         setTimeout(function () {
 
-            /* ready the circles to be playd with */
             circles.forEach(function (itme) {
-                itme.move();
+                itme.hideValue();
             });
 
-            game(circles);
+            setTimeout(function () {
 
-        }, 200);
+                /* ready the circles to be playd with */
+                circles.forEach(function (itme) {
+                    itme.move();
+                });
+
+                game(circles);
+
+            }, 200);
+        }, 3000);
+
 
     }, 3000);
 
 }
 
 
-//setTimeout(function () {
-//    println('one');
-//
-//    setTimeout(function () {
-//        println('tow');
-//    }, 1000);
-//
-//}, 2000);
+// TODO: create a restart function for build game.
+
+function reStart() {
+    // container for the circles(playground).
+    const container = UI.container();
+
+    /* clear container before start */
+    UI.clearContainer();
+
+    /* create the circles */
+    const allCirlces = createCircles(Circle);
+    const circles = randomizeCircles(allCirlces, 5);
 
 
+    /* start the game */
 
+        /* deploy circles to the container. */
+        multiAppend(container, circles);
+
+        /* remove pop up */
+        UI.removePopUp();
+
+        setTimeout(function () {
+
+            circles.forEach(function (itme) {
+                itme.hideValue();
+            });
+
+            setTimeout(function () {
+
+                /* ready the circles to be playd with */
+                circles.forEach(function (itme) {
+                    itme.move();
+                });
+
+                game(circles);
+
+            }, 200);
+        }, 3000);
+
+
+}
 
 
 
