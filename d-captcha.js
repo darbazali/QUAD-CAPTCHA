@@ -20,7 +20,7 @@ movement tracking and memorizing.
 SECTION 1: general purpose functions
 **************************************/
 
-/* simplyfing console.log */
+/* simplyfing console.log, debbuging purpose */
 const println = console.log;
 
 /* appending an element to a node, general purpose */
@@ -60,13 +60,15 @@ function isColliding(element1, element2) {
 }
 
 
-/* Randomize(shuffle) and array, algorithm */
+/* Randomize(shuffle) an array, algorithm */
 function randomizeCircles(srcArray, amount) {
     var rndArray = []; // random array
 
     while (rndArray.length < amount) {
         const random_index = Math.floor(Math.random() * srcArray.length);
-        if (!rndArray.indexOf(random_index) >= 0) {
+        if (!rndArray.indexOf(random_index) >= 0
+           || !rndArray.includes(random_index)) {
+
             rndArray.push(srcArray[random_index]);
             srcArray.splice(random_index, 1);
         }
@@ -89,9 +91,9 @@ function createCircles(object) {
         var overLapping = false;
         for (var j = 0; j < circles.length; j++) {
             var other = circles[j];
-            var check = isColliding(circle.draw(), other.draw());
+            var collision = isColliding(circle.draw(), other.draw());
 
-            if (check) {
+            if (collision) {
                 overLapping = true;
                 value--; // start again
                 break; // break the loop
@@ -359,9 +361,6 @@ function UIObject() {
     const successMSG = '<h3>Succsess!<h3>';
 
 
-//    popUp.innerHTML = infoMSG;
-
-
     // text for title
     title.innerHTML =
         '<p>Memorize the numbers<br/>' +
@@ -500,8 +499,6 @@ function UIObject() {
 
 
     /* Mobile version */
-
-
     if (window.innerWidth < 700) {
         zoomButton.disabled = true;
         zoomButton.style.cursor = 'default';
@@ -536,7 +533,6 @@ function UIObject() {
     // restart button action
     restartButton.onclick = function() {
         clearIntervals();
-        UI.clearContainer;
 
         if (wrapper.lastChild == popUp) {
             wrapper.removeChild(popUp);
@@ -557,7 +553,7 @@ function UIObject() {
 
         if (wrapper.lastChild == popUp) {
             wrapper.removeChild(popUp);
-            buildGame();
+            reStart();
         } else {
             append(wrapper, popUp);
         }
@@ -586,6 +582,11 @@ function UIObject() {
 
         popUpRetry: function() {
             popUp.innerHTML = retryMSG;
+            append(wrapper, popUp);
+        },
+
+        popUpSuccess: function() {
+            popUp.innerHTML = successMSG;
             append(wrapper, popUp);
         },
 
@@ -793,7 +794,7 @@ const ANCHOR = new Anchor();
 const UI     = new UIObject();
 
 
-
+// TODO: build a submit button
 const dcSubmit = document.getElementById('d-captcha-submit');
 dcSubmit.style.backgroundColor = '#999';
 
@@ -828,8 +829,13 @@ function game(elements) {
                 if (sortedModel.length === 0 ) {
                     isHuman = true;
                     
-                    UI.close();
-                    dcSubmit.disabled = false;
+                    UI.popUpSuccess();
+
+                    setTimeout(function() {
+
+                        UI.close();
+                        dcSubmit.disabled = false;
+                    }, 1000);
 
                 }
 
@@ -896,16 +902,16 @@ function buildGame() {
                 itme.hideValue();
             });
 
+            /* ready the circles to be playd with */
+            circles.forEach(function (itme) {
+                itme.move();
+            });
+
             setTimeout(function () {
-
-                /* ready the circles to be playd with */
-                circles.forEach(function (itme) {
-                    itme.move();
-                });
-
                 game(circles);
 
-            }, 200);
+            }, 300);
+
         }, 3000);
 
 
@@ -914,7 +920,6 @@ function buildGame() {
 }
 
 
-// TODO: create a restart function for build game.
 
 function reStart() {
     // container for the circles(playground).
@@ -925,7 +930,7 @@ function reStart() {
 
     /* create the circles */
     const allCirlces = createCircles(Circle);
-    const circles = randomizeCircles(allCirlces, 5);
+    const circles    = randomizeCircles(allCirlces, 5);
 
 
     /* start the game */
@@ -953,8 +958,6 @@ function reStart() {
 
             }, 200);
         }, 3000);
-
-
 }
 
 
