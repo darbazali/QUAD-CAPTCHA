@@ -23,17 +23,24 @@ SECTION 1: general purpose functions
 /* simplyfing console.log, debbuging purpose */
 const println = console.log;
 
-/* appending an element to a node, general purpose */
-function append(node, element) {
-    return node.appendChild(element);
-}
+///* appending an element to a node, general purpose */
+//function append(node, element) {
+//    return node.appendChild(element);
+//}
 
 
 /* appending multiple elements to a node */
-function multiAppend(nodeName, elements) {
-    elements.forEach(function(element) {
-        nodeName.appendChild(element.draw());
-    });
+function append(nodeName, element) {
+
+    if (element.length > 1) {
+        element.forEach(function(item) {
+            nodeName.appendChild(item.draw());
+        });
+
+    } else {
+        nodeName.appendChild(element)
+    }
+
 }
 
 
@@ -782,7 +789,11 @@ function Circle(value, randomX, randomY) {
     }
 }
 
+// TODO: build a submit button
+function SUBMIT() {
+    // this is what the system is targetting
 
+}
 
 /***************************************************************************/
 
@@ -795,7 +806,7 @@ const ANCHOR = new Anchor();
 const UI     = new UIObject();
 
 
-// TODO: build a submit button
+
 const dcSubmit = document.getElementById('d-captcha-submit');
 dcSubmit.style.backgroundColor = '#999';
 
@@ -880,8 +891,8 @@ function buildGame() {
     UI.clearContainer();
 
     /* create the circles */
-    const allCirlces = createCircles(Circle);
-    const circles = randomizeCircles(allCirlces, 5);
+    const allCirlces    = createCircles(Circle);
+    const circles       = randomizeCircles(allCirlces, 5);
 
 
     /* show the instruction message then start the game */
@@ -892,7 +903,7 @@ function buildGame() {
     /* start the game */
     setTimeout(function () {
         /* deploy circles to the container. */
-        multiAppend(container, circles);
+        append(container, circles);
 
         /* remove pop up */
         UI.removePopUp();
@@ -960,6 +971,9 @@ function reStart() {
             }, 200);
         }, 3000);
 }
+
+
+
 
 
 
