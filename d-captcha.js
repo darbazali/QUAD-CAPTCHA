@@ -110,54 +110,8 @@ function createCircles(object) {
 }
 
 
-/* handling sroll bar */
-function Scroll() {
 
-    // left: 37, up: 38, right: 39, down: 40,
-    // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
-    const keys = {
-        37: 1,
-        38: 1,
-        39: 1,
-        40: 1
-    };
 
-    function preventDefault(e) {
-        e = e || window.event;
-        if (e.preventDefault)
-            e.preventDefault();
-        e.returnValue = false;
-    }
-
-    function preventDefaultForScrollKeys(e) {
-        if (keys[e.keyCode]) {
-            preventDefault(e);
-            return false;
-        }
-    }
-
-    return {
-        disable: function () {
-            if (window.addEventListener) // older FF
-                window.addEventListener('DOMMouseScroll', preventDefault, false);
-            window.onwheel = preventDefault; // modern standard
-            window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-            window.ontouchmove = preventDefault; // mobile
-            document.onkeydown = preventDefaultForScrollKeys;
-        },
-
-        enable: function () {
-            if (window.removeEventListener)
-                window.removeEventListener('DOMMouseScroll', preventDefault, false);
-            window.onmousewheel = document.onmousewheel = null;
-            window.onwheel = null;
-            window.ontouchmove = null;
-            document.onkeydown = null;
-        }
-    }
-
-}
-const SCROLL = new Scroll();
 
 
 /* get the value of circles and put them inside an array */
@@ -781,6 +735,55 @@ function Circle(value, randomX, randomY) {
     }
 }
 
+
+/* handling sroll bar */
+function Scroll() {
+
+    // left: 37, up: 38, right: 39, down: 40,
+    // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+    const keys = {
+        37: 1,
+        38: 1,
+        39: 1,
+        40: 1
+    };
+
+    function preventDefault(e) {
+        e = e || window.event;
+        if (e.preventDefault)
+            e.preventDefault();
+        e.returnValue = false;
+    }
+
+    function preventDefaultForScrollKeys(e) {
+        if (keys[e.keyCode]) {
+            preventDefault(e);
+            return false;
+        }
+    }
+
+    return {
+        disable: function () {
+            if (window.addEventListener) // older FF
+                window.addEventListener('DOMMouseScroll', preventDefault, false);
+            window.onwheel = preventDefault; // modern standard
+            window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+            window.ontouchmove = preventDefault; // mobile
+            document.onkeydown = preventDefaultForScrollKeys;
+        },
+
+        enable: function () {
+            if (window.removeEventListener)
+                window.removeEventListener('DOMMouseScroll', preventDefault, false);
+            window.onmousewheel = document.onmousewheel = null;
+            window.onwheel = null;
+            window.ontouchmove = null;
+            document.onkeydown = null;
+        }
+    }
+
+}
+
 // TODO: build a submit button
 function SUBMIT() {
     // this is what the system is targetting
@@ -796,6 +799,7 @@ SECTION 3: set up
 
 const ANCHOR = new Anchor();
 const UI     = new UIObject();
+const SCROLL = new Scroll();
 
 
 
