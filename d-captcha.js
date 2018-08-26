@@ -20,16 +20,8 @@ movement tracking and memorizing.
 SECTION 1: general purpose functions
 **************************************/
 
-/* simplyfing console.log, debbuging purpose */
-const println = console.log;
 
-///* appending an element to a node, general purpose */
-//function append(node, element) {
-//    return node.appendChild(element);
-//}
-
-
-/* appending multiple elements to a node */
+/* append element/elements to a node. */
 function append(nodeName, element) {
 
     if (element.length > 1) {
@@ -68,7 +60,7 @@ function isColliding(element1, element2) {
 
 
 /* Randomize(shuffle) an array, algorithm */
-function randomizeCircles(srcArray, amount) {
+function shuffle(srcArray, amount) {
     var rndArray = []; // random array
 
     while (rndArray.length < amount) {
@@ -165,7 +157,7 @@ function Scroll() {
     }
 
 }
-const scroll = new Scroll();
+const SCROLL = new Scroll();
 
 
 /* get the value of circles and put them inside an array */
@@ -244,7 +236,7 @@ function Anchor() {
     checkbox.onclick = function() {
         UI.open();
         buildGame();
-        scroll.disable();
+        SCROLL.disable();
     }
 }
 
@@ -530,7 +522,7 @@ function UIObject() {
         // at this point we have to clear all intervals
         clearIntervals();
         UI.close();
-        scroll.enable();
+        SCROLL.enable();
 
         if (wrapper.lastChild == popUp) {
             wrapper.removeChild(popUp);
@@ -892,7 +884,7 @@ function buildGame() {
 
     /* create the circles */
     const allCirlces    = createCircles(Circle);
-    const circles       = randomizeCircles(allCirlces, 5);
+    const circles       = shuffle(allCirlces, 5);
 
 
     /* show the instruction message then start the game */
@@ -932,7 +924,7 @@ function buildGame() {
 }
 
 
-
+/* restart the game with wrong play or restart button.*/
 function reStart() {
     // container for the circles(playground).
     const container = UI.container();
@@ -942,13 +934,13 @@ function reStart() {
 
     /* create the circles */
     const allCirlces = createCircles(Circle);
-    const circles    = randomizeCircles(allCirlces, 5);
+    const circles    = shuffle(allCirlces, 5);
 
 
     /* start the game */
 
         /* deploy circles to the container. */
-        multiAppend(container, circles);
+        append(container, circles);
 
         /* remove pop up */
         UI.removePopUp();
