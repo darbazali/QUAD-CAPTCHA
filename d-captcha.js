@@ -10,10 +10,12 @@ Aim             : Internet Bot
 
 Description:
 
-dCAPTCHA is a brand new, GAME based  CAPTCHA system that focuses on human thinking,
+dCAPTCHA is a brand new, GAME based
+CAPTCHA system that focuses on human thinking,
 movement tracking and memorizing.
 
 */
+
 
 
 /**************************************
@@ -123,13 +125,13 @@ function makeSortedModel(elements) {
 }
 
 
-/***************************************************************************/
-
 
 
 /**************************************
 SECTION 2: COMPONENTS
 **************************************/
+
+// TODO: modify anchor component
 
 /* 2.1 - Anchor */
 function Anchor() {
@@ -188,6 +190,12 @@ function Anchor() {
     UI.open();
     buildGame();
     SCROLL.disable();
+  }
+
+  return {
+    checked: function() {
+      checkbox.disabled = true;
+    }
   }
 }
 
@@ -800,11 +808,13 @@ function Submit() {
       d_c_submit.disabled = false;
       style.backgroundColor = 'forestgreen';
       style.cursor = 'pointer';
+      style.opacity = '1';
     }
   }
 }
 
-/***************************************************************************/
+
+
 
 
 /**************************************
@@ -815,8 +825,6 @@ const ANCHOR = new Anchor();
 const UI = new UIObject();
 const SCROLL = new Scroll();
 const SUBMIT = new Submit();
-
-
 
 
 // start playing game with the circles.
@@ -856,7 +864,8 @@ function game(elements) {
           setTimeout(function () {
             SUBMIT.enable();
             UI.close();
-          }, 1000);
+            ANCHOR.checked();
+          }, 500);
 
         }
 
@@ -980,3 +989,7 @@ function reStart() {
     }, 200);
   }, 3000);
 }
+
+
+
+
