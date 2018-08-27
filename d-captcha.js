@@ -111,16 +111,15 @@ function createCircles(object) {
 }
 
 
-/* get the value of circles and put them inside an array */
-function getCircleValues(elements) {
-  // getting random array value and put it in an array
-  const numberArray = [];
+/* retruns an array of sorted values of a none sorted array */
+function makeSortedModel(elements) {
+  const sortedValues = [];
 
   elements.forEach(function (item) {
-    numberArray.push(parseInt(item.draw().getAttribute('value')));
+    sortedValues.push(parseInt(item.draw().getAttribute('value')));
   });
 
-  return numberArray.sort()
+  return sortedValues.sort()
 }
 
 
@@ -145,8 +144,9 @@ function Anchor() {
   append(anchor, checkbox);
   append(anchor, title);
 
-  const target = document.getElementById('d-captcha-div');
-  append(target, anchor);
+  const target = document.getElementsByClassName('d-captcha-div');
+  const d_c_anchor = target[0];
+  append(d_c_anchor, anchor);
 
 
 
@@ -733,8 +733,7 @@ function Circle(value, randomX, randomY) {
   }
 }
 
-
-/* handling sroll bar */
+/* 2.4 handling sroll bar */
 function Scroll() {
 
   // left: 37, up: 38, right: 39, down: 40,
@@ -782,10 +781,27 @@ function Scroll() {
 
 }
 
-// TODO: build a submit button
-function SUBMIT() {
+/* 2.5 SUBMIT button */
+function Submit() {
   // this is what the system is targetting
+  const submit = document.getElementsByClassName('d-captcha-submit');
+  const d_c_submit = submit[0];
+  const style = d_c_submit.style;
 
+  d_c_submit.disabled = true;
+
+  style.backgroundColor = '#626262';
+  style.cursor = 'default';
+  style.opacity = '0.7';
+
+
+  return {
+    enable: function () {
+      d_c_submit.disabled = false;
+      style.backgroundColor = 'forestgreen';
+      style.cursor = 'pointer';
+    }
+  }
 }
 
 /***************************************************************************/
@@ -798,24 +814,23 @@ SECTION 3: set up
 const ANCHOR = new Anchor();
 const UI = new UIObject();
 const SCROLL = new Scroll();
+const SUBMIT = new Submit();
 
 
 
-const dcSubmit = document.getElementById('d-captcha-submit');
-dcSubmit.style.backgroundColor = '#999';
 
 // start playing game with the circles.
 function game(elements) {
   var isHuman = false;
 
   /* a model for sorted circles */
-  const sortedModel = getCircleValues(elements);
+  const sortedModel = makeSortedModel(elements);
 
   elements.forEach(function (element) {
     element.draw().onclick = function (event) {
       // value of the current circle
       const value = this.getAttribute('value');
-
+      const baseNumber = sortedModel[0];
 
       /*
           if user clicks on the right circle
@@ -826,7 +841,8 @@ function game(elements) {
       */
 
       // TODO: refactor this block
-      if (value == sortedModel[0]) {
+
+      if (value == baseNumber) {
         sortedModel.shift();
         element.rightPlay();
         element.stop();
@@ -838,9 +854,8 @@ function game(elements) {
           UI.popUpSuccess();
 
           setTimeout(function () {
-
+            SUBMIT.enable();
             UI.close();
-            dcSubmit.disabled = false;
           }, 1000);
 
         }
