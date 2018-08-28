@@ -145,32 +145,45 @@ const colors = {
 
 
 
-// TODO: redesign anchor element
 /* 2.1 - Anchor */
 function Anchor() {
 
+  // common styles for checkBox element
+  function styleCheckbox(element) {
+    const style = element.style;
+
+    style.height = '30px';
+    style.width = '30px';
+    style.border = '1px solid ' + colors.darkGray;
+    style.borderRadius = '2px';
+    style.backgroundColor = colors.white;
+    style.color = colors.forestGreen;
+    style.marginRight = '10px';
+    style.padding = '0';
+    style.fontSize = '30px';
+    style.textAlign = 'center';
+    style.cursor = 'pointer';
+  }
+
   // elements
-  var anchor = document.createElement('div');
-  var checkbox = document.createElement('div');
-  var title = document.createElement('div');
+  const anchor = document.createElement('div');
+  const checkbox = document.createElement('div');
+  const checkedBox = checkbox.cloneNode(true);
+  const title = document.createElement('div');
+  const target = document.getElementsByClassName('d-captcha-div');
+  const d_c_anchor = target[0];
+  const checkMark = '&#10003';
 
   // assembling
   title.innerHTML = "I'm not a robot";
   append(anchor, checkbox);
   append(anchor, title);
-
-  const target = document.getElementsByClassName('d-captcha-div');
-  const d_c_anchor = target[0];
   append(d_c_anchor, anchor);
-
 
 
   // styles
   style = anchor.style;
-  checkBox_style = checkbox.style;
   title_style = title.style;
-//  const checkMark = '\u2713';
-  const checkMark = '&#10003';
 
   // anchor style
   style.width = '300px';
@@ -186,24 +199,21 @@ function Anchor() {
   style.marginBottom = '10px';
 
 
-  // checkbox style
-  checkBox_style.height = '30px';
-  checkBox_style.width = '30px';
-  checkBox_style.border = '1px solid ' + colors.darkGray;
-  checkBox_style.borderRadius = '2px';
-  checkBox_style.backgroundColor = colors.white;
-  checkBox_style.color = colors.forestGreen;
-  checkBox_style.marginRight = '10px';
-  checkBox_style.padding = '0';
-  checkBox_style.paddingLeft = '2px';
-  checkBox_style.fontSize = '28px';
-  checkBox_style.cursor = 'pointer';
-  checkBox_style.transition = 'background-color 0.3s';
+  // checkBox style
+  styleCheckbox(checkbox);
+
+
+  // checkedBox style
+  styleCheckbox(checkedBox);
+  checkedBox.innerHTML = checkMark;
+  checkedBox.style.cursor = 'default';
+
 
 
   // title stile
   title_style.cursor = 'default';
   title_style.color = 'inherit';
+
 
   checkbox.onclick = function () {
     UI.open();
@@ -213,9 +223,7 @@ function Anchor() {
 
   return {
     checked: function() {
-      checkbox.setAttribute('disabled', true);
-      checkbox.innerHTML = checkMark;
-      checkbox.removeEventListener('click', UI.open);
+      checkbox.parentNode.replaceChild(checkedBox, checkbox);
     }
   }
 }
@@ -223,9 +231,6 @@ function Anchor() {
 /* 2.2 - UI */
 function UIObject() {
 
-  // colors
-  const white = '#FFFFFF';
-  const transparent = 'rgba(255, 255, 255, 0)';
 
   /* Private funcitons */
   // common styles for buttons
@@ -239,12 +244,12 @@ function UIObject() {
     style.padding = '0 5px';
     style.fontSize = '40px';
     style.fontWeight = '400';
-    style.backgroundColor = transparent;
+    style.backgroundColor = colors.transparent;
     style.display = 'inline-block';
     style.float = 'left'
     style.border = 'none';
     style.cursor = 'pointer';
-    style.color = white;
+    style.color = colors.white;
     style.transition = 'all .2s ease-in-out';
 
     const userAgent = window.navigator.userAgent;
@@ -398,7 +403,7 @@ function UIObject() {
   overStyle.top = window.pageYOffset + 'px';
   overStyle.left = window.pageXOffset + 'px';
   overStyle.backgroundColor = 'rgba(72, 72, 72, 0.8)';
-  overStyle.color = white;
+  overStyle.color = colors.white;
   overStyle.fontFamily = 'Arial';
   //    commonStyle(overlay);
 
@@ -407,7 +412,7 @@ function UIObject() {
   wrapStyle.width = '320px';
   wrapStyle.height = '480px';
   wrapStyle.borderRadius = '15px';
-  wrapStyle.backgroundColor = '#177cff';
+  wrapStyle.backgroundColor = colors.dodgerBlue;
   wrapStyle.boxShadow = '0 0 20px #333333';
   wrapStyle.boxSizing = 'inherit';
   wrapStyle.position = 'relative';
@@ -437,7 +442,7 @@ function UIObject() {
   titlStyle.margin = '0';
   titlStyle.padding = '5px 10px';
   titlStyle.fontSize = '26px';
-  titlStyle.backgroundColor = transparent;
+  titlStyle.backgroundColor = colors.transparent;
 
   const paragraph = title.firstChild
   paragraph.style.padding = '0';
@@ -450,7 +455,7 @@ function UIObject() {
   btnWrapStyle.width = '100%';
   btnWrapStyle.height = '50px';
   btnWrapStyle.padding = '5px 0';
-  btnWrapStyle.backgroundColor = transparent;
+  btnWrapStyle.backgroundColor = colors.transparent;
 
 
   // restart button style
@@ -469,7 +474,7 @@ function UIObject() {
   // container style
   contStyle.width = '320px';
   contStyle.height = '320px';
-  contStyle.backgroundColor = '#5C5C5C';
+  contStyle.backgroundColor = '#696969';
   contStyle.margin = '0 auto';
   contStyle.position = 'relative';
   contStyle.boxSizing = 'inherit';
