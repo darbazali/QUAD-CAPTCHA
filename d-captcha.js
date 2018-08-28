@@ -22,6 +22,8 @@ movement tracking and memorizing.
 SECTION 1: general purpose functions
 **************************************/
 
+const println = console.log;
+
 
 /* append element/elements to a node. */
 function append(nodeName, element) {
@@ -131,8 +133,19 @@ function makeSortedModel(elements) {
 SECTION 2: COMPONENTS
 **************************************/
 
-// TODO: modify anchor component
+const colors = {
+  white:        '#FFF',
+  transparent:  'rgba(255, 255, 255, 0)',
+  darkGray:     '#979797',
+  lightGray:    '#D8D8D8',
+  mediumBlue:   '#0000CD',
+  forestGreen:  '#228B22',
+  dodgerBlue:   '#1E90FF'
+}
 
+
+
+// TODO: redesign anchor element
 /* 2.1 - Anchor */
 function Anchor() {
 
@@ -142,7 +155,7 @@ function Anchor() {
   var title = document.createElement('div');
 
   // assembling
-  title.innerHTML = "I'm not a robot!";
+  title.innerHTML = "I'm not a robot";
   append(anchor, checkbox);
   append(anchor, title);
 
@@ -156,35 +169,41 @@ function Anchor() {
   style = anchor.style;
   checkBox_style = checkbox.style;
   title_style = title.style;
+//  const checkMark = '\u2713';
+  const checkMark = '&#10003';
 
   // anchor style
   style.width = '300px';
   style.height = '80px';
   style.boxSizing = 'border-box';
-  style.backgroundColor = '#cecece';
-  style.color = '#0a4bfc';
-  style.border = '1px solid #000';
-  style.borderRadius = '3px';
+  style.backgroundColor = colors.lightGray;
+  style.color = colors.mediumBlue;
+  style.border = '1px solid ' + colors.darkGray;
+  style.borderRadius = '8px';
   style.display = 'flex';
-  style.fontSize = '20px';
+  style.fontSize = '25px';
   style.padding = '20px 10px';
   style.marginBottom = '10px';
 
 
   // checkbox style
-  checkBox_style.height = '20px';
-  checkBox_style.width = '20px';
-  checkBox_style.border = '1px solid #0a4bfc';
+  checkBox_style.height = '30px';
+  checkBox_style.width = '30px';
+  checkBox_style.border = '1px solid ' + colors.darkGray;
   checkBox_style.borderRadius = '2px';
-  checkBox_style.backgroundColor = '#fff';
+  checkBox_style.backgroundColor = colors.white;
+  checkBox_style.color = colors.forestGreen;
   checkBox_style.marginRight = '10px';
+  checkBox_style.padding = '0';
+  checkBox_style.paddingLeft = '2px';
+  checkBox_style.fontSize = '28px';
   checkBox_style.cursor = 'pointer';
   checkBox_style.transition = 'background-color 0.3s';
 
 
   // title stile
   title_style.cursor = 'default';
-  title_style.color = '#0a4bfc';
+  title_style.color = 'inherit';
 
   checkbox.onclick = function () {
     UI.open();
@@ -194,7 +213,9 @@ function Anchor() {
 
   return {
     checked: function() {
-      checkbox.disabled = true;
+      checkbox.setAttribute('disabled', true);
+      checkbox.innerHTML = checkMark;
+      checkbox.removeEventListener('click', UI.open);
     }
   }
 }
@@ -285,7 +306,6 @@ function UIObject() {
   const infoButton = document.createElement('input');
   const zoomButton = document.createElement('input');
 
-  // TODO: complet this task.
   /*
       implementing pop up messages
       how many messages do we need
@@ -589,7 +609,7 @@ function Circle(value, randomX, randomY) {
   style.fontSize = '54px';
   style.borderRadius = '100%';
   style.textDecoration = 'none';
-  style.backgroundColor = '#1028ac';
+  style.backgroundColor = colors.mediumBlue;
   style.color = '#fff';
   style.border = 'none';
   style.cursor = 'pointer';
@@ -697,7 +717,6 @@ function Circle(value, randomX, randomY) {
 
   } // update
 
-  // TODO: refactor this block.
 
   // methodes for the circle
   return {
@@ -798,15 +817,15 @@ function Submit() {
 
   d_c_submit.disabled = true;
 
-  style.backgroundColor = '#626262';
+//  style.backgroundColor = colors.darkGray;
   style.cursor = 'default';
-  style.opacity = '0.7';
+  style.opacity = '0.6';
 
 
   return {
     enable: function () {
       d_c_submit.disabled = false;
-      style.backgroundColor = 'forestgreen';
+      style.backgroundColor = colors.forestGreen;
       style.cursor = 'pointer';
       style.opacity = '1';
     }
@@ -837,8 +856,9 @@ function game(elements) {
   elements.forEach(function (element) {
     element.draw().onclick = function (event) {
       // value of the current circle
-      const value = this.getAttribute('value');
+      const value = parseInt(this.getAttribute('value'));
       const baseNumber = sortedModel[0];
+
 
       /*
           if user clicks on the right circle
@@ -848,9 +868,8 @@ function game(elements) {
               remove current index from Sorted Model array
       */
 
-      // TODO: refactor this block
 
-      if (value == baseNumber) {
+      if (value === baseNumber) {
         sortedModel.shift();
         element.rightPlay();
         element.stop();
@@ -989,6 +1008,14 @@ function reStart() {
     }, 200);
   }, 3000);
 }
+
+
+
+
+
+
+
+
 
 
 
