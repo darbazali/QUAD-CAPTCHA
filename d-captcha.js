@@ -888,8 +888,9 @@ function game(elements) {
           setTimeout(function () {
             SUBMIT.enable();
             UI.close();
+            SCROLL.enable();
             ANCHOR.checked();
-          }, 500);
+          }, 200);
 
         }
 
