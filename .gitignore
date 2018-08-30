@@ -4,6 +4,7 @@
 
 /css/
 .gitignore
+d-captcha.min.js
 /script/unit-testing.js
 index.html
 test.html
