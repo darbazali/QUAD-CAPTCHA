@@ -65,6 +65,9 @@ function UIObject() {
   const title = document.createElement('div');
   const popUp = document.createElement('div');
 
+  const timer = document.createElement('div');
+
+
   const buttonWrapp = document.createElement('div');
 
   /*
@@ -87,7 +90,7 @@ function UIObject() {
 
     '<p><span style="font-weight: 800">look at the' +
     ' circles for<br/> 3 seconds. </span><br/>' +
-    'after the numbers disapeard, try to memorize them in the ' +
+    'after the numbers disapeard, click the circles One by One in the ' +
     '<span style="font-weight: 700">Ascending Order</span></p>';
 
 
@@ -105,13 +108,14 @@ function UIObject() {
     '<p>Memorize the numbers<br/>' +
     ' in the <span style="font-weight: 700">Ascending Order</span></p>';
 
-
+//  timer.innerHTML = '0';
 
   // Assembling
   append(overlay, wrapper);
   append(wrapper, title);
   append(wrapper, container);
   append(wrapper, buttonWrapp);
+//  append(wrapper, timer);
 
   append(buttonWrapp, ICON.infoButton());
   append(buttonWrapp, ICON.restartButton());
@@ -124,6 +128,8 @@ function UIObject() {
   const wrapStyle = wrapper.style;
   const contStyle = container.style;
   const popStyle = popUp.style;
+  const timerStyle = timer.style;
+
 
   const titlStyle = title.style;
   const btnWrapStyle = buttonWrapp.style;
@@ -172,6 +178,7 @@ function UIObject() {
   popStyle.marginTop = '10px';
   popStyle.borderRadius = '10px';
   popStyle.boxShadow = '0 0 20px #333333';
+  popStyle.cursor = 'default';
 
 
   // title style
@@ -206,7 +213,22 @@ function UIObject() {
   contStyle.position = 'relative';
   contStyle.boxSizing = 'inherit';
 
-
+    // timer style
+  timerStyle.width = '150px';
+  timerStyle.height = '150px';
+  timerStyle.border = '5px solid #fff';
+  timerStyle.borderRadius = '50%';
+  timerStyle.backgroundColor = '#e55a04';
+  timerStyle.color = '#FFF';
+  timerStyle.boxShadow = '0 0 20px #292929';
+  timerStyle.textAlign = 'center';
+  timerStyle.fontSize = '126px';
+  timerStyle.padding = 'none';
+  timerStyle.position = 'absolute';
+  timerStyle.left = '50%';
+  timerStyle.top = '50%';
+  timerStyle.transform = 'translate(-50%, -50%)';
+  timerStyle.cursor = 'default';
 
 
 
@@ -275,9 +297,25 @@ function UIObject() {
       return document.body.removeChild(overlay);
     },
 
-    popUp: function () {
-      popUp.innerHTML = infoMSG;
-      append(wrapper, popUp)
+    timer: function (func) {
+      append(wrapper, timer);
+      var seconds = 2;
+      var timerId = setInterval(updateTimer, 1000);
+
+      timer.innerHTML = seconds;
+
+      function updateTimer () {
+        seconds --;
+        timer.innerHTML = seconds;
+
+        if (seconds === 0) {
+          clearInterval(timerId);
+          setTimeout(function() {
+          wrapper.removeChild(timer);
+          func()
+          }, 1000)
+        }
+      }
     },
 
     popUpRetry: function () {
@@ -316,6 +354,7 @@ function Icons() {
     style.width = '50px';
     style.height = '50px';
     style.padding = '0';
+    style.cursor = 'pointer';
     style.boxSizing = 'border-box';
     style.display = 'inline-block';
     style.margin = '0px 28px';
@@ -381,6 +420,11 @@ function Icons() {
 
 
 const UI = new UIObject();
+//var timer = UI.timer();
+//if (timer) {
+//  println("I'm done!");
+//}
 
+UI.timer(UI.popUpSuccess)
 
 document.body.appendChild(UI.open())

@@ -22,7 +22,13 @@ movement tracking and memorizing.
 SECTION 1: general purpose functions
 **************************************/
 
-const println = console.log;
+//const println = console.log;
+
+/* change string to integer */
+function strToInt(str) {
+  const integer = +str || parseInt(str); // for IE < 9
+  return integer;
+}
 
 
 /* append element/elements to a node. */
@@ -46,11 +52,11 @@ function isColliding(element1, element2) {
   // size of the element
   var size = 60;
 
-  const X1 = parseInt(element1.style.left);
-  const X2 = parseInt(element2.style.left);
+  const X1 = strToInt(element1.style.left);
+  const X2 = strToInt(element2.style.left);
 
-  const Y1 = parseInt(element1.style.top);
-  const Y2 = parseInt(element2.style.top);
+  const Y1 = strToInt(element1.style.top);
+  const Y2 = strToInt(element2.style.top);
 
 
   if (X1 + size >= X2 &&
@@ -120,11 +126,12 @@ function makeSortedModel(elements) {
   const sortedValues = [];
 
   elements.forEach(function (item) {
-    sortedValues.push(parseInt(item.draw().getAttribute('value')));
+    sortedValues.push(strToInt(item.draw().getAttribute('value')));
   });
 
   return sortedValues.sort()
 }
+
 
 
 
@@ -143,7 +150,6 @@ const colors = {
   dodgerBlue: '#1E90FF',
   royalBlue:  '#4169E1'
 }
-
 
 
 /* 2.1 - Anchor */
@@ -202,6 +208,14 @@ function Anchor() {
 
   // checkBox style
   styleCheckbox(checkbox);
+  checkbox.style.transition = 'box-shadow 0.3s';
+  checkbox.onmousemove = function() {
+    checkbox.style.boxShadow = '0 0 10px #7b7b7b';
+  }
+
+  checkbox.onmouseout = function() {
+    checkbox.style.boxShadow = 'none';
+  }
 
 
   // checkedBox style
@@ -242,58 +256,66 @@ function Icons() {
     style.height = '50px';
     style.padding = '0';
     style.boxSizing = 'border-box';
+    style.display = 'inline-block';
+    style.cursor = 'pointer';
+    style.margin = '0px 28px';
+    style.transition = 'all 0.3s';
+    style.backgroundColor = colors.transparent;
+
+    button.onmouseover = function () {
+      style.opacity = '0.8';
+      style.transform = 'scale(1.1)';
+    }
+
+    button.onmouseout = function () {
+      style.opacity = '1';
+      style.transform = 'scale(1)';
+    }
   }
 
 
   // icon names
 
-  const closeBtn    = document.createElement('div');
-  const infoBtn     = document.createElement('div');
-  const restartBtn  = document.createElement('div');
-  const zoomBtn     = document.createElement('div');
+  const closeBtn = document.createElement('div');
+  const infoBtn = document.createElement('div');
+  const restartBtn = document.createElement('div');
 
 
   btnStyle(closeBtn);
   btnStyle(infoBtn);
   btnStyle(restartBtn);
-  btnStyle(zoomBtn);
 
   const close = '<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons" transform="translate(-108.000000, -43.000000)" stroke="#FFFFFF" stroke-width="3"><g id="Group-4" transform="translate(110.000000, 45.000000)"><circle id="Oval-2" cx="25" cy="25" r="25"></circle><path d="M13.5,14.5 L37.5,36.5" id="Line-4" stroke-linecap="square"></path><path d="M13.5,14.5 L37.5,36.5" id="Line-4-Copy" stroke-linecap="square" transform="translate(25.500000, 25.500000) scale(1, -1) translate(-25.500000, -25.500000) "></path></g></g></g></svg>';
 
 
-  const restart = '<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons" transform="translate(-38.000000, -43.000000)">g id="Group" transform="translate(40.000000, 45.000000)"><circle id="Oval-2-Copy-4" stroke="#FFFFFF" stroke-width="3" cx="25" cy="25" r="25"></circle><path d="M37.3937438,29.3565788 C35.7683668,34.3728416 31.0577675,38 25.5,38 C18.5964406,38 13,32.4035594 13,25.5 C13,18.5964406 18.5964406,13 25.5,13 C30.0450607,13 34.0235583,15.425745 36.2114728,19.0532151 L36.970375,20.1937468 C37.2509913,20.6154767 37.5940654,20.9921147 37.9878485,21.3107626 L38.0030837,21.323091" id="Oval-2-Copy-6" stroke="#FFFFFF" stroke-width="3"></path><polygon id="Triangle-2" fill="#FFFFFF" transform="translate(37.482899, 22.041852) rotate(147.000000) translate(-37.482899, -22.041852) " points="37.4828991 17.5418518 43.4828991 26.5418518 31.4828991 26.5418518"></polygon></g></g></g></svg>';
+  const restart = '<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons" transform="translate(-38.000000, -43.000000)"><g id="Group" transform="translate(40.000000, 45.000000)"><circle id="Oval-2-Copy-4" stroke="#FFFFFF" stroke-width="3" cx="25" cy="25" r="25"></circle><path d="M37.3937438,29.3565788 C35.7683668,34.3728416 31.0577675,38 25.5,38 C18.5964406,38 13,32.4035594 13,25.5 C13,18.5964406 18.5964406,13 25.5,13 C30.0450607,13 34.0235583,15.425745 36.2114728,19.0532151 L36.970375,20.1937468 C37.2509913,20.6154767 37.5940654,20.9921147 37.9878485,21.3107626 L38.0030837,21.323091" id="Oval-2-Copy-6" stroke="#FFFFFF" stroke-width="3"></path><polygon id="Triangle-2" fill="#FFFFFF" transform="translate(37.482899, 22.041852) rotate(147.000000) translate(-37.482899, -22.041852) " points="37.4828991 17.5418518 43.4828991 26.5418518 31.4828991 26.5418518"></polygon></g></g></g></svg>';
 
-  const info =
-        '<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' +
-    '<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">' +
-        '<g id="Icons" transform="translate(-190.000000, -43.000000)">' +
-           '<g id="Group-3" transform="translate(192.000000, 45.000000)">' +
-                '<circle id="Oval-2-Copy" stroke="#FFFFFF" stroke-width="3" cx="25" cy="25" r="25"></circle>' +
-                '<path d="M30.25,33.1796875 C30.6718771,33.4296887 30.8828125,33.6718738 30.8828125,33.90625 C30.8828125,34.4687528 30.2031318,35.5781167 28.84375,37.234375 C27.0156159,39.4843863 25.3203203,40.609375 23.7578125,40.609375 C22.6171818,40.609375 22.046875,39.8515701 22.046875,38.3359375 C22.046875,37.6953093 22.2812477,35.726579 22.75,32.4296875 L23.6640625,26.0546875 L23.8984375,24.4375 L24.0859375,23.1484375 C24.1640629,22.6015598 24.203125,22.1406269 24.203125,21.765625 C24.203125,20.9843711 23.9843772,20.59375 23.546875,20.59375 C22.3281189,20.59375 21.015632,21.9374866 19.609375,24.625 C19.3124985,24.3593737 19.1640625,24.0937513 19.1640625,23.828125 C19.1640625,22.8749952 20.04296,21.593758 21.8007812,19.984375 C23.5586025,18.374992 24.9609323,17.5703125 26.0078125,17.5703125 C27.1796934,17.5703125 27.765625,18.3828044 27.765625,20.0078125 C27.765625,20.3203141 27.7031256,20.9609327 27.578125,21.9296875 L27.3671875,23.5 C27.3515624,23.6250006 27.2656258,24.2578068 27.109375,25.3984375 L26.1484375,32.1015625 L25.9140625,33.6015625 C25.7109365,35.0859449 25.609375,36.0781225 25.609375,36.578125 C25.609375,37.2500034 25.8046855,37.5859375 26.1953125,37.5859375 C27.5078191,37.5859375 28.859368,36.1172022 30.25,33.1796875 Z" id="i" fill="#FFFFFF"></path>' +
-                '<circle id="Oval-3" fill="#FFFFFF" cx="25.5" cy="12.5" r="2.5"></circle>' +
-            '</g></g></g></svg>';
+  const info = '<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons" transform="translate(-179.000000, -43.000000)"><g id="Group-3" transform="translate(181.000000, 45.000000)"><circle id="Oval-2-Copy" stroke="#FFFFFF" stroke-width="3" cx="25" cy="25" r="25"></circle><path d="M30.25,33.1796875 C30.6718771,33.4296887 30.8828125,33.6718738 30.8828125,33.90625 C30.8828125,34.4687528 30.2031318,35.5781167 28.84375,37.234375 C27.0156159,39.4843863 25.3203203,40.609375 23.7578125,40.609375 C22.6171818,40.609375 22.046875,39.8515701 22.046875,38.3359375 C22.046875,37.6953093 22.2812477,35.726579 22.75,32.4296875 L23.6640625,26.0546875 L23.8984375,24.4375 L24.0859375,23.1484375 C24.1640629,22.6015598 24.203125,22.1406269 24.203125,21.765625 C24.203125,20.9843711 23.9843772,20.59375 23.546875,20.59375 C22.3281189,20.59375 21.015632,21.9374866 19.609375,24.625 C19.3124985,24.3593737 19.1640625,24.0937513 19.1640625,23.828125 C19.1640625,22.8749952 20.04296,21.593758 21.8007812,19.984375 C23.5586025,18.374992 24.9609323,17.5703125 26.0078125,17.5703125 C27.1796934,17.5703125 27.765625,18.3828044 27.765625,20.0078125 C27.765625,20.3203141 27.7031256,20.9609327 27.578125,21.9296875 L27.3671875,23.5 C27.3515624,23.6250006 27.2656258,24.2578068 27.109375,25.3984375 L26.1484375,32.1015625 L25.9140625,33.6015625 C25.7109365,35.0859449 25.609375,36.0781225 25.609375,36.578125 C25.609375,37.2500034 25.8046855,37.5859375 26.1953125,37.5859375 C27.5078191,37.5859375 28.859368,36.1172022 30.25,33.1796875 Z" id="i" fill="#FFFFFF"></path><circle id="Oval-3" fill="#FFFFFF" cx="25.5" cy="12.5" r="2.5"></circle></g></g></g></svg>';
 
-  const zoom = '<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons" transform="translate(-254.000000, -44.000000)"><g id="Group-2" transform="translate(256.000000, 46.000000)"><circle id="Oval-2-Copy-2" stroke="#FFFFFF" stroke-width="3" cx="25" cy="25" r="25"></circle><polygon id="Triangle" fill="#FFFFFF" transform="translate(34.435029, 17.435029) rotate(45.000000) translate(-34.435029, -17.435029) " points="34.4350288 9.43502884 45.4350288 25.4350288 23.4350288 25.4350288"></polygon><polygon id="Triangle-Copy" fill="#FFFFFF" transform="translate(18.435029, 33.435029) scale(-1, -1) rotate(45.000000) translate(-18.435029, -33.435029) " points="18.4350288 25.4350288 29.4350288 41.4350288 7.43502884 41.4350288"></polygon></g></g></g></svg>';
+
+
+  closeBtn.innerHTML = close;
+  restartBtn.innerHTML = restart;
+  infoBtn.innerHTML = info;
+
 
   return {
-    closeButton: function() {
-      closeBtn.innerHTML = close;
+    closeButton: function () {
+      return closeBtn;
     },
 
-    restartButton: function() {
-      restartBtn.innerHTML = restart;
+    restartButton: function () {
+      return restartBtn;
     },
 
-    infoButton: function() {
-      infoBtn.innerHTML = info;
-    },
-
-    zoomButton: function() {
-      zoomBtn.innerHTML = zoom;
+    infoButton: function () {
+      return infoBtn
     }
   }
 
 }
+
+const ICON = new Icons();
 
 
 /* 2.2 - UI */
@@ -301,50 +323,6 @@ function UIObject() {
 
 
   /* Private funcitons */
-  // common styles for buttons
-  function buttonCommonStyle(element) {
-
-    const style = element.style;
-
-    style.width = '15%';
-    style.height = '50px';
-    style.margin = '5px 15px';
-    style.padding = '0 5px';
-    style.fontSize = '40px';
-    style.fontWeight = '400';
-    style.backgroundColor = colors.transparent;
-    style.display = 'inline-block';
-    style.float = 'left'
-    style.border = 'none';
-    style.cursor = 'pointer';
-    style.color = colors.white;
-    style.transition = 'all .2s ease-in-out';
-
-    const userAgent = window.navigator.userAgent;
-    if (userAgent.match('Firefox')) {
-      //            style.fontSize  = '58px';
-      style.color = white;
-      style.fontFamily = 'Arial';
-    }
-
-
-    /* remove outline whene element is fucuesd */
-    element.onfocus = function () {
-      this.style.outline = 'none';
-    }
-
-    /* scale buttons with hover event */
-    element.onmouseover = function () {
-      this.style.transform = 'scale(1.3)';
-    }
-
-    element.onmouseout = function () {
-      this.style.transform = 'scale(1)';
-
-    }
-
-  }
-
 
   // style an element with some properties
   function commonStyle(element) {
@@ -373,11 +351,10 @@ function UIObject() {
   const title = document.createElement('div');
   const popUp = document.createElement('div');
 
+  const timer = document.createElement('div');
+
+
   const buttonWrapp = document.createElement('div');
-  const closeButton = document.createElement('input');
-  const restartButton = document.createElement('input');
-  const infoButton = document.createElement('input');
-  const zoomButton = document.createElement('input');
 
   /*
       implementing pop up messages
@@ -399,7 +376,7 @@ function UIObject() {
 
     '<p><span style="font-weight: 800">look at the' +
     ' circles for<br/> 3 seconds. </span><br/>' +
-    'after the numbers disapeard, try to memorize them in the ' +
+    'after the numbers disapeard, click the circles One by One in the ' +
     '<span style="font-weight: 700">Ascending Order</span></p>';
 
 
@@ -417,33 +394,18 @@ function UIObject() {
     '<p>Memorize the numbers<br/>' +
     ' in the <span style="font-weight: 700">Ascending Order</span></p>';
 
-
-  // setting attributes
-  closeButton.setAttribute('type', 'button');
-  closeButton.setAttribute('value', '⊗');
-
-  // restart button
-  restartButton.setAttribute('type', 'button');
-  restartButton.setAttribute('value', '⟳');
-
-  infoButton.setAttribute('type', 'button');
-  infoButton.setAttribute('value', 'ℹ︎');
-
-  //zoom button
-  zoomButton.setAttribute('type', 'button');
-  zoomButton.setAttribute('value', '⊕');
-
+//  timer.innerHTML = '0';
 
   // Assembling
   append(overlay, wrapper);
   append(wrapper, title);
   append(wrapper, container);
   append(wrapper, buttonWrapp);
+//  append(wrapper, timer);
 
-  append(buttonWrapp, zoomButton);
-  append(buttonWrapp, infoButton);
-  append(buttonWrapp, restartButton);
-  append(buttonWrapp, closeButton);
+  append(buttonWrapp, ICON.infoButton());
+  append(buttonWrapp, ICON.restartButton());
+  append(buttonWrapp, ICON.closeButton());
 
 
 
@@ -452,10 +414,10 @@ function UIObject() {
   const wrapStyle = wrapper.style;
   const contStyle = container.style;
   const popStyle = popUp.style;
+  const timerStyle = timer.style;
+
 
   const titlStyle = title.style;
-  const closeStyle = closeButton.style;
-  const restStyle = restartButton.style;
   const btnWrapStyle = buttonWrapp.style;
 
 
@@ -479,7 +441,7 @@ function UIObject() {
   // wrapper style
   wrapStyle.width = '320px';
   wrapStyle.height = '480px';
-  wrapStyle.borderRadius = '15px';
+  wrapStyle.borderRadius = '10px';
   wrapStyle.backgroundColor = colors.royalBlue;
   wrapStyle.boxShadow = '0 0 20px #333333';
   wrapStyle.boxSizing = 'inherit';
@@ -494,13 +456,15 @@ function UIObject() {
   popStyle.left = '50%';
   popStyle.top = '50%';
   popStyle.transform = 'translate(-50%, -50%)'
-  popStyle.backgroundColor = 'rgba(0, 144, 105, 0.8)';
+  popStyle.backgroundColor = colors.royalBlue;
   popStyle.width = '300px';
   popStyle.height = '170px';
   popStyle.fontSize = '22px';
   popStyle.textAlign = 'center';
   popStyle.marginTop = '10px';
-  popStyle.borderRadius = '15px';
+  popStyle.borderRadius = '10px';
+  popStyle.boxShadow = '0 0 20px #333333';
+  popStyle.cursor = 'default';
 
 
   // title style
@@ -526,18 +490,6 @@ function UIObject() {
   btnWrapStyle.backgroundColor = colors.transparent;
 
 
-  // restart button style
-  buttonCommonStyle(restartButton);
-  restStyle.fontSize = '32px';
-
-  // close button style
-  buttonCommonStyle(closeButton);
-
-
-  buttonCommonStyle(infoButton);
-
-
-  buttonCommonStyle(zoomButton);
 
   // container style
   contStyle.width = '320px';
@@ -547,14 +499,23 @@ function UIObject() {
   contStyle.position = 'relative';
   contStyle.boxSizing = 'inherit';
 
+    // timer style
+  timerStyle.width = '150px';
+  timerStyle.height = '150px';
+  timerStyle.border = '5px solid #fff';
+  timerStyle.borderRadius = '50%';
+  timerStyle.backgroundColor = '#e55a04';
+  timerStyle.color = '#FFF';
+  timerStyle.boxShadow = '0 0 20px #292929';
+  timerStyle.textAlign = 'center';
+  timerStyle.fontSize = '126px';
+  timerStyle.padding = 'none';
+  timerStyle.position = 'absolute';
+  timerStyle.left = '50%';
+  timerStyle.top = '50%';
+  timerStyle.transform = 'translate(-50%, -50%)';
+  timerStyle.cursor = 'default';
 
-
-  /* Mobile version */
-  if (window.innerWidth < 700) {
-    zoomButton.disabled = true;
-    zoomButton.style.cursor = 'default';
-    zoomButton.style.opacity = '0.5';
-  }
 
 
   // Centering with resize event
@@ -567,14 +528,16 @@ function UIObject() {
     }
   }
 
-
+  if (window.innerWidth > 700 && window.innerHeight > 700) {
+    overStyle.transform = 'scale(1.3)';
+  }
   // close button event
-  closeButton.onclick = function () {
+  ICON.closeButton().onclick = function () {
 
     // at this point we have to clear all intervals
-    clearIntervals();
-    UI.close();
-    SCROLL.enable();
+        clearIntervals();
+        UI.close();
+        SCROLL.enable();
 
     if (wrapper.lastChild == popUp) {
       wrapper.removeChild(popUp);
@@ -582,7 +545,7 @@ function UIObject() {
   }
 
   // restart button action
-  restartButton.onclick = function () {
+  ICON.restartButton().onclick = function () {
     clearIntervals();
 
     if (wrapper.lastChild == popUp) {
@@ -593,24 +556,24 @@ function UIObject() {
   }
 
 
-  zoomButton.onclick = function () {
-    overStyle.transform = 'scale(1.3)';
-  }
-
-  infoButton.onclick = function () {
+  ICON.infoButton().onclick = function () {
     clearIntervals();
     UI.clearContainer();
     popUp.innerHTML = infoMSG;
 
+    if (wrapper.lastChild == timer) {
+      wrapper.removeChild(timer);
+    }
+
     if (wrapper.lastChild == popUp) {
       wrapper.removeChild(popUp);
-      reStart();
+            reStart();
     } else {
       append(wrapper, popUp);
     }
   }
 
-
+  // TODO: REFACTOR THIS BLOCK.
   // Methodes
   return {
 
@@ -626,9 +589,25 @@ function UIObject() {
       return document.body.removeChild(overlay);
     },
 
-    popUp: function () {
-      popUp.innerHTML = infoMSG;
-      append(wrapper, popUp)
+    timer: function (callBack) {
+      append(wrapper, timer);
+      var seconds = 2;
+      var timerId = setInterval(updateTimer, 1000);
+
+      timer.innerHTML = seconds;
+
+      function updateTimer () {
+        seconds --;
+        timer.innerHTML = seconds;
+
+        if (seconds === 0) {
+          clearInterval(timerId);
+          setTimeout(function() {
+          wrapper.removeChild(timer);
+          callBack() // this function will be executed after timer is over.
+          }, 1000)
+        }
+      }
     },
 
     popUpRetry: function () {
@@ -642,6 +621,7 @@ function UIObject() {
     },
 
     clearContainer: function () {
+      clearIntervals();
       while (container.firstChild) {
         container.removeChild(container.firstChild);
       }
@@ -655,6 +635,7 @@ function UIObject() {
   } // return
 
 }
+
 
 /* 2.3 - Circle Object */
 function Circle(value, randomX, randomY) {
@@ -719,7 +700,7 @@ function Circle(value, randomX, randomY) {
   /* removing px Suffix from a string */
   function removePX(str) {
     var number = 0;
-    number = parseInt(str.slice(0, -2));
+    number = strToInt(str.slice(0, -2));
     return number;
   }
 
@@ -834,6 +815,7 @@ function Circle(value, randomX, randomY) {
   }
 }
 
+
 /* 2.4 handling sroll bar */
 function Scroll() {
 
@@ -882,6 +864,7 @@ function Scroll() {
 
 }
 
+
 /* 2.5 SUBMIT button */
 function Submit() {
   // this is what the system is targetting
@@ -918,20 +901,19 @@ const ANCHOR = new Anchor();
 const UI = new UIObject();
 const SCROLL = new Scroll();
 const SUBMIT = new Submit();
-const ICON = new Icons();
+
 
 
 // start playing game with the circles.
 function game(elements) {
-  var isHuman = false;
 
-  /* a model for sorted circles */
+  /* sorted copy of the circles */
   const sortedModel = makeSortedModel(elements);
 
   elements.forEach(function (element) {
     element.draw().onclick = function (event) {
       // value of the current circle
-      const value = parseInt(this.getAttribute('value'));
+      const value = strToInt(this.getAttribute('value'));
       const baseNumber = sortedModel[0];
 
 
@@ -951,7 +933,6 @@ function game(elements) {
         element.showValue();
 
         if (sortedModel.length === 0) {
-          isHuman = true;
 
           UI.popUpSuccess();
 
@@ -982,6 +963,7 @@ function game(elements) {
           element.disable();
         });
 
+
         element.wrongPlay();
         UI.popUpRetry();
         setTimeout(function () {
@@ -1008,39 +990,35 @@ function buildGame() {
   const circles = shuffle(allCirlces, 5);
 
 
-  /* show the instruction message then start the game */
-
-  UI.popUp();
-
-
   /* start the game */
-  setTimeout(function () {
-    /* deploy circles to the container. */
-    append(container, circles);
+  function startGame() {
 
-    /* remove pop up */
-    UI.removePopUp();
 
-    setTimeout(function () {
+      /* deploy circles to the container. */
+      append(container, circles);
 
-      circles.forEach(function (itme) {
-        itme.hideValue();
-      });
-
-      /* ready the circles to be playd with */
-      circles.forEach(function (itme) {
-        itme.move();
-      });
 
       setTimeout(function () {
-        game(circles);
 
-      }, 300);
+        circles.forEach(function (itme) {
+          itme.hideValue();
+        });
 
-    }, 3000);
+        /* ready the circles to be playd with */
+        circles.forEach(function (itme) {
+          itme.move();
+        });
 
+        setTimeout(function () {
+          game(circles);
 
-  }, 3000);
+        }, 300);
+
+      }, 3000);
+  }
+
+  // show the timer, then start game.
+  UI.timer(startGame);
 
 }
 
@@ -1084,17 +1062,6 @@ function reStart() {
     }, 200);
   }, 3000);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
