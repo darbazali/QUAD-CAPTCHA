@@ -1,6 +1,6 @@
 /*
 
-Software Name   : dCAPTCHA
+Software Name   : gCAPTCHA
 Version         : 1.0
 Author          : Darbaz Ali
 Date            : july / 2018
@@ -10,7 +10,7 @@ Aim             : Internet Bot
 
 Description:
 
-dCAPTCHA is a brand new, GAME based
+gCAPTCHA is a brand new, GAME based
 CAPTCHA system that focuses on human thinking,
 movement tracking and memorizing.
 
@@ -264,12 +264,17 @@ function Icons() {
 
     button.onmouseover = function () {
       style.opacity = '0.8';
+      style.filter = "alpha(opacity=80)"; // IE
       style.transform = 'scale(1.1)';
+      style.msTransform = 'scale(1.1)'; // IE
     }
 
     button.onmouseout = function () {
       style.opacity = '1';
+      style.filter = "alpha(opacity=100)"; // IE
       style.transform = 'scale(1)';
+      style.msTransform = 'scale(1)'; // IE
+
     }
   }
 
@@ -394,7 +399,6 @@ function UIObject() {
     '<p>Memorize the numbers<br/>' +
     ' in the <span style="font-weight: 700">Ascending Order</span></p>';
 
-//  timer.innerHTML = '0';
 
   // Assembling
   append(overlay, wrapper);
