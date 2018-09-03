@@ -1,6 +1,6 @@
 /*
 
-Software Name   : gCAPTCHA
+Software Name   : gCAPTCHA (game CAPTCHA)
 Version         : 1.0
 Author          : Darbaz Ali
 Date            : july / 2018
@@ -36,7 +36,7 @@ function append(nodeName, element) {
   /* for appending an array of elements */
   if (element.length > 1) {
     element.forEach(function (item) {
-      nodeName.appendChild(item.draw());
+      nodeName.appendChild(item.circle);
     });
 
     /* appending a singl element */
@@ -101,7 +101,7 @@ function createCircles(object) {
     var overLapping = false;
     for (var j = 0; j < circles.length; j++) {
       var other = circles[j];
-      var collision = isColliding(circle.draw(), other.draw());
+      var collision = isColliding(circle.circle, other.circle);
 
       if (collision) {
         overLapping = true;
@@ -126,7 +126,7 @@ function makeSortedModel(elements) {
   const sortedValues = [];
 
   elements.forEach(function (item) {
-    sortedValues.push(strToInt(item.draw().getAttribute('value')));
+    sortedValues.push(strToInt(item.circle.getAttribute('value')));
   });
 
   return sortedValues.sort()
@@ -209,6 +209,7 @@ function Anchor() {
   // checkBox style
   styleCheckbox(checkbox);
   checkbox.style.transition = 'box-shadow 0.3s';
+  checkbox.style.borderRadius = '3px';
   checkbox.onmousemove = function() {
     checkbox.style.boxShadow = '0 0 10px #7b7b7b';
   }
@@ -252,13 +253,15 @@ function Icons() {
   function btnStyle(button) {
     const style = button.style;
 
-    style.width = '50px';
-    style.height = '50px';
+    style.width = '55px';
+    style.height = '55px';
     style.padding = '0';
     style.boxSizing = 'border-box';
     style.display = 'inline-block';
     style.cursor = 'pointer';
-    style.margin = '0px 28px';
+    style.margin = '0px 25px';
+    style.borderRadius = '50%';
+    style.border = 'none';
     style.transition = 'all 0.3s';
     style.backgroundColor = colors.transparent;
 
@@ -276,14 +279,21 @@ function Icons() {
       style.msTransform = 'scale(1)'; // IE
 
     }
+
+    button.onfocus = function () {
+      style.outline = 'none';
+    }
   }
 
 
   // icon names
+  const closeBtn = document.createElement('button');
+  const infoBtn = document.createElement('button');
+  const restartBtn = document.createElement('button');
 
-  const closeBtn = document.createElement('div');
-  const infoBtn = document.createElement('div');
-  const restartBtn = document.createElement('div');
+  closeBtn.setAttribute('type', 'button');
+  infoBtn.setAttribute('type', 'button');
+  restartBtn.setAttribute('type', 'button');
 
 
   btnStyle(closeBtn);
@@ -305,17 +315,9 @@ function Icons() {
 
 
   return {
-    closeButton: function () {
-      return closeBtn;
-    },
-
-    restartButton: function () {
-      return restartBtn;
-    },
-
-    infoButton: function () {
-      return infoBtn
-    }
+    closeBtn,
+    restartBtn,
+    infoBtn
   }
 
 }
@@ -380,18 +382,18 @@ function UIObject() {
   const infoMSG =
 
     '<p><span style="font-weight: 800">look at the' +
-    ' circles for<br/> 3 seconds. </span><br/>' +
+    ' circles for<br/> 3 seconds. </span>' +
     'after the numbers disapeard, click the circles One by One in the ' +
     '<span style="font-weight: 700">Ascending Order</span></p>';
 
 
   /* 2. retry message */
   const retryMSG =
-    '<p><span style="font-weight: 700">Wrong! </span><br/>' +
+    '<p><span style="font-weight: 700">Wrong! </span><br/><br/>' +
     'Try again...</p>';
 
   /* 3. success message */
-  const successMSG = '<h3>Succsess!<h3>';
+  const successMSG = '<h3><br/>Succsess!<h3>';
 
 
   // text for title
@@ -405,11 +407,10 @@ function UIObject() {
   append(wrapper, title);
   append(wrapper, container);
   append(wrapper, buttonWrapp);
-//  append(wrapper, timer);
 
-  append(buttonWrapp, ICON.infoButton());
-  append(buttonWrapp, ICON.restartButton());
-  append(buttonWrapp, ICON.closeButton());
+  append(buttonWrapp, ICON.infoBtn);
+  append(buttonWrapp, ICON.restartBtn);
+  append(buttonWrapp, ICON.closeBtn);
 
 
 
@@ -466,9 +467,11 @@ function UIObject() {
   popStyle.fontSize = '22px';
   popStyle.textAlign = 'center';
   popStyle.marginTop = '10px';
+  popStyle.padding = '5px';
   popStyle.borderRadius = '10px';
   popStyle.boxShadow = '0 0 20px #333333';
   popStyle.cursor = 'default';
+  popStyle.boxSizing = 'border-box';
 
 
   // title style
@@ -512,7 +515,7 @@ function UIObject() {
   timerStyle.color = '#FFF';
   timerStyle.boxShadow = '0 0 20px #292929';
   timerStyle.textAlign = 'center';
-  timerStyle.fontSize = '126px';
+  timerStyle.fontSize = '130px';
   timerStyle.padding = 'none';
   timerStyle.position = 'absolute';
   timerStyle.left = '50%';
@@ -533,10 +536,10 @@ function UIObject() {
   }
 
   if (window.innerWidth > 700 && window.innerHeight > 700) {
-    overStyle.transform = 'scale(1.3)';
+    overStyle.transform = 'scale(1.1)';
   }
   // close button event
-  ICON.closeButton().onclick = function () {
+  ICON.closeBtn.onclick = function () {
 
     // at this point we have to clear all intervals
         clearIntervals();
@@ -549,7 +552,7 @@ function UIObject() {
   }
 
   // restart button action
-  ICON.restartButton().onclick = function () {
+  ICON.restartBtn.onclick = function () {
     clearIntervals();
 
     if (wrapper.lastChild == popUp) {
@@ -560,7 +563,7 @@ function UIObject() {
   }
 
 
-  ICON.infoButton().onclick = function () {
+  ICON.infoBtn.onclick = function () {
     clearIntervals();
     UI.clearContainer();
     popUp.innerHTML = infoMSG;
@@ -620,6 +623,7 @@ function UIObject() {
     },
 
     popUpSuccess: function () {
+      popStyle.backgroundColor = colors.forestGreen;
       popUp.innerHTML = successMSG;
       append(wrapper, popUp);
     },
@@ -669,8 +673,8 @@ function Circle(value, randomX, randomY) {
   style.textDecoration = 'none';
   style.backgroundColor = colors.mediumBlue;
   style.color = '#fff';
-//  style.border = 'none';
-  style.border = '1px solid #999';
+  style.border = 'none';
+//  style.border = '2px solid #fff';
   style.cursor = 'pointer';
   style.position = 'absolute';
   style.left = randomX + 'px';
@@ -729,8 +733,8 @@ function Circle(value, randomX, randomY) {
   var height = 260;
 
   // element starting position
-  elementXPos = removePX(circle.style.left);
-  elementYPos = removePX(circle.style.top);
+  elementXPos = randomX//removePX(circle.style.left);
+  elementYPos = randomY//removePX(circle.style.top);
 
   // element speed
   Xspeed = 15 / FPS;
@@ -745,6 +749,8 @@ function Circle(value, randomX, randomY) {
     Yspeed = -Yspeed;
   }
 
+
+  // TODO: MODIFY THIS BLOCK
 
   // UPDATE FUNCTION
   function update() {
@@ -779,9 +785,7 @@ function Circle(value, randomX, randomY) {
 
   // methodes for the circle
   return {
-    draw: function () {
-      return circle;
-    },
+    circle,
 
     hideValue: function () {
       style.fontSize = '0px';
@@ -878,17 +882,15 @@ function Submit() {
 
   d_c_submit.disabled = true;
 
-  //  style.backgroundColor = colors.darkGray;
   style.cursor = 'default';
-  style.opacity = '0.6';
 
 
   return {
     enable: function () {
       d_c_submit.disabled = false;
-      style.backgroundColor = colors.forestGreen;
       style.cursor = 'pointer';
       style.opacity = '1';
+      style.filter = 'alpha(opacity=1)'
     }
   }
 }
@@ -915,7 +917,7 @@ function game(elements) {
   const sortedModel = makeSortedModel(elements);
 
   elements.forEach(function (element) {
-    element.draw().onclick = function (event) {
+    element.circle.onclick = function (event) {
       // value of the current circle
       const value = strToInt(this.getAttribute('value'));
       const baseNumber = sortedModel[0];
@@ -945,7 +947,7 @@ function game(elements) {
             UI.close();
             SCROLL.enable();
             ANCHOR.checked();
-          }, 200);
+          }, 500);
 
         }
 
@@ -960,6 +962,7 @@ function game(elements) {
               show a retry message for 2s
               then restart the game
       */
+
       else {
         elements.forEach(function (element) {
           element.stop();
@@ -990,8 +993,8 @@ function buildGame() {
   UI.clearContainer();
 
   /* create the circles */
-  const allCirlces = createCircles(Circle);
-  const circles = shuffle(allCirlces, 5);
+  const allCirlces  = createCircles(Circle);
+  const circles     = shuffle(allCirlces, 5);
 
 
   /* start the game */
@@ -1066,7 +1069,6 @@ function reStart() {
     }, 200);
   }, 3000);
 }
-
 
 
 

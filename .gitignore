@@ -2,7 +2,8 @@
 # https://help.github.com/articles/ignoring-files
 # Example .gitignore files: https://github.com/github/gitignore
 
-/css/
+/css/main.css
+/css/normalize.min.css
 .gitignore
 d-captcha.min.js
 /script/unit-testing.js

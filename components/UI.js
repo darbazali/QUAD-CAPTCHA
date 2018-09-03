@@ -108,18 +108,18 @@ function UIObject() {
     '<p>Memorize the numbers<br/>' +
     ' in the <span style="font-weight: 700">Ascending Order</span></p>';
 
-//  timer.innerHTML = '0';
+  timer.innerHTML = '0';
 
   // Assembling
   append(overlay, wrapper);
   append(wrapper, title);
   append(wrapper, container);
   append(wrapper, buttonWrapp);
-//  append(wrapper, timer);
+  append(wrapper, timer);
 
-  append(buttonWrapp, ICON.infoButton());
-  append(buttonWrapp, ICON.restartButton());
-  append(buttonWrapp, ICON.closeButton());
+  append(buttonWrapp, ICON.infoBtn);
+  append(buttonWrapp, ICON.restartBtn);
+  append(buttonWrapp, ICON.closeBtn);
 
 
 
@@ -175,7 +175,7 @@ function UIObject() {
   popStyle.height = '170px';
   popStyle.fontSize = '22px';
   popStyle.textAlign = 'center';
-  popStyle.marginTop = '10px';
+  popStyle.margin = '10px 5px';
   popStyle.borderRadius = '10px';
   popStyle.boxShadow = '0 0 20px #333333';
   popStyle.cursor = 'default';
@@ -200,6 +200,7 @@ function UIObject() {
   // button wrapp style
   btnWrapStyle.width = '100%';
   btnWrapStyle.height = '50px';
+  btnWrapStyle.marginTop = '3px';
   btnWrapStyle.padding = '5px 0';
   btnWrapStyle.backgroundColor = colors.transparent;
 
@@ -213,7 +214,7 @@ function UIObject() {
   contStyle.position = 'relative';
   contStyle.boxSizing = 'inherit';
 
-    // timer style
+  // timer style
   timerStyle.width = '150px';
   timerStyle.height = '150px';
   timerStyle.border = '5px solid #fff';
@@ -222,7 +223,7 @@ function UIObject() {
   timerStyle.color = '#FFF';
   timerStyle.boxShadow = '0 0 20px #292929';
   timerStyle.textAlign = 'center';
-  timerStyle.fontSize = '126px';
+  timerStyle.fontSize = '130px';
   timerStyle.padding = 'none';
   timerStyle.position = 'absolute';
   timerStyle.left = '50%';
@@ -244,7 +245,7 @@ function UIObject() {
 
 
   // close button event
-  ICON.closeButton().onclick = function () {
+  ICON.closeBtn.onclick = function () {
 
     // at this point we have to clear all intervals
     //    clearIntervals();
@@ -257,7 +258,7 @@ function UIObject() {
   }
 
   // restart button action
-  ICON.restartButton().onclick = function () {
+  ICON.restartBtn.onclick = function () {
     clearIntervals();
 
     if (wrapper.lastChild == popUp) {
@@ -268,7 +269,7 @@ function UIObject() {
   }
 
 
-  ICON.infoButton().onclick = function () {
+  ICON.infoBtn.onclick = function () {
     //    clearIntervals();
     UI.clearContainer();
     popUp.innerHTML = infoMSG;
@@ -304,15 +305,15 @@ function UIObject() {
 
       timer.innerHTML = seconds;
 
-      function updateTimer () {
-        seconds --;
+      function updateTimer() {
+        seconds--;
         timer.innerHTML = seconds;
 
         if (seconds === 0) {
           clearInterval(timerId);
-          setTimeout(function() {
-          wrapper.removeChild(timer);
-          func()
+          setTimeout(function () {
+            wrapper.removeChild(timer);
+            func()
           }, 1000)
         }
       }
@@ -351,33 +352,47 @@ function Icons() {
   function btnStyle(button) {
     const style = button.style;
 
-    style.width = '50px';
-    style.height = '50px';
+    style.width = '55px';
+    style.height = '55px';
     style.padding = '0';
-    style.cursor = 'pointer';
     style.boxSizing = 'border-box';
     style.display = 'inline-block';
-    style.margin = '0px 28px';
+    style.cursor = 'pointer';
+    style.margin = '0px 25px';
+    style.borderRadius = '50%';
+    style.border = 'none';
     style.transition = 'all 0.3s';
     style.backgroundColor = colors.transparent;
 
     button.onmouseover = function () {
       style.opacity = '0.8';
+      style.filter = "alpha(opacity=80)"; // IE
       style.transform = 'scale(1.1)';
+      style.msTransform = 'scale(1.1)'; // IE
     }
 
     button.onmouseout = function () {
       style.opacity = '1';
+      style.filter = "alpha(opacity=100)"; // IE
       style.transform = 'scale(1)';
+      style.msTransform = 'scale(1)'; // IE
+
+    }
+
+    button.onfocus = function () {
+      style.outline = 'none';
     }
   }
 
 
   // icon names
+  const closeBtn = document.createElement('button');
+  const infoBtn = document.createElement('button');
+  const restartBtn = document.createElement('button');
 
-  const closeBtn = document.createElement('div');
-  const infoBtn = document.createElement('div');
-  const restartBtn = document.createElement('div');
+  closeBtn.setAttribute('type', 'button');
+  infoBtn.setAttribute('type', 'button');
+  restartBtn.setAttribute('type', 'button');
 
 
   btnStyle(closeBtn);
@@ -399,17 +414,9 @@ function Icons() {
 
 
   return {
-    closeButton: function () {
-      return closeBtn;
-    },
-
-    restartButton: function () {
-      return restartBtn;
-    },
-
-    infoButton: function () {
-      return infoBtn
-    }
+    closeBtn,
+    restartBtn,
+    infoBtn
   }
 
 }
@@ -425,6 +432,6 @@ const UI = new UIObject();
 //  println("I'm done!");
 //}
 
-UI.timer(UI.popUpSuccess)
+//UI.timer(UI.popUpSuccess)
 
 document.body.appendChild(UI.open())
