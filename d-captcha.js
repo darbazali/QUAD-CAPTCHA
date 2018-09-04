@@ -31,6 +31,12 @@ function strToInt(str) {
 }
 
 
+// flip function, returns 0 or 1 randomly.
+function flip() {
+  return Math.floor(Math.random() * 2);
+}
+
+
 /* append element/elements to a node. */
 function append(nodeName, element) {
   /* for appending an array of elements */
@@ -733,19 +739,19 @@ function Circle(value, randomX, randomY) {
   var height = 260;
 
   // element starting position
-  elementXPos = randomX//removePX(circle.style.left);
-  elementYPos = randomY//removePX(circle.style.top);
+  elementXPos = randomX;
+  elementYPos = randomY;
 
   // element speed
   Xspeed = 15 / FPS;
   Yspeed = 15 / FPS;
 
   // random direction
-  if (Math.floor(Math.random() * 2) == 0) {
+  if (flip() == 0 ) {
     Xspeed = -Xspeed;
   }
 
-  if (Math.floor(Math.random() * 2) == 0) {
+  if (flip() == 0) {
     Yspeed = -Yspeed;
   }
 
