@@ -22,11 +22,11 @@ movement tracking and memorizing.
 SECTION 1: general purpose functions
 **************************************/
 
-//const println = console.log;
+const println = console.log;
 
 /* change string to integer */
 function strToInt(str) {
-  const integer = +str || parseInt(str); // for IE < 9
+  const integer = parseInt(str) || +str; // for IE < 9
   return integer;
 }
 
@@ -154,7 +154,7 @@ const colors = {
   mediumBlue: '#0000CD',
   forestGreen: '#228B22',
   dodgerBlue: '#1E90FF',
-  royalBlue:  '#4169E1'
+  royalBlue: '#4169E1'
 }
 
 
@@ -216,11 +216,11 @@ function Anchor() {
   styleCheckbox(checkbox);
   checkbox.style.transition = 'box-shadow 0.3s';
   checkbox.style.borderRadius = '3px';
-  checkbox.onmousemove = function() {
+  checkbox.onmousemove = function () {
     checkbox.style.boxShadow = '0 0 10px #7b7b7b';
   }
 
-  checkbox.onmouseout = function() {
+  checkbox.onmouseout = function () {
     checkbox.style.boxShadow = 'none';
   }
 
@@ -249,6 +249,7 @@ function Anchor() {
     }
   }
 }
+
 
 /* 2.2 = Buttons */
 // icon set
@@ -368,21 +369,6 @@ function UIObject() {
 
 
   const buttonWrapp = document.createElement('div');
-
-  /*
-      implementing pop up messages
-      how many messages do we need
-      1. instruction message
-      2. wrong playing message
-      3. success message
-
-      1. this pop up should appear with first start and
-          when user clicks on info button
-
-      2. this pop up should appear when user plays wrong playing
-
-      3. this pop up should appear when user plays right playing
-  */
 
   /* 1. instruction message */
   const infoMSG =
@@ -512,7 +498,7 @@ function UIObject() {
   contStyle.position = 'relative';
   contStyle.boxSizing = 'inherit';
 
-    // timer style
+  // timer style
   timerStyle.width = '150px';
   timerStyle.height = '150px';
   timerStyle.border = '5px solid #fff';
@@ -548,9 +534,9 @@ function UIObject() {
   ICON.closeBtn.onclick = function () {
 
     // at this point we have to clear all intervals
-        clearIntervals();
-        UI.close();
-        SCROLL.enable();
+    clearIntervals();
+    UI.close();
+    SCROLL.enable();
 
     if (wrapper.lastChild == popUp) {
       wrapper.removeChild(popUp);
@@ -580,7 +566,7 @@ function UIObject() {
 
     if (wrapper.lastChild == popUp) {
       wrapper.removeChild(popUp);
-            reStart();
+      reStart();
     } else {
       append(wrapper, popUp);
     }
@@ -609,15 +595,15 @@ function UIObject() {
 
       timer.innerHTML = seconds;
 
-      function updateTimer () {
-        seconds --;
+      function updateTimer() {
+        seconds--;
         timer.innerHTML = seconds;
 
         if (seconds === 0) {
           clearInterval(timerId);
-          setTimeout(function() {
-          wrapper.removeChild(timer);
-          callBack() // this function will be executed after timer is over.
+          setTimeout(function () {
+            wrapper.removeChild(timer);
+            callBack() // this function will be executed after timer is over.
           }, 1000)
         }
       }
@@ -680,7 +666,6 @@ function Circle(value, randomX, randomY) {
   style.backgroundColor = colors.mediumBlue;
   style.color = '#fff';
   style.border = 'none';
-//  style.border = '2px solid #fff';
   style.cursor = 'pointer';
   style.position = 'absolute';
   style.left = randomX + 'px';
@@ -712,11 +697,11 @@ function Circle(value, randomX, randomY) {
 
 
   /* removing px Suffix from a string */
-  function removePX(str) {
-    var number = 0;
-    number = strToInt(str.slice(0, -2));
-    return number;
-  }
+  //  function removePX(str) {
+  //    var number = 0;
+  //    number = strToInt(str.slice(0, -2));
+  //    return number;
+  //  }
 
   /* properties for moving the object */
 
@@ -747,7 +732,7 @@ function Circle(value, randomX, randomY) {
   Yspeed = 15 / FPS;
 
   // random direction
-  if (flip() == 0 ) {
+  if (flip() == 0) {
     Xspeed = -Xspeed;
   }
 
@@ -765,7 +750,10 @@ function Circle(value, randomX, randomY) {
     elementXPos += Xspeed;
     elementYPos += Yspeed;
 
+    //    println(elementXPos)
+
     circle.style.left = elementXPos + 'px';
+
     circle.style.top = elementYPos + 'px';
 
     // Horizontal movement
@@ -968,7 +956,6 @@ function game(elements) {
               show a retry message for 2s
               then restart the game
       */
-
       else {
         elements.forEach(function (element) {
           element.stop();
@@ -999,35 +986,35 @@ function buildGame() {
   UI.clearContainer();
 
   /* create the circles */
-  const allCirlces  = createCircles(Circle);
-  const circles     = shuffle(allCirlces, 5);
+  const allCirlces = createCircles(Circle);
+  const circles = shuffle(allCirlces, 5);
 
 
   /* start the game */
   function startGame() {
 
 
-      /* deploy circles to the container. */
-      append(container, circles);
+    /* deploy circles to the container. */
+    append(container, circles);
 
+
+    setTimeout(function () {
+
+      circles.forEach(function (itme) {
+        itme.hideValue();
+      });
+
+      /* ready the circles to be playd with */
+      circles.forEach(function (itme) {
+        itme.move();
+      });
 
       setTimeout(function () {
+        game(circles);
 
-        circles.forEach(function (itme) {
-          itme.hideValue();
-        });
+      }, 300);
 
-        /* ready the circles to be playd with */
-        circles.forEach(function (itme) {
-          itme.move();
-        });
-
-        setTimeout(function () {
-          game(circles);
-
-        }, 300);
-
-      }, 3000);
+    }, 3000);
   }
 
   // show the timer, then start game.
@@ -1075,11 +1062,6 @@ function reStart() {
     }, 200);
   }, 3000);
 }
-
-
-
-
-
 
 
 
