@@ -292,20 +292,19 @@ function Icons() {
     }
   }
 
+  function createBTN() {
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    btnStyle(button);
+    return button;
+  }
 
   // icon names
-  const closeBtn = document.createElement('button');
-  const infoBtn = document.createElement('button');
-  const restartBtn = document.createElement('button');
-
-  closeBtn.setAttribute('type', 'button');
-  infoBtn.setAttribute('type', 'button');
-  restartBtn.setAttribute('type', 'button');
+  const closeBtn    = createBTN();
+  const infoBtn     = createBTN();
+  const restartBtn  = createBTN();
 
 
-  btnStyle(closeBtn);
-  btnStyle(infoBtn);
-  btnStyle(restartBtn);
 
   const close = '<svg width="54px" height="54px" viewBox="0 0 54 54" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Icons" transform="translate(-108.000000, -43.000000)" stroke="#FFFFFF" stroke-width="3"><g id="Group-4" transform="translate(110.000000, 45.000000)"><circle id="Oval-2" cx="25" cy="25" r="25"></circle><path d="M13.5,14.5 L37.5,36.5" id="Line-4" stroke-linecap="square"></path><path d="M13.5,14.5 L37.5,36.5" id="Line-4-Copy" stroke-linecap="square" transform="translate(25.500000, 25.500000) scale(1, -1) translate(-25.500000, -25.500000) "></path></g></g></g></svg>';
 
