@@ -358,16 +358,18 @@ function UIObject() {
 
 
   // creating elements
-  const overlay = document.createElement('div');
-  const wrapper = document.createElement('div');
-  const container = document.createElement('div');
-  const title = document.createElement('div');
-  const popUp = document.createElement('div');
+  function createDIV() {
+    return document.createElement('div');
 
-  const timer = document.createElement('div');
+  }
 
-
-  const buttonWrapp = document.createElement('div');
+  const overlay     = createDIV();
+  const wrapper     = createDIV();
+  const container   = createDIV();
+  const title       = createDIV();
+  const popUp       = createDIV();
+  const timer       = createDIV();
+  const buttonWrapp = createDIV();
 
   /* 1. instruction message */
   const infoMSG =
