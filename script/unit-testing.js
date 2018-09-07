@@ -1,56 +1,77 @@
-// print to the console
-const println = console.log;
-
-// imlement a bubble sort
-
-function bubbleSort(srcArray) {
-    // create a container for sorted items
-    var sourceArray = srcArray.slice();
-    var bubbleSorted = [];
-
-    // loop through source array
-    while ( sourceArray.length == 0) {
-        var max = getMax(sourceArray);
-        bubbleSorted.push(max);
-        sourceArray.splice(max, 1);
-    }
-
-
-    return bubbleSorted;
-}
-
-const myArray = [9, 2, 7, 0, 8, 5, 10, 4, -4];
-
-
-
-
-function getMax(array) {
-    var maxNumber = 0;
-    array.forEach(function(itme) {
-        if (itme > maxNumber) {
-            maxNumber = itme;
-        }
-    })
-
-    return maxNumber;
-}
-
-
-function getMin(array) {
-    var minNumber = 0;
-    array.forEach(function(item) {
-        if (item < minNumber) {
-            minNumber = item;
-        }
-    })
-
-    return minNumber;
-}
+//const println = console.log;
+//
+//const Style = {
+//
+//  center: function (element) {
+//    var style = element.style;
+//    style.position = 'absolute';
+//    style.left = '50%';
+//    style.top = '50%';
+//    style.transform = 'translate(-50%, -50%)'
+//  }
+//
+//}
+//
+//
+//const ELEMENT = {
+//  create: function () {
+//    return document.createElement('div');
+//  },
+//
+//  elments: {
+//    overlay: this.create,
+//    wrapper: this.create(),
+//    container: this.create(),
+//    title: this.create(),
+//    info: this.create(),
+//    timer: this.create(),
+//    BTNWrapper: this.create()
+//  },
+//
+//  style: function(style) {
+//    return this.setAttribute('style', style);
+//  }
+//
+//
+//
+//}
+//
+//
+//const style = "width: 100px; height: 100px; background-color: firebrick;"
+//const timer = ELEMENT.create().style(style);
+//
+//
+//document.body.appendChild(ELEMENT.elments.overlay.style(style));
 
 
 
-println(bubbleSort(myArray));
 
-println(getMax(myArray));
+const element = document.createElement('div');
 
-println(getMin(myArray));
+const style =
+      "width: 100px;" +
+      "height: 100px;" +
+      "border-radius: 100%;" +
+      "transform: scale(1.5);" +
+      "background-color: #fff;";
+
+element.setAttribute('style', style);
+
+document.body.appendChild(element);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

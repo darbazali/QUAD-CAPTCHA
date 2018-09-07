@@ -300,9 +300,9 @@ function Icons() {
   }
 
   // icon names
-  const closeBtn    = createBTN();
-  const infoBtn     = createBTN();
-  const restartBtn  = createBTN();
+  const closeBtn = createBTN();
+  const infoBtn = createBTN();
+  const restartBtn = createBTN();
 
 
 
@@ -336,6 +336,17 @@ function UIObject() {
 
 
   /* Private funcitons */
+  const Style = {
+
+    center: function (element) {
+      var style = element.style;
+
+      style.left = '50%';
+      style.top = '50%';
+      style.transform = 'translate(-50%, -50%)'
+    }
+
+  }
 
   // style an element with some properties
   function commonStyle(element) {
@@ -363,12 +374,12 @@ function UIObject() {
 
   }
 
-  const overlay     = createDIV();
-  const wrapper     = createDIV();
-  const container   = createDIV();
-  const title       = createDIV();
-  const popUp       = createDIV();
-  const timer       = createDIV();
+  const overlay = createDIV();
+  const wrapper = createDIV();
+  const container = createDIV();
+  const title = createDIV();
+  const info = createDIV();
+  const timer = createDIV();
   const buttonWrapp = createDIV();
 
   /* 1. instruction message */
@@ -411,7 +422,7 @@ function UIObject() {
   const overStyle = overlay.style;
   const wrapStyle = wrapper.style;
   const contStyle = container.style;
-  const popStyle = popUp.style;
+  const infoStyle = info.style;
   const timerStyle = timer.style;
 
 
@@ -444,27 +455,25 @@ function UIObject() {
   wrapStyle.boxShadow = '0 0 20px #333333';
   wrapStyle.boxSizing = 'inherit';
   wrapStyle.position = 'relative';
-  wrapStyle.left = '50%';
-  wrapStyle.top = '50%';
-  wrapStyle.transform = 'translate(-50%, -50%)';
+  Style.center(wrapper);
 
 
   // pop up style
-  popStyle.position = 'absolute';
-  popStyle.left = '50%';
-  popStyle.top = '50%';
-  popStyle.transform = 'translate(-50%, -50%)'
-  popStyle.backgroundColor = colors.royalBlue;
-  popStyle.width = '300px';
-  popStyle.height = '170px';
-  popStyle.fontSize = '22px';
-  popStyle.textAlign = 'center';
-  popStyle.marginTop = '10px';
-  popStyle.padding = '5px';
-  popStyle.borderRadius = '10px';
-  popStyle.boxShadow = '0 0 20px #333333';
-  popStyle.cursor = 'default';
-  popStyle.boxSizing = 'border-box';
+
+  Style.center(info);
+
+  infoStyle.position = 'absolute';
+  infoStyle.backgroundColor = colors.royalBlue;
+  infoStyle.width = '300px';
+  infoStyle.height = '170px';
+  infoStyle.fontSize = '22px';
+  infoStyle.textAlign = 'center';
+  infoStyle.marginTop = '10px';
+  infoStyle.padding = '5px';
+  infoStyle.borderRadius = '10px';
+  infoStyle.boxShadow = '0 0 20px #333333';
+  infoStyle.cursor = 'default';
+  infoStyle.boxSizing = 'border-box';
 
 
   // title style
@@ -500,6 +509,7 @@ function UIObject() {
   contStyle.boxSizing = 'inherit';
 
   // timer style
+  Style.center(timer);
   timerStyle.width = '150px';
   timerStyle.height = '150px';
   timerStyle.border = '5px solid #fff';
@@ -511,9 +521,6 @@ function UIObject() {
   timerStyle.fontSize = '130px';
   timerStyle.padding = 'none';
   timerStyle.position = 'absolute';
-  timerStyle.left = '50%';
-  timerStyle.top = '50%';
-  timerStyle.transform = 'translate(-50%, -50%)';
   timerStyle.cursor = 'default';
 
 
@@ -539,8 +546,8 @@ function UIObject() {
     UI.close();
     SCROLL.enable();
 
-    if (wrapper.lastChild == popUp) {
-      wrapper.removeChild(popUp);
+    if (wrapper.lastChild == info) {
+      wrapper.removeChild(info);
     }
   }
 
@@ -552,8 +559,8 @@ function UIObject() {
       wrapper.removeChild(timer);
     }
 
-    if (wrapper.lastChild == popUp) {
-      wrapper.removeChild(popUp);
+    if (wrapper.lastChild == info) {
+      wrapper.removeChild(info);
     }
 
     reStart();
@@ -563,17 +570,17 @@ function UIObject() {
   ICON.infoBtn.onclick = function () {
     clearIntervals();
     UI.clearContainer();
-    popUp.innerHTML = infoMSG;
+    info.innerHTML = infoMSG;
 
     if (wrapper.lastChild == timer) {
       wrapper.removeChild(timer);
     }
 
-    if (wrapper.lastChild == popUp) {
-      wrapper.removeChild(popUp);
+    if (wrapper.lastChild == info) {
+      wrapper.removeChild(info);
       reStart();
     } else {
-      append(wrapper, popUp);
+      append(wrapper, info);
     }
   }
 
@@ -625,7 +632,7 @@ function UIObject() {
     },
 
     popUpSuccess: function () {
-      popStyle.backgroundColor = colors.forestGreen;
+      infoStyle.backgroundColor = colors.forestGreen;
       popUp.innerHTML = successMSG;
       append(wrapper, popUp);
     },
@@ -907,10 +914,10 @@ function Submit() {
 SECTION 3: set up
 **************************************/
 
-const ANCHOR  = new Anchor();
-const UI      = new UIObject();
-const SCROLL  = new Scroll();
-const SUBMIT  = new Submit();
+const ANCHOR = new Anchor();
+const UI = new UIObject();
+const SCROLL = new Scroll();
+const SUBMIT = new Submit();
 
 
 
@@ -1075,10 +1082,3 @@ function reStart() {
 
 
 // TODO: Create a game object.
-
-
-
-
-
-
-
