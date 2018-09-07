@@ -40,6 +40,18 @@ function Anchor() {
   const checkbox = createDiv();
   const title = createDiv();
 
+  const anchorStyle =
+        "height: 30px;" +
+        "width: 30px;" +
+        "border: 2px solid #999;" +
+        "border-radius: 2px;" +
+        "background-color: #FFF" +
+        "" +
+        " ";
+
+  const checkboxStyle = "";
+  const titleStyle = "";
+
   const checkedBox = checkbox.cloneNode(true);
   const target = document.getElementsByClassName('d-captcha-div');
   const d_c_anchor = target[0];

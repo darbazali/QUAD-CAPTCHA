@@ -36,6 +36,17 @@ function flip() {
   return Math.floor(Math.random() * 2);
 }
 
+// creating element
+function createDiv() {
+  return document.body.createElement('div');
+}
+
+
+// styleing element
+function styleDiv(element, style) {
+  element.setAttribute('style', style)
+}
+
 
 /* append element/elements to a node. */
 function append(nodeName, element) {
