@@ -6,7 +6,6 @@
 /css/normalize.min.css
 .gitignore
 d-captcha.min.js
-/script/unit-testing.js
+/testing/test.html
+/testing/svg.html
 index.html
-test.html
-svg.html

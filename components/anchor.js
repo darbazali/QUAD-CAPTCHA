@@ -1,100 +1,109 @@
-// printing to the console, debugging purpose
-const println = console.log;
-
-/* appending an element to a node, general purpose */
+// append element to a node
 function append(node, element) {
-    return node.appendChild(element);
+  return node.appendChild(element);
+}
+
+// creating element
+function createDiv() {
+  return document.body.createElement('div');
+}
+
+
+// styleing element
+function styleDiv(element, style) {
+  element.setAttribute('style', style)
 }
 
 
 
-
-
-/********************************
-2.1 - Anchor
-********************************/
 function Anchor() {
 
-    // elements
-    var anchor    = document.createElement('div');
-    var checkbox  = document.createElement('div');
-    var title     = document.createElement('div');
+  // common styles for checkBox element
+  function styleCheckbox(element) {
+    const style = element.style;
 
-    // assembling
-    title.innerHTML = "I'm not a robot!";
-    append(anchor, checkbox);
-    append(anchor, title);
+    style.height = '30px';
+    style.width = '30px';
+    style.border = '1px solid ' + colors.darkGray;
+    style.borderRadius = '2px';
+    style.backgroundColor = colors.white;
+    style.color = colors.forestGreen;
+    style.marginRight = '10px';
+    style.padding = '0';
+    style.fontSize = '30px';
+    style.textAlign = 'center';
+    style.cursor = 'pointer';
+  }
 
+  // elements
+  const anchor = createDiv();
+  const checkbox = createDiv();
+  const title = createDiv();
 
-    // styles
-    style = anchor.style;
-    checkBox_style = checkbox.style;
-    title_style = title.style;
+  const checkedBox = checkbox.cloneNode(true);
+  const target = document.getElementsByClassName('d-captcha-div');
+  const d_c_anchor = target[0];
+  const checkMark = '&#10003';
 
-    // anchor style
-    style.width           = '220px';
-    style.height          = '40px';
-    style.boxSizing       = 'border-box';
-    style.backgroundColor = '#cecece';
-    style.color           = '#0a4bfc';
-    style.border          = '1px solid #0a4bfc';
-    style.borderRadius    = '3px';
-    style.display         = 'flex';
-    style.fontSize        = '20px';
-    style.padding         = '8px';
-
-
-    // checkbox style
-    checkBox_style.height          = '20px';
-    checkBox_style.width           = '20px';
-    checkBox_style.border          = '1px solid #0a4bfc';
-    checkBox_style.borderRadius    = '2px';
-    checkBox_style.backgroundColor = '#fff';
-    checkBox_style.marginRight     = '10px';
-    checkBox_style.cursor          = 'pointer';
-    checkBox_style.transition      = 'background-color 0.3s';
-
-    // hover effect for the checkbox
-    checkbox.addEventListener('mouseover', function (e) {
-        checkBox_style.backgroundColor = '#b7bee2';
-    }, false);
-
-    checkbox.addEventListener('mouseout', function (e) {
-        checkBox_style.backgroundColor = '#fff';
-    }, false);
+  // assembling
+  title.innerHTML = "I'm not a robot";
+  append(anchor, checkbox);
+  append(anchor, title);
+  append(d_c_anchor, anchor);
 
 
-    // title stile
-    title_style.cursor = 'default';
+  // styles
+  style = anchor.style;
+  title_style = title.style;
 
-    return {
-        anchor: function() {
-            return anchor;
-        },
+  // anchor style
+  style.width = '300px';
+  style.height = '80px';
+  style.boxSizing = 'border-box';
+  style.backgroundColor = colors.lightGray;
+  style.color = colors.mediumBlue;
+  style.border = '1px solid ' + colors.darkGray;
+  style.borderRadius = '8px';
+  style.display = 'flex';
+  style.fontSize = '25px';
+  style.padding = '20px 10px';
+  style.marginBottom = '10px';
 
-        checkBox: function() {
-            return checkbox;
-        }
+
+  // checkBox style
+  styleCheckbox(checkbox);
+  checkbox.style.transition = 'box-shadow 0.3s';
+  checkbox.style.borderRadius = '3px';
+  checkbox.onmousemove = function () {
+    checkbox.style.boxShadow = '0 0 10px #7b7b7b';
+  }
+
+  checkbox.onmouseout = function () {
+    checkbox.style.boxShadow = 'none';
+  }
+
+
+  // checkedBox style
+  styleCheckbox(checkedBox);
+  checkedBox.innerHTML = checkMark;
+  checkedBox.style.cursor = 'default';
+
+
+
+  // title stile
+  title_style.cursor = 'default';
+  title_style.color = 'inherit';
+
+
+  checkbox.onclick = function () {
+    UI.open();
+    buildGame();
+    SCROLL.disable();
+  }
+
+  return {
+    checked: function () {
+      checkbox.parentNode.replaceChild(checkedBox, checkbox);
     }
+  }
 }
-
-
-
-const Anchor1 = new Anchor();
-const anchor = Anchor1.anchor();
-const checkBox = Anchor1.checkBox();
-
-const target = document.getElementById('d-captcha');
-
-append(target, anchor)
-
-checkBox.addEventListener('click', function(event) {
-    console.log(this);
-}, false);
-
-
-
-
-
-
-
