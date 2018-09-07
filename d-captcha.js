@@ -898,10 +898,10 @@ function Submit() {
 SECTION 3: set up
 **************************************/
 
-const ANCHOR = new Anchor();
-const UI = new UIObject();
-const SCROLL = new Scroll();
-const SUBMIT = new Submit();
+const ANCHOR  = new Anchor();
+const UI      = new UIObject();
+const SCROLL  = new Scroll();
+const SUBMIT  = new Submit();
 
 
 
@@ -1065,6 +1065,7 @@ function reStart() {
 }
 
 
+// TODO: Create a game object.
 
 
 
