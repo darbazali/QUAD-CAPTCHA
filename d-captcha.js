@@ -350,7 +350,7 @@ function UIObject() {
 
   // clear all intervals
   function clearIntervals() {
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 50; i++) {
       window.clearInterval(i);
     }
 
@@ -548,6 +548,10 @@ function UIObject() {
   ICON.restartBtn.onclick = function () {
     clearIntervals();
 
+    if (wrapper.lastChild == timer) {
+      wrapper.removeChild(timer);
+    }
+
     if (wrapper.lastChild == popUp) {
       wrapper.removeChild(popUp);
     }
@@ -603,7 +607,12 @@ function UIObject() {
         if (seconds === 0) {
           clearInterval(timerId);
           setTimeout(function () {
-            wrapper.removeChild(timer);
+
+
+            if (wrapper.lastChild == timer) {
+              wrapper.removeChild(timer);
+            }
+
             callBack() // this function will be executed after timer is over.
           }, 1000)
         }
