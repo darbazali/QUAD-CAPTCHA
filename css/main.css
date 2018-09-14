@@ -1,3 +1,12 @@
+/*---------- GLOBAL ----------*/
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+}
+
 body {font-family: Arial, Helvetica, sans-serif;}
 
 input[type=text], select, textarea {

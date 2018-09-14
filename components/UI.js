@@ -200,7 +200,7 @@ function UIObject() {
 
   const infoMSG =
 
-    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.<hr/>Click on the reload button for new game.</p>';
+    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.<hr style="height:1px;border:none;color:#ccc;background-color:#ccc;"/>Click on the reload button for new game.</p>';
 
 
   // text for title

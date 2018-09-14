@@ -11,24 +11,17 @@ Aim             : Internet Bot
 Description:
 
 gCAPTCHA is a brand new, GAME based
-CAPTCHA system that focuses on human thinking,
-movement tracking and memorizing.
+CAPTCHA system that focuses on human thinking
+and memorizing.
 
 */
 
 
 
-/**************************************
-SECTION 1: general purpose functions
-**************************************/
 
-const println = console.log;
+/*---------- general purpose functions ----------*/
 
-/* change string to integer */
-function strToInt(str) {
-  const integer = parseInt(str) || +str; // for IE < 9
-  return integer;
-}
+//let println = console.log;
 
 
 // flip function, returns 0 or 1 randomly.
@@ -53,7 +46,7 @@ function append(nodeName, element) {
   /* for appending an array of elements */
   if (element.length > 1) {
     element.forEach(function (item) {
-      nodeName.appendChild(item.circle);
+      nodeName.appendChild(item.circle); // for circle objects
     });
 
     /* appending a singl element */
@@ -67,13 +60,13 @@ function append(nodeName, element) {
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
   // size of the element
-  var size = 60;
+  const size = 60;
 
-  const X1 = strToInt(element1.style.left);
-  const X2 = strToInt(element2.style.left);
+  const X1 = parseInt(element1.style.left);
+  const X2 = parseInt(element2.style.left);
 
-  const Y1 = strToInt(element1.style.top);
-  const Y2 = strToInt(element2.style.top);
+  const Y1 = parseInt(element1.style.top);
+  const Y2 = parseInt(element2.style.top);
 
 
   if (X1 + size >= X2 &&
@@ -89,7 +82,7 @@ function isColliding(element1, element2) {
 
 /* Randomize(shuffle) an array, algorithm */
 function shuffle(srcArray, amount) {
-  var rndArray = []; // random array
+  let rndArray = []; // random array
 
   while (rndArray.length < amount) {
     const random_index = Math.floor(Math.random() * srcArray.length);
@@ -107,18 +100,18 @@ function shuffle(srcArray, amount) {
 /* create circles from Circle object, algorithm */
 function createCircles(object) {
   const circles = [];
-  var value = 0;
+  let value = 0;
   while (circles.length < 10) {
     // object
-    var RandomX = Math.floor(Math.random() * 260);
-    var RandomY = Math.floor(Math.random() * 260);
-    var circle = new object(value, RandomX, RandomY);
+    let RandomX = Math.floor(Math.random() * 260);
+    let RandomY = Math.floor(Math.random() * 260);
+    let circle = new object(value, RandomX, RandomY);
 
     // looping throught all existing locations
-    var overLapping = false;
-    for (var j = 0; j < circles.length; j++) {
-      var other = circles[j];
-      var collision = isColliding(circle.circle, other.circle);
+    let overLapping = false;
+    for (let j = 0; j < circles.length; j++) {
+      let other = circles[j];
+      let collision = isColliding(circle.circle, other.circle);
 
       if (collision) {
         overLapping = true;
@@ -143,7 +136,7 @@ function makeSortedModel(elements) {
   const sortedValues = [];
 
   elements.forEach(function (item) {
-    sortedValues.push(strToInt(item.circle.getAttribute('value')));
+    sortedValues.push(parseInt(item.circle.getAttribute('value')));
   });
 
   return sortedValues.sort()
@@ -152,10 +145,7 @@ function makeSortedModel(elements) {
 
 
 
-
-/**************************************
-SECTION 2: COMPONENTS
-**************************************/
+/*---------- COMPONENTS ----------*/
 
 const colors = {
   white: '#FFF',
@@ -166,6 +156,7 @@ const colors = {
   forestGreen: '#228B22',
   royalBlue: '#4169E1',
   lightBlue: '#0563CF',
+  deepBlue: '#053091',
   dimGray: '#696969',
   redOrange: "#E15821"
 }
@@ -269,10 +260,17 @@ function Anchor() {
 
 
   checkbox.onclick = function () {
-    UI.open();
-    buildGame();
-    SCROLL.disable();
+    let size = window.innerHeight;
+
+    if (size < 550) {
+      alert('Please put your device in Portraite mode, and try again!')
+    } else {
+      UI.open();
+      buildGame();
+      SCROLL.disable();
+    }
   }
+
 
   return {
     checked: function () {
@@ -283,21 +281,19 @@ function Anchor() {
 
 
 /* 2.2 = Buttons */
-// icon set
-
 function Icons() {
 
   // general style for buttons
   function btnStyle(button) {
     const style = button.style;
 
-    style.width = '55px';
-    style.height = '55px';
+    style.width = '60px';
+    style.height = '60px';
     style.padding = '0';
     style.boxSizing = 'border-box';
     style.display = 'inline-block';
     style.cursor = 'pointer';
-    style.margin = '0px 25px';
+    style.margin = '0px 22px';
     style.borderRadius = '50%';
     style.opacity = '0.8';
     style.border = 'none';
@@ -327,6 +323,7 @@ function Icons() {
   function createButton() {
     const button = document.createElement('button');
     button.setAttribute('type', 'button');
+    btnStyle(button);
     return button;
   }
 
@@ -334,15 +331,6 @@ function Icons() {
   const closeBtn = createButton();
   const infoBtn = createButton();
   const restartBtn = createButton();
-
-
-
-  btnStyle(closeBtn);
-  btnStyle(infoBtn);
-  btnStyle(restartBtn);
-
-
-
 
 
   closeBtn.innerHTML = SVG.closeIcon;
@@ -385,10 +373,25 @@ function UIObject() {
 
   }
 
-  function toggle(node, element, toggle) {
+  function fadeCont(element) {
+    let style = element.style;
+    style.opacity = '0';
+    style.visibility = 'hidden';
+
+
+  }
+
+  function toggle(node, element, toggle, func) {
+
+    // node: parent node for the element.
+    // element: the element to be toggled.
+    // toggle: if true? toggle, else: remove element.
+    // func: a callback tha runs when elment is toggled.
+
     if (toggle) {
       if (node.lastChild == element) {
         node.removeChild(element);
+        func();
 
       } else {
         append(node, element);
@@ -403,12 +406,11 @@ function UIObject() {
 
   // clear all intervals
   function clearIntervals() {
-    for (var i = 0; i < 100; i++) {
+    for (let i = 0; i < 100; i++) {
       window.clearInterval(i);
     }
 
   }
-
 
   /*--------- creating elements --------*/
 
@@ -423,6 +425,7 @@ function UIObject() {
   const info = createDiv();
   const buttonBlock = createDiv();
 
+  const popUPBlock = createDiv();
   const successPOPUP = createDiv();
   const failPOPUP = createDiv();
 
@@ -435,6 +438,7 @@ function UIObject() {
     centerStyle: "left: 50%; top: 50%; transform: translate(-50%, -50%);",
     boxShadow: "box-shadow: 0 0 20px #333333;",
     absPos: "position: absolute;",
+    borderBox: 'box-sizing: border-box; -webkit-box-sizing: border-box;',
     gradient: "background: linear-gradient(#0563CF, #0133A4);",
 
 
@@ -446,7 +450,7 @@ function UIObject() {
       "top: " + window.pageYOffset + "px;" +
       "left: " + window.pageXOffset + "px;" +
       "background-color: rgba(72, 72, 72, 0.8);" +
-      "color: #fff; box-sizing: border-box; font-family: Arial",
+      "color: #fff; font-family: Arial;",
 
     // wrapper style
     wrapperStyle: "width: 320px; height: 480px; border-radius: 15px;" +
@@ -455,9 +459,10 @@ function UIObject() {
 
 
     // info style
-    infoStyle: "width: 300px; height: 185px; font-size: 18px; text-align: left;" +
-      "margin: 10px 5px; border-radius: 5px; cursor: default; position: absolute;" +
-      "background-color: " + colors.lightBlue + "; padding: 5px 10px;",
+    infoStyle: "width: 300px; height: 190px; font-size: 18px; text-align: left;" +
+      "margin: 10px 5px; border-radius: 10px; cursor: default; position: absolute;" +
+      "background-color: " + colors.lightBlue + "; padding: 5px 10px; opacity: 0.9;" +
+      "color: #d9d9d9;",
 
 
 
@@ -482,7 +487,11 @@ function UIObject() {
       "text-align: center; font-size: 130px; position: absolute; cursor: default; color: #FFF;" +
       "background-color: " + colors.redOrange + "; font-weight: 100;",
 
-    popUpStyle: "display: block; opacity: 0; visibility: hidden; transition: visibility 1s linear, opacity 1s;"
+
+    popUPBlockStyle: "width: 320px; height: 320px; background-color: #4A4A4A;" +
+    "font-size: 26px;",
+
+    faded: "display: block; opacity: 0; visibility: hidden; transition: visibility 1s linear, opacity 1s linear;"
 
 
   }
@@ -494,7 +503,7 @@ function UIObject() {
 
   const infoMSG =
 
-    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.<hr/>Click on the reload button for new game.</p>';
+    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.<hr style="height:1px;border:none;color:#ccc;background-color:#ccc; margin: 10px 0; opacity: 0.9;"/>Click on the reload button for new game.</p>';
 
 
   // text for title
@@ -515,8 +524,9 @@ function UIObject() {
   append(wrapper, titleBlock);
   append(wrapper, container);
   append(wrapper, buttonBlock);
-  append(wrapper, failPOPUP)
-  append(wrapper, successPOPUP)
+  append(wrapper, popUPBlock);
+  append(wrapper, failPOPUP);
+  append(wrapper, successPOPUP);
 
   append(buttonBlock, ICON.infoBtn);
   append(buttonBlock, ICON.restartBtn);
@@ -528,9 +538,9 @@ function UIObject() {
 
 
 
-   /*--------- Styling the components --------*/
+  /*--------- Styling the components --------*/
 
-  styleElem(overlay, STYLES.resetStyle + STYLES.overlayStyle);
+  styleElem(overlay, STYLES.resetStyle + STYLES.overlayStyle + STYLES.borderBox);
   styleElem(wrapper, STYLES.wrapperStyle + STYLES.centerStyle + STYLES.gradient);
   styleElem(titleBlock, STYLES.titleBlockStyle + STYLES.resetStyle);
   styleElem(title, STYLES.titleStyle);
@@ -538,8 +548,10 @@ function UIObject() {
   styleElem(buttonBlock, STYLES.resetStyle + STYLES.buttonBlockStyle)
   styleElem(timer, STYLES.timerStyle + STYLES.centerStyle + STYLES.boxShadow)
   styleElem(info, STYLES.infoStyle + STYLES.centerStyle + STYLES.resetStyle + STYLES.gradient)
-  styleElem(successPOPUP, STYLES.centerStyle + STYLES.absPos + STYLES.popUpStyle);
-  styleElem(failPOPUP, STYLES.centerStyle + STYLES.absPos + STYLES.popUpStyle);
+
+  styleElem(popUPBlock, STYLES.centerStyle + STYLES.absPos + STYLES.popUPBlockStyle + STYLES.faded);
+  styleElem(successPOPUP, STYLES.centerStyle + STYLES.absPos + STYLES.faded);
+  styleElem(failPOPUP, STYLES.centerStyle + STYLES.absPos + STYLES.faded);
 
 
 
@@ -550,8 +562,20 @@ function UIObject() {
     if (overlay) {
       overlay.style.width = window.innerWidth + 'px';
       overlay.style.height = window.innerHeight + 'px';
+      overlay.style.top = window.pageYOffset + 'px';
+      overlay.style.left = window.pageXOffset + 'px';
 
     }
+
+    if (window.innerHeight < 500) {
+      UI.close();
+      SCROLL.enable();
+    }
+  }
+
+  window.onscroll = function () {
+    overlay.style.top = window.pageYOffset + 'px';
+    overlay.style.left = window.pageXOffset + 'px';
   }
 
 
@@ -559,37 +583,35 @@ function UIObject() {
   ICON.closeBtn.onclick = function () {
 
     // at this point we have to clear all intervals
-        clearIntervals();
-        UI.close();
-        SCROLL.enable();
+    clearIntervals();
+    UI.close();
+    SCROLL.enable();
 
-    if (wrapper.lastChild == popUp) {
-      wrapper.removeChild(popUp);
-    }
+    toggle(wrapper, info);
   }
 
   // restart button action
   ICON.restartBtn.onclick = function () {
     clearIntervals();
+    UI.removeTimer();
 
     toggle(wrapper, info);
-
-        reStart();
+    fadeCont(popUPBlock);
+    reStart();
   }
 
 
   ICON.infoBtn.onclick = function () {
-        clearIntervals();
+    clearIntervals();
+    UI.removeTimer();
     UI.clearContainer();
     popUp.innerHTML = infoMSG;
-
-    toggle(wrapper, info, true);
+//    serialFade(info);
+    toggle(wrapper, info, true, reStart);
+    //    reStart();
   }
 
-
-
-
-    /*--------- properties and methodes --------*/
+  /*--------- properties and methodes --------*/
   return {
 
     container: function () {
@@ -602,12 +624,15 @@ function UIObject() {
 
     close: function () {
       return document.body.removeChild(overlay);
+      clearIntervals();
     },
 
     timer: function (func) {
+      popUPBlock.style.opacity = '1';
+      popUPBlock.style.visibility = 'visible';
       append(wrapper, timer);
-      var seconds = 2;
-      var timerId = setInterval(updateTimer, 1000);
+      let seconds = 2;
+      let timerId = setInterval(updateTimer, 1000);
 
       timer.innerHTML = seconds;
 
@@ -619,6 +644,10 @@ function UIObject() {
           clearInterval(timerId);
           setTimeout(function () {
             wrapper.removeChild(timer);
+
+            popUPBlock.style.opacity = '0';
+            popUPBlock.style.visibility = 'hidden';
+
             func()
           }, 1000);
 
@@ -628,15 +657,12 @@ function UIObject() {
 
     failPOPUp: function () {
 
-      setTimeout(function() {
-        UI.clearContainer();
-
-      }, 500);
-
       fade(failPOPUP);
+
     },
 
     successPOPUp: function () {
+
       fade(successPOPUP)
     },
 
@@ -646,8 +672,12 @@ function UIObject() {
       }
     },
 
-    removePopUp: function () {
-      fade(failPOPUP)
+    removeTimer: function () {
+      toggle(wrapper, timer);
+    },
+
+    fadeContainer: function () {
+      fade(popUPBlock);
     }
   } // return
 
@@ -663,32 +693,26 @@ function Circle(value, randomX, randomY) {
   this.randomX = randomX;
   this.randomY = randomY;
 
-  var moveCircle;
+  let moveCircle;
 
-  var circle = document.createElement('input');
+  let circle = document.createElement('input');
 
   circle.setAttribute('type', 'button');
   circle.setAttribute('value', value);
 
+  let cSTYLE =
+    "width: 60px; height: 60px; max-width: 60px; max-height: 60px;" +
+    "box-sizing: border-box; -webkit-box-sizing: border-box;" +
+    "font-size: 54px; border-radius: 100%; text-decoration: none;" +
+    "color: #FFFFFF; border: 0; cursor: pointer; position: absolute;" +
+    "left: " + randomX + "px;" + "top: " + randomY + "px;" +
+    "transition: box-shadow 0.3s, background-color 0.5s;" +
+    "background-color: " + colors.deepBlue + ";" +
+    "outline: 0;";
+
+  styleElem(circle, cSTYLE)
+
   const style = circle.style;
-
-  // circle style
-  style.width = '60px';
-  style.height = '60px';
-  style.maxWidth = '60px';
-  style.maxHeight = '60px';
-  style.fontSize = '54px';
-  style.borderRadius = '100%';
-  style.textDecoration = 'none';
-  style.backgroundColor = colors.mediumBlue;
-  style.color = '#fff';
-  style.border = 'none';
-  style.cursor = 'pointer';
-  style.position = 'absolute';
-  style.left = randomX + 'px';
-  style.top = randomY + 'px';
-  style.transition = 'box-shadow 0.3s, background-color 0.5s';
-
 
   /* chage style with hover effect */
   circle.onmouseover = function () {
@@ -709,16 +733,9 @@ function Circle(value, randomX, randomY) {
     circle.setAttribute('disabled', 'disabled');
     style.opacity = '0.7';
     style.cursor = 'default';
+    style.boxShadow = 'none';
   }
 
-
-
-  /* removing px Suffix from a string */
-  //  function removePX(str) {
-  //    var number = 0;
-  //    number = strToInt(str.slice(0, -2));
-  //    return number;
-  //  }
 
   /* properties for moving the object */
 
@@ -726,19 +743,19 @@ function Circle(value, randomX, randomY) {
   const FPS = 60;
 
   // element size
-  var elementSize = '60px';
+  let elementSize = '60px';
 
   // element x position, y Position
-  var elementXPos;
-  var elementYPos;
+  let elementXPos;
+  let elementYPos;
 
   // element X speed, Y speed
-  var Xspeed;
-  var Yspeed;
+  let Xspeed;
+  let Yspeed;
 
   // edges
-  var width = 260;
-  var height = 260;
+  let width = 260;
+  let height = 260;
 
   // element starting position
   elementXPos = randomX;
@@ -767,11 +784,20 @@ function Circle(value, randomX, randomY) {
     elementXPos += Xspeed;
     elementYPos += Yspeed;
 
-    //    println(elementXPos)
 
     circle.style.left = elementXPos + 'px';
-
     circle.style.top = elementYPos + 'px';
+
+    // change direction randomly
+    if (Math.floor(Math.random() * 150) == 1) {
+      Xspeed = -Xspeed;
+    }
+
+    if (Math.floor(Math.random() * 150) == 1) {
+      Yspeed = -Yspeed;
+    }
+
+
 
     // Horizontal movement
     if (elementXPos < 0 && Xspeed < 0) {
@@ -811,7 +837,7 @@ function Circle(value, randomX, randomY) {
     },
 
     stop: function () {
-      for (var i = 0; i < 100; i++) {
+      for (let i = 0; i < 100; i++) {
         window.clearInterval(moveCircle);
       }
 
@@ -820,12 +846,12 @@ function Circle(value, randomX, randomY) {
 
     rightPlay: function () {
       disable()
-      style.backgroundColor = '#1f9103';
+      style.backgroundColor = '#138b13';
     },
 
     wrongPlay: function () {
       disable();
-      style.backgroundColor = '#cc0000'
+      style.backgroundColor = colors.redOrange;
     },
 
     disable: function () {
@@ -908,11 +934,7 @@ function Submit() {
 
 
 
-
-
-/**************************************
-SECTION 3: set up
-**************************************/
+/*---------- SET UP ----------*/
 
 const ANCHOR = new Anchor();
 const UI = new UIObject();
@@ -930,7 +952,7 @@ function game(elements) {
   elements.forEach(function (element) {
     element.circle.onclick = function (event) {
       // value of the current circle
-      const value = strToInt(this.getAttribute('value'));
+      const value = parseInt(this.getAttribute('value'));
       const baseNumber = sortedModel[0];
 
 
@@ -943,7 +965,7 @@ function game(elements) {
         element.showValue();
 
         if (sortedModel.length === 0) {
-
+          UI.fadeContainer();
           UI.successPOPUp();
 
           setTimeout(function () {
@@ -951,15 +973,11 @@ function game(elements) {
             UI.close();
             SCROLL.enable();
             ANCHOR.checked();
-          }, 1000);
+          }, 1500);
 
         }
 
-      }
-
-
-
-      else {
+      } else {
         elements.forEach(function (element) {
           element.stop();
           element.showValue();
@@ -968,11 +986,18 @@ function game(elements) {
 
 
         element.wrongPlay();
-        UI.failPOPUp();
+
         setTimeout(function () {
-          UI.removePopUp();
-          reStart();
-        }, 2000)
+          UI.fadeContainer();
+          UI.failPOPUp();
+
+          setTimeout(function () {
+            UI.failPOPUp();
+            UI.fadeContainer();
+            reStart();
+          }, 2000) // restart
+        }, 200);
+
 
       }
     }
@@ -1046,8 +1071,7 @@ function reStart() {
   append(container, circles);
 
   /* remove pop up */
-  UI.removePopUp();
-
+  //  UI.failPOPUp();
   setTimeout(function () {
 
     circles.forEach(function (itme) {
