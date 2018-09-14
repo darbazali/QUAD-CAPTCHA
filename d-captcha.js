@@ -606,9 +606,8 @@ function UIObject() {
     UI.removeTimer();
     UI.clearContainer();
     popUp.innerHTML = infoMSG;
-//    serialFade(info);
+    fade(popUPBlock);
     toggle(wrapper, info, true, reStart);
-    //    reStart();
   }
 
   /*--------- properties and methodes --------*/
