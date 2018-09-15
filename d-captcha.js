@@ -412,6 +412,17 @@ function UIObject() {
 
   }
 
+  // check if a node is in page
+  function isInPage(node) {
+    if (document.body.contains(node)) {
+      return true;
+    } else {
+      return false;
+    }
+
+    //    return (node === document.body) ? false : document.body.contains(node);
+  }
+
   /*--------- creating elements --------*/
 
   const overlay = createDiv();
@@ -489,7 +500,7 @@ function UIObject() {
 
 
     popUPBlockStyle: "width: 320px; height: 320px; background-color: #4A4A4A;" +
-    "font-size: 26px;",
+      "font-size: 26px;",
 
     faded: "display: block; opacity: 0; visibility: hidden; transition: visibility 1s linear, opacity 1s linear;"
 
@@ -559,7 +570,7 @@ function UIObject() {
   // Centering with resize event
   window.onresize = function () {
 
-    if (overlay) {
+    if (isInPage(overlay)) {
       overlay.style.width = window.innerWidth + 'px';
       overlay.style.height = window.innerHeight + 'px';
       overlay.style.top = window.pageYOffset + 'px';
@@ -568,8 +579,11 @@ function UIObject() {
     }
 
     if (window.innerHeight < 500) {
-      UI.close();
-      SCROLL.enable();
+      if (isInPage(overlay)) {
+        UI.close();
+        SCROLL.enable();
+
+      }
     }
   }
 
@@ -622,8 +636,10 @@ function UIObject() {
     },
 
     close: function () {
-      return document.body.removeChild(overlay);
       clearIntervals();
+      if (isInPage(overlay)) {
+        document.body.removeChild(overlay);
+      }
     },
 
     timer: function (func) {
