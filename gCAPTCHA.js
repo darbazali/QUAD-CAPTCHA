@@ -260,12 +260,13 @@ function Anchor() {
 
 
   checkbox.onclick = function () {
-    let size = window.innerHeight;
+    let wHeight = window.innerHeight;
 
-    if (size < 550) {
+    if (wHeight < 450) {
       alert('Please put your device in Portraite mode, and try again!')
     } else {
       UI.open();
+      UI.centerUI();
       buildGame();
       SCROLL.disable();
     }
@@ -611,6 +612,7 @@ function UIObject() {
 
     toggle(wrapper, info);
     fadeCont(popUPBlock);
+
     reStart();
   }
 
@@ -629,6 +631,18 @@ function UIObject() {
 
     container: function () {
       return container;
+    },
+
+    centerUI: function () {
+      if (isInPage(overlay)) {
+
+        let style = overlay.style;
+        style.width = window.innerWidth + 'px';
+        style.height = window.innerHeight + 'px';
+        style.top = window.pageYOffset + 'px';
+        style.left = window.pageXOffset + 'px';
+
+      }
     },
 
     open: function () {
@@ -804,11 +818,11 @@ function Circle(value, randomX, randomY) {
     circle.style.top = elementYPos + 'px';
 
     // change direction randomly
-    if (Math.floor(Math.random() * 150) == 1) {
+    if (Math.floor(Math.random() * 200) == 1) {
       Xspeed = -Xspeed;
     }
 
-    if (Math.floor(Math.random() * 150) == 1) {
+    if (Math.floor(Math.random() * 200) == 1) {
       Yspeed = -Yspeed;
     }
 
@@ -1108,3 +1122,21 @@ function reStart() {
 
 
 // TODO: Create a game object.
+
+function Game() {
+
+
+  return {
+    start: function() {
+
+    },
+
+    stop: function() {
+
+    },
+
+    restart: function() {
+
+    }
+  }
+}
