@@ -1,5 +1,12 @@
 const println = console.log;
 
+(function() {
+  let meta = document.createElement('meta');
+      meta.setAttribute("name", "viewport");
+      meta.setAttribute("content", "width=device-width, initial-scale=1.0");
+
+      document.getElementsByTagName('head')[0].appendChild(meta);
+}) ();
 
 /* append element/elements to a node. */
 function appendNode(nodeName, element) {
@@ -42,12 +49,14 @@ const colors = {
   royalBlue: '#4169E1',
   lightBlue: '#0563CF',
   dimGray: '#696969',
-  redOrange: "#E15821"
+  redOrange: "#E15821",
+  darkBlue: "#243061"
 }
 
 
 const SVG = {
 
+  uiBackground: '<svg width="321px" height="460px" viewBox="0 0 321 460" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><linearGradient x1="50%" y1="1.50830925%" x2="50%" y2="100%" id="linearGradient-1"><stop stop-color="#EEEEEE" stop-opacity="0.121320199" offset="0%"></stop><stop stop-color="#D8D8D8" stop-opacity="0.47619452" offset="100%"></stop></linearGradient></defs><g id="gCAPTCHA" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="iPad-Pro-Copy-4" transform="translate(-656.000000, -672.000000)"><g id="Group-3" transform="translate(656.000000, 672.000000)"><rect id="Frame-Copy-2" fill="#243061" x="0" y="0" width="320" height="460" rx="30"></rect><g id="Group-2" transform="translate(0.000000, 105.000000)" fill="url(#linearGradient-1)" opacity="0.196986607"><rect id="Rectangle-12-Copy-36" x="217" y="201" width="50" height="50" rx="3"></rect><rect id="Rectangle-12-Copy-56" x="233" y="226" width="50" height="50" rx="3"></rect><rect id="Rectangle-12-Copy-37" x="283" y="156" width="38" height="50" rx="3"></rect><rect id="Rectangle-12-Copy-38" x="72" y="178" width="30" height="31" rx="3"></rect><rect id="Rectangle-12-Copy-39" x="167" y="248" width="17" height="18" rx="3"></rect><rect id="Rectangle-12-Copy-40" x="220" y="154" width="17" height="18" rx="3"></rect><rect id="Rectangle-12-Copy-41" x="26" y="248" width="17" height="18" rx="3"></rect><rect id="Rectangle-12-Copy-42" x="126" y="35" width="50" height="50" rx="3"></rect><rect id="Rectangle-12-Copy-43" x="65" y="172" width="30" height="31" rx="3"></rect><rect id="Rectangle-12-Copy-44" x="0" y="123" width="21" height="31" rx="3"></rect><rect id="Rectangle-12-Copy-45" x="264" y="115" width="30" height="31" rx="3"></rect><rect id="Rectangle-12-Copy-46" x="242" y="0" width="30" height="31" rx="3"></rect><rect id="Rectangle-12-Copy-47" x="112" y="217" width="17" height="18" rx="2"></rect><rect id="Rectangle-12-Copy-48" x="38" y="47" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-49" x="95" y="20" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-50" x="132" y="70" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-51" x="202" y="10" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-52" x="242" y="80" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-53" x="153" y="176" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-54" x="184" y="42" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-55" x="184" y="107" width="10" height="10" rx="2"></rect><rect id="Rectangle-12-Copy-57" x="35" y="67" width="10" height="10" rx="1"></rect><rect id="Rectangle-12-Copy-58" x="100" y="15" width="10" height="10" rx="1"></rect><rect id="Rectangle-12-Copy-59" x="137" y="90" width="5" height="5" rx="0.5"></rect><rect id="Rectangle-12-Copy-60" x="137" y="3" width="5" height="5" rx="0.5"></rect><rect id="Rectangle-12-Copy-61" x="48" y="8" width="5" height="5" rx="0.5"></rect><rect id="Rectangle-12-Copy-62" x="51" y="3" width="5" height="5" rx="0.5"></rect><rect id="Rectangle-12-Copy-63" x="207" y="5" width="10" height="10" rx="1.5"></rect><rect id="Rectangle-12-Copy-64" x="247" y="75" width="10" height="10" rx="2.5"></rect><rect id="Rectangle-12-Copy-65" x="158" y="171" width="10" height="10" rx="2.5"></rect><rect id="Rectangle-12-Copy-66" x="189" y="37" width="10" height="10" rx="2.5"></rect><rect id="Rectangle-12-Copy-67" x="189" y="102" width="10" height="10" rx="2.5"></rect><rect id="Rectangle-12-Copy-68" x="53" y="102" width="10" height="10" rx="2.5"></rect></g></g></g></g></svg>',
 
   closeIcon: '<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="gCAPTCHA" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="Desktop" transform="translate(-583.000000, -535.000000)"><g id="Close" transform="translate(584.000000, 536.000000)"><circle id="Oval-2" stroke="#FFFFFF" cx="25" cy="25" r="25"></circle><rect id="Rectangle-10" fill="#FFFFFF" transform="translate(24.788582, 24.788582) rotate(45.000000) translate(-24.788582, -24.788582) " x="22.7885822" y="7.28858223" width="4" height="35" rx="2"></rect><rect id="Rectangle-10-Copy" fill="#FFFFFF" transform="translate(24.788582, 24.788582) scale(1, -1) rotate(45.000000) translate(-24.788582, -24.788582) " x="22.7885822" y="7.28858223" width="4" height="35" rx="2"></rect></g></g></g></svg>',
 
@@ -119,6 +128,8 @@ function UIObject() {
   /*--------- creating elements --------*/
 
   const overlay = createDiv();
+  const mainFrame = createDiv();
+  const frame = createDiv();
   const wrapper = createDiv();
   const container = createDiv();
 
@@ -152,11 +163,11 @@ function UIObject() {
       "top: " + window.pageYOffset + "px;" +
       "left: " + window.pageXOffset + "px;" +
       "background-color: rgba(72, 72, 72, 0.8);" +
-      "color: #fff; box-sizing: border-box; font-family: Arial",
+      "color: #fff; box-sizing: border-box; font-family: Arial;",
 
     // wrapper style
-    wrapperStyle: "width: 320px; height: 480px; border-radius: 15px;" +
-      "background-color: " + colors.royalBlue +
+    wrapperStyle: "width: 320px; height: 450px; border-radius: 30px;" +
+      "background-color: #0F0C29" +
       "; position: relative;",
 
 
@@ -168,20 +179,21 @@ function UIObject() {
 
 
     /* title style */
-    titleBlockStyle: "width: 100%; height: 80px; margin: 0; padding: 5px 10px;" +
-      "font-size: 24px; font-weight: bold; background-color: " + colors.transparent + ";",
+    titleBlockStyle: "width: 100%; height: 70px; margin: 0; padding: 2px 10px;" +
+      "font-size: 25px; font-weight: bold; background-color: " + colors.transparent + "; color: #F5A623;",
 
     titleStyle: "margin: 0; padding: 0; margin-top: 5px; margin-left: 10px; cursor: default;",
 
 
     // button container style
-    buttonBlockStyle: "width: 320; height: 70px; margin-top: 6px; padding: 5px 0;" +
+    buttonBlockStyle: "width: 320; height: 60px; margin-top: 3px; padding: 0;" +
 
       "background-color: " + colors.transparent + ";",
 
     // container style
     containerStyle: "width: 320px; height: 320px; margin: 0 auto; position: relative;" +
-      "background-color: #4A4A4A;",
+      "background-color: " + colors.transparent + ";" +
+    "border-top: 1px solid #694914; border-bottom: 1px solid #694914;",
 
 
     timerStyle: "width: 150px; height: 150px; border: 5px solid #3B3B3B; border-radius: 50%; " +
@@ -236,7 +248,7 @@ function UIObject() {
    /*--------- Styling the components --------*/
 
   styleElem(overlay, STYLES.resetStyle + STYLES.overlayStyle);
-  styleElem(wrapper, STYLES.wrapperStyle + STYLES.centerStyle + STYLES.gradient);
+  styleElem(wrapper, STYLES.wrapperStyle + STYLES.centerStyle);
   styleElem(titleBlock, STYLES.titleBlockStyle + STYLES.resetStyle);
   styleElem(title, STYLES.titleStyle);
   styleElem(container, STYLES.containerStyle);
@@ -362,13 +374,14 @@ function Icons() {
   function btnStyle(button) {
     const style = button.style;
 
-    style.width = '55px';
-    style.height = '55px';
+    style.width = '50px';
+    style.height = '50px';
     style.padding = '0';
+    style.margin = '0';
     style.boxSizing = 'border-box';
     style.display = 'inline-block';
     style.cursor = 'pointer';
-    style.margin = '0px 25px';
+    style.margin = '0px 28px';
     style.borderRadius = '50%';
     style.opacity = '0.8';
     style.border = 'none';
@@ -428,8 +441,6 @@ function Icons() {
   }
 
 }
-
-
 
 
 
