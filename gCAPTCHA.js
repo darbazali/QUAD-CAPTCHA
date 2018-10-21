@@ -305,13 +305,15 @@ function Icons() {
   function btnStyle(button) {
     const style = button.style;
 
-    style.width = '60px';
-    style.height = '60px';
+    style.width = '45px';
+    style.height = '45px';
     style.padding = '0';
     style.boxSizing = 'border-box';
     style.display = 'inline-block';
     style.cursor = 'pointer';
-    style.margin = '0px 22px';
+//    style.margin = '0';
+//    style.marginLeft = '60px';
+//    style.marginRight = '60px';
     style.borderRadius = '50%';
     style.opacity = '0.8';
     style.border = 'none';
@@ -354,6 +356,10 @@ function Icons() {
   closeBtn.innerHTML = SVG.closeIcon;
   restartBtn.innerHTML = SVG.restartIcon;
   infoBtn.innerHTML = SVG.infoIcon;
+
+  infoBtn.style.marginLeft = '18px';
+  infoBtn.style.marginRight = '75px';
+  restartBtn.style.marginRight = '75px';
 
 
   return {
@@ -443,6 +449,10 @@ function UIObject() {
 
   const overlay = createDiv();
   const wrapper = createDiv();
+  const backGround = createDiv();
+  const frame = createDiv();
+
+
   const container = createDiv();
 
   const titleBlock = createDiv();
@@ -480,34 +490,37 @@ function UIObject() {
       "color: #fff; font-family: Arial;",
 
     // wrapper style
-    wrapperStyle: "width: 320px; height: 460px; border-radius: 15px;" +
-      "background-color: " + colors.royalBlue +
-      "; position: relative;",
+    wrapperStyle: "width: 320px; height: 450px; border-radius: 30px;" +
+      "background-color: transparent;  position: relative;",
+
+    frameStyle: "width: 320px; height: 450px; border-radius: 30px;" +
+    " background-color: transparent;",
 
 
     // info style
-    infoStyle: "width: 300px; height: 190px; font-size: 18px; text-align: left;" +
-      "margin: 10px 5px; border-radius: 10px; cursor: default; position: absolute;" +
-      "background-color: " + colors.lightBlue + "; padding: 5px 10px; opacity: 0.9;" +
-      "color: #d9d9d9;",
+    infoStyle: "width: 300px; height: 190px; font-size: 24px; text-align: left;" +
+      "margin: 5px 5px; border-radius: 10px; cursor: default; position: absolute;" +
+      "background-color: transparent; padding: 5px 10px; opacity: 0.9;" +
+      "color: #F5A623;",
 
 
 
     /* title style */
-    titleBlockStyle: "width: 100%; height: 80px; margin: 0; padding: 5px 10px;" +
-      "font-size: 24px; font-weight: bold; background-color: " + colors.transparent + ";",
+    titleBlockStyle: "width: 100%; height: 70px; margin: 0; padding: 5px 0;" +
+      "font-size: 26px; font-weight: bold; background-color: " + colors.transparent + "; text-align: center;",
 
-    titleStyle: "margin: 0; padding: 0; margin-top: 5px; margin-left: 10px; cursor: default;",
+    titleStyle: "margin: 0; padding: 0; cursor: default; color: #F5A623",
 
 
     // button container style
-    buttonBlockStyle: "width: 320; height: 70px; margin-top: 6px; padding: 5px 0;" +
+    buttonBlockStyle: "width: 320; height: 60px; margin-top: 5px; padding: 0;" +
 
       "background-color: " + colors.transparent + ";",
 
     // container style
     containerStyle: "width: 320px; height: 320px; margin: 0 auto; position: relative;" +
-      "background-color: " + colors.transparent + ";",
+      "background-color: transparent;" +
+    "border-top: 1px solid #915f0b; border-bottom: 1px solid #915f0b;",
 
 
     timerStyle: "width: 150px; height: 150px; border: 5px solid #3B3B3B; border-radius: 50%; " +
@@ -530,7 +543,7 @@ function UIObject() {
 
   const infoMSG =
 
-    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.<hr style="height:1px;border:none;color:#ccc;background-color:#ccc; margin: 10px 0; opacity: 0.9;"/>Click on the reload button for new game.</p>';
+    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.<hr style="height:1px;border:none;color:#ccc;background-color:#F5A623; margin: 0; opacity: 0.9;"/>Click on the reload button for new game.</p>';
 
 
   // text for title
@@ -539,7 +552,7 @@ function UIObject() {
     ' in the Ascending Order.</p>';
 
 
-
+  backGround.innerHTML = SVG.frameBack;
   timer.innerHTML = '0';
   info.innerHTML = infoMSG;
   successPOPUP.innerHTML = SVG.successPopUP;
@@ -548,12 +561,14 @@ function UIObject() {
 
   // Assembling
   append(overlay, wrapper);
-  append(wrapper, titleBlock);
-  append(wrapper, container);
-  append(wrapper, buttonBlock);
-  append(wrapper, popUPBlock);
-  append(wrapper, failPOPUP);
-  append(wrapper, successPOPUP);
+  append(wrapper, backGround)
+  append(wrapper, frame);
+  append(frame, titleBlock);
+  append(frame, container);
+  append(frame, buttonBlock);
+//  append(frame, popUPBlock);
+  append(frame, failPOPUP);
+  append(frame, successPOPUP);
 
   append(buttonBlock, ICON.infoBtn);
   append(buttonBlock, ICON.restartBtn);
@@ -568,13 +583,15 @@ function UIObject() {
   /*--------- Styling the components --------*/
 
   styleElem(overlay, STYLES.resetStyle + STYLES.overlayStyle + STYLES.borderBox);
-  styleElem(wrapper, STYLES.wrapperStyle + STYLES.centerStyle + STYLES.gradient);
+  styleElem(wrapper, STYLES.wrapperStyle + STYLES.centerStyle);
+  styleElem(backGround, STYLES.absPos + STYLES.frameStyle + STYLES.centerStyle);
+  styleElem(frame, STYLES.absPos + STYLES.frameStyle + STYLES.centerStyle);
   styleElem(titleBlock, STYLES.titleBlockStyle + STYLES.resetStyle);
   styleElem(title, STYLES.titleStyle);
   styleElem(container, STYLES.containerStyle);
   styleElem(buttonBlock, STYLES.resetStyle + STYLES.buttonBlockStyle)
   styleElem(timer, STYLES.timerStyle + STYLES.centerStyle + STYLES.boxShadow)
-  styleElem(info, STYLES.infoStyle + STYLES.centerStyle + STYLES.resetStyle + STYLES.gradient)
+  styleElem(info, STYLES.infoStyle + STYLES.centerStyle)
 
   styleElem(popUPBlock, STYLES.centerStyle + STYLES.absPos + STYLES.popUPBlockStyle + STYLES.faded);
   styleElem(successPOPUP, STYLES.centerStyle + STYLES.absPos + STYLES.faded);
@@ -616,6 +633,8 @@ function UIObject() {
     clearIntervals();
     UI.close();
     SCROLL.enable();
+    this.style.transform = 'scale(1)';
+    this.style.opacity = '0.8';
 
     toggle(wrapper, info);
   }
@@ -671,33 +690,33 @@ function UIObject() {
       }
     },
 
-    timer: function (func) {
-      popUPBlock.style.opacity = '1';
-      popUPBlock.style.visibility = 'visible';
-      append(wrapper, timer);
-      let seconds = 1;
-      let timerId = setInterval(updateTimer, 1000);
-
-      timer.innerHTML = seconds;
-
-      function updateTimer() {
-        seconds--;
-        timer.innerHTML = seconds;
-
-        if (seconds === 0) {
-          clearInterval(timerId);
-          setTimeout(function () {
-            wrapper.removeChild(timer);
-
-            popUPBlock.style.opacity = '0';
-            popUPBlock.style.visibility = 'hidden';
-
-            func()
-          }, 1000);
-
-        }
-      }
-    },
+//    timer: function (func) {
+//      popUPBlock.style.opacity = '1';
+//      popUPBlock.style.visibility = 'visible';
+//      append(wrapper, timer);
+//      let seconds = 1;
+//      let timerId = setInterval(updateTimer, 1000);
+//
+//      timer.innerHTML = seconds;
+//
+//      function updateTimer() {
+//        seconds--;
+//        timer.innerHTML = seconds;
+//
+//        if (seconds === 0) {
+//          clearInterval(timerId);
+//          setTimeout(function () {
+//            wrapper.removeChild(timer);
+//
+//            popUPBlock.style.opacity = '0';
+//            popUPBlock.style.visibility = 'hidden';
+//
+//            func()
+//          }, 1000);
+//
+//        }
+//      }
+//    },
 
     failPOPUp: function () {
 
@@ -747,12 +766,13 @@ function Circle(value, randomX, randomY) {
   let cSTYLE =
     "width: 60px; height: 60px; max-width: 60px; max-height: 60px;" +
     "box-sizing: border-box; -webkit-box-sizing: border-box;" +
-    "font-size: 54px; border-radius: 100%; text-decoration: none;" +
-    "color: #FFFFFF; border: 0; cursor: pointer; position: absolute;" +
+    "font-size: 50px; border-radius: 100%; text-decoration: none;" +
+    "color: #F5A623; border: 4px solid #F5A623; cursor: pointer; position: absolute;" +
     "left: " + randomX + "px;" + "top: " + randomY + "px;" +
     "transition: box-shadow 0.3s, background-color 0.5s;" +
-    "background-color: " + colors.deepBlue + ";" +
-    "outline: 0;";
+    "background-color: transparent;" +
+    "outline: 0; padding: 0; margin: 0; text-align: center;" +
+      "font-weight: 500;";
 
   styleElem(circle, cSTYLE)
 
@@ -892,12 +912,13 @@ function Circle(value, randomX, randomY) {
 
     rightPlay: function () {
       disable()
-      style.backgroundColor = '#138b13';
+//      style.backgroundColor = '#138b13';
     },
 
     wrongPlay: function () {
       disable();
-      style.backgroundColor = colors.redOrange;
+      circle.setAttribute('value', 'X');
+//      style.backgroundColor = colors.redOrange;
     },
 
     disable: function () {
@@ -1093,7 +1114,7 @@ function buildGame() {
   }
 
   // show the timer, then start game.
-  UI.timer(startGame);
+  game()
 
 }
 
