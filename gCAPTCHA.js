@@ -21,21 +21,16 @@ and memorizing.
 
 //let println = console.log;
 
+const gCLink = 'Home Page: <a href="http://www.gCAPTCHA.com" style="color: #F5A623">gCAPTCHA.com</a>';
 
 // IIFE: deploying viewport meta tag to the page.
-(function() {
+(function () {
   let viewPort = document.createElement('meta');
-      viewPort.setAttribute("name", "viewport");
-      viewPort.setAttribute("content", "width=device-width, initial-scale=1.0");
+  viewPort.setAttribute("name", "viewport");
+  viewPort.setAttribute("content", "width=device-width, initial-scale=1.0");
 
-      document.getElementsByTagName('head')[0].appendChild(viewPort);
-}) ();
-
-
-// flip function, returns 0 or 1 randomly.
-function flip() {
-  return Math.floor(Math.random() * 2);
-}
+  document.getElementsByTagName('head')[0].appendChild(viewPort);
+})();
 
 
 // random integer between tow numbers, min & max
@@ -156,7 +151,12 @@ function makeSortedModel(elements) {
   return sortedValues.sort()
 }
 
+/*
 
+  the above function is used to create a sorted sample array
+  of the randomized circles.
+
+*/
 
 
 /*---------- COMPONENTS ----------*/
@@ -221,15 +221,16 @@ function Anchor() {
   const checkbox = document.createElement('div');
   const checkedBox = checkbox.cloneNode(true);
   const title = document.createElement('div');
-  const target = document.getElementsByClassName('d-captcha-div');
-  const d_c_anchor = target[0];
+  const target = document.querySelector('.d-captcha-div');
+  const submit = document.querySelector('.d-captcha-submit');
+  //  const d_c_anchor = target[0];
   const checkMark = '&#10003';
 
   // assembling
   title.innerHTML = "I'm not a robot";
   append(anchor, checkbox);
   append(anchor, title);
-  append(d_c_anchor, anchor);
+  append(target, anchor);
 
 
   // styles
@@ -292,7 +293,7 @@ function Anchor() {
   return {
     checked: function () {
       checkbox.parentNode.replaceChild(checkedBox, checkbox);
-      target.setAttribute('disabled', 'false');
+      submit.setAttribute('disabled', 'false');
     }
   }
 }
@@ -311,10 +312,10 @@ function Icons() {
     style.boxSizing = 'border-box';
     style.display = 'inline-block';
     style.cursor = 'pointer';
-//    style.margin = '0';
-//    style.marginLeft = '60px';
-//    style.marginRight = '60px';
-    style.borderRadius = '50%';
+    //    style.margin = '0';
+    //    style.marginLeft = '60px';
+    //    style.marginRight = '60px';
+    style.borderRadius = '0';
     style.opacity = '0.8';
     style.border = 'none';
     style.transition = 'all 0.3s';
@@ -357,9 +358,9 @@ function Icons() {
   restartBtn.innerHTML = SVG.restartIcon;
   infoBtn.innerHTML = SVG.infoIcon;
 
-  infoBtn.style.marginLeft = '18px';
-  infoBtn.style.marginRight = '75px';
-  restartBtn.style.marginRight = '75px';
+  infoBtn.style.marginLeft = '65px';
+  infoBtn.style.marginRight = '30px';
+  restartBtn.style.marginRight = '30px';
 
 
   return {
@@ -452,7 +453,6 @@ function UIObject() {
   const backGround = createDiv();
   const frame = createDiv();
 
-
   const container = createDiv();
 
   const titleBlock = createDiv();
@@ -476,8 +476,6 @@ function UIObject() {
     boxShadow: "box-shadow: 0 0 20px #333333;",
     absPos: "position: absolute;",
     borderBox: 'box-sizing: border-box; -webkit-box-sizing: border-box;',
-    gradient: "background: linear-gradient(#0563CF, #0133A4);",
-
 
     // styles / specific
     // overlay style
@@ -494,11 +492,11 @@ function UIObject() {
       "background-color: transparent;  position: relative;",
 
     frameStyle: "width: 320px; height: 450px; border-radius: 30px;" +
-    " background-color: transparent;",
+      " background-color: transparent;",
 
 
     // info style
-    infoStyle: "width: 300px; height: 190px; font-size: 24px; text-align: left;" +
+    infoStyle: "width: 300px; height: 300px; font-size: 22px; text-align: left;" +
       "margin: 5px 5px; border-radius: 10px; cursor: default; position: absolute;" +
       "background-color: transparent; padding: 5px 10px; opacity: 0.9;" +
       "color: #F5A623;",
@@ -520,30 +518,31 @@ function UIObject() {
     // container style
     containerStyle: "width: 320px; height: 320px; margin: 0 auto; position: relative;" +
       "background-color: transparent;" +
-    "border-top: 1px solid #915f0b; border-bottom: 1px solid #915f0b;",
+      "border-top: 1px solid #915f0b; border-bottom: 1px solid #915f0b;",
 
 
-    timerStyle: "width: 150px; height: 150px; border: 5px solid #3B3B3B; border-radius: 50%; " +
-      "text-align: center; font-size: 130px; position: absolute; cursor: default; color: #FFF;" +
+    timerStyle: "width: 170px; height: 75px; border: 2px solid #3B3B3B; border-radius: 15px; " +
+      "text-align: center; font-size: 48px; position: absolute; cursor: default; color: #FFF;" +
       "background-color: " + colors.redOrange + "; font-weight: 100;",
 
 
     popUPBlockStyle: "width: 320px; height: 320px; background-color: #4A4A4A;" +
       "font-size: 32px;",
 
-    faded: "display: block; opacity: 0; visibility: hidden; transition: visibility 1s linear, opacity 1s linear;"
+    faded: "display: block; opacity: 0; visibility: hidden; transition: visibility .5s linear, opacity .5s linear;"
 
 
   }
 
-// TODO: modify UI style
+  // TODO: modify UI style
 
+  // horizontal line breaker
+  const lineBreak = '<hr style="height:1px;border:none;color:#ccc;background-color:#F5A623; margin: 10px 0; opacity: 0.9;"/>';
 
   /* 1. instruction message */
-
   const infoMSG =
 
-    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.<hr style="height:1px;border:none;color:#ccc;background-color:#F5A623; margin: 0; opacity: 0.9;"/>Click on the reload button for new game.</p>';
+    '<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order.' + lineBreak + 'Click on the reload button for new game.</p>' + lineBreak + gCLink;
 
 
   // text for title
@@ -553,7 +552,6 @@ function UIObject() {
 
 
   backGround.innerHTML = SVG.frameBack;
-  timer.innerHTML = '0';
   info.innerHTML = infoMSG;
   successPOPUP.innerHTML = SVG.successPopUP;
   failPOPUP.innerHTML = SVG.failPopUP;
@@ -566,7 +564,7 @@ function UIObject() {
   append(frame, titleBlock);
   append(frame, container);
   append(frame, buttonBlock);
-//  append(frame, popUPBlock);
+  //  append(frame, popUPBlock);
   append(frame, failPOPUP);
   append(frame, successPOPUP);
 
@@ -600,9 +598,11 @@ function UIObject() {
 
 
 
+
   // Centering with resize event
   window.onresize = function () {
 
+    // center the UI to the screen
     if (isInPage(overlay)) {
       overlay.style.width = window.innerWidth + 'px';
       overlay.style.height = window.innerHeight + 'px';
@@ -611,6 +611,7 @@ function UIObject() {
 
     }
 
+    // close the game if width of the window is < 500px.
     if (window.innerHeight < 500) {
       if (isInPage(overlay)) {
         UI.close();
@@ -618,7 +619,15 @@ function UIObject() {
 
       }
     }
+
+    // scale size of the UI with 1.3 for bigger screens.
+    if (window.innerHeight > 700 && window.innerWidth > 1200) {
+      overlay.style.transform = 'scale(1.3)';
+      overlay.style.msTransform = 'scale(1.3)';
+    }
   }
+
+
 
   window.onscroll = function () {
     overlay.style.top = window.pageYOffset + 'px';
@@ -636,16 +645,19 @@ function UIObject() {
     this.style.transform = 'scale(1)';
     this.style.opacity = '0.8';
 
-    toggle(wrapper, info);
+    toggle(frame, info);
   }
 
   // restart button action
   ICON.restartBtn.onclick = function () {
-    clearIntervals();
-    UI.removeTimer();
+    //    UI.removeTimer();
+    UI.clearContainer();
 
-    toggle(wrapper, info);
-    fadeCont(popUPBlock);
+    toggle(frame, info);
+    toggle(frame, failPOPUP);
+    clearIntervals();
+
+    //    fadeCont(popUPBlock);
 
     reStart();
   }
@@ -655,9 +667,9 @@ function UIObject() {
     clearIntervals();
     UI.removeTimer();
     UI.clearContainer();
-    popUp.innerHTML = infoMSG;
+    //    popUp.innerHTML = infoMSG;
     fade(popUPBlock);
-    toggle(wrapper, info, true, reStart);
+    toggle(frame, info, true, reStart);
   }
 
   /*--------- properties and methodes --------*/
@@ -690,33 +702,46 @@ function UIObject() {
       }
     },
 
-//    timer: function (func) {
-//      popUPBlock.style.opacity = '1';
-//      popUPBlock.style.visibility = 'visible';
-//      append(wrapper, timer);
-//      let seconds = 1;
-//      let timerId = setInterval(updateTimer, 1000);
-//
-//      timer.innerHTML = seconds;
-//
-//      function updateTimer() {
-//        seconds--;
-//        timer.innerHTML = seconds;
-//
-//        if (seconds === 0) {
-//          clearInterval(timerId);
-//          setTimeout(function () {
-//            wrapper.removeChild(timer);
-//
-//            popUPBlock.style.opacity = '0';
-//            popUPBlock.style.visibility = 'hidden';
-//
-//            func()
-//          }, 1000);
-//
-//        }
-//      }
-//    },
+    //    timer: function (func) {
+    //      popUPBlock.style.opacity = '1';
+    //      popUPBlock.style.visibility = 'visible';
+    //      append(wrapper, timer);
+    //      let seconds = 1;
+    //      let timerId = setInterval(updateTimer, 1000);
+    //
+    //      timer.innerHTML = seconds;
+    //
+    //      function updateTimer() {
+    //        seconds--;
+    //        timer.innerHTML = seconds;
+    //
+    //        if (seconds === 0) {
+    //          clearInterval(timerId);
+    //          setTimeout(function () {
+    //            wrapper.removeChild(timer);
+    //
+    //            popUPBlock.style.opacity = '0';
+    //            popUPBlock.style.visibility = 'hidden';
+    //
+    //            func()
+    //          }, 1000);
+    //
+    //        }
+    //      }
+    //    },
+
+    ready: function(func) {
+      popUPBlock.style.opacity = '1';
+      popUPBlock.style.visibility = 'visible';
+      append(frame, timer);
+      timer.innerHTML = 'Ready!';
+        setTimeout(function() {
+          frame.removeChild(timer);
+          popUPBlock.style.opacity = '0';
+          popUPBlock.style.visibility = 'hidden';
+          func(); // start game after showing ready alert.
+        }, 1200);
+    },
 
     failPOPUp: function () {
 
@@ -772,7 +797,7 @@ function Circle(value, randomX, randomY) {
     "transition: box-shadow 0.3s, background-color 0.5s;" +
     "background-color: transparent;" +
     "outline: 0; padding: 0; margin: 0; text-align: center;" +
-      "font-weight: 500;";
+    "font-weight: 500;";
 
   styleElem(circle, cSTYLE)
 
@@ -780,7 +805,7 @@ function Circle(value, randomX, randomY) {
 
   /* chage style with hover effect */
   circle.onmouseover = function () {
-    style.boxShadow = '0px 0px 10px #000';
+    style.boxShadow = '0px 0px 20px #F5A623';
   }
 
   circle.onmouseout = function () {
@@ -832,11 +857,11 @@ function Circle(value, randomX, randomY) {
   Yspeed = 15 / FPS;
 
   // random direction
-  if (flip() == 0) {
+  if (randomInt(0, 1) == 0) {
     Xspeed = -Xspeed;
   }
 
-  if (flip() == 0) {
+  if (randomInt(0, 1) == 0) {
     Yspeed = -Yspeed;
   }
 
@@ -912,13 +937,13 @@ function Circle(value, randomX, randomY) {
 
     rightPlay: function () {
       disable()
-//      style.backgroundColor = '#138b13';
+      //      style.backgroundColor = '#138b13';
     },
 
     wrongPlay: function () {
       disable();
       circle.setAttribute('value', 'X');
-//      style.backgroundColor = colors.redOrange;
+      //      style.backgroundColor = colors.redOrange;
     },
 
     disable: function () {
@@ -1110,11 +1135,11 @@ function buildGame() {
 
       }, 300);
 
-    }, 3000);
+    }, 2000);
   }
 
   // show the timer, then start game.
-  game()
+  UI.ready(startGame)
 
 }
 
@@ -1155,27 +1180,8 @@ function reStart() {
       game(circles);
 
     }, 200);
-  }, 3000);
+  }, 2000);
 }
 
 
-
-
-function Game() {
-
-
-  return {
-    start: function() {
-
-    },
-
-    stop: function() {
-
-    },
-
-    restart: function() {
-
-    }
-  }
-}
-
+/*---------- END ----------*/
