@@ -21,7 +21,7 @@ and memorizing.
 
 //let println = console.log;
 
-const gCLink = 'Home Page: <a href="http://www.gCAPTCHA.com" style="color: #F5A623">gCAPTCHA.com</a>';
+const gCLink = 'Home Page: <a href="https://darbaz.design/projects/g-shield.html" style="color: #F5A623">Learn More</a>';
 
 // IIFE: deploying viewport meta tag to the page.
 (function () {
