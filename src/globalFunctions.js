@@ -21,7 +21,11 @@ function append(nodeName, element) {
   } else {
     nodeName.appendChild(element);
   }
+
+
 }
+
+
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
   // size of the element
