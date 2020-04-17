@@ -18,6 +18,19 @@ and memorizing.
 
 /*---------- general purpose functions ----------*/
 
+import {
+  createDiv,
+  styleElem,
+  append,
+  shuffle,
+  createCircles,
+  makeSortedModel,
+} from "./globalFunctions";
+import { Circle } from "./Circle";
+import { Scroll } from "./Scroll";
+import { Icons } from "./Icons";
+import { SVG } from "./SVG";
+
 //let println = console.log;
 
 const gCLink =
@@ -32,149 +45,6 @@ const gCLink =
   document.getElementsByTagName("head")[0].appendChild(viewPort);
 })();
 
-// random integer between tow numbers, min & max
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max + 1 - min) + min);
-}
-
-// creating element
-function createDiv() {
-  return document.createElement("div");
-}
-
-// styleing element
-function styleElem(element, style) {
-  element.setAttribute("style", style);
-}
-
-/* append element/elements to a node. */
-function append(nodeName, element) {
-  /* for appending an array of elements */
-  if (element.length > 1) {
-    element.forEach(function (item) {
-      nodeName.appendChild(item.circle); // for circle objects
-    });
-
-    /* appending a singl element */
-  } else {
-    nodeName.appendChild(element);
-  }
-}
-
-/* collision detection (rect - rect) true or false, algorithm */
-function isColliding(element1, element2) {
-  // size of the element
-  const size = 60;
-
-  const X1 = parseInt(element1.style.left);
-  const X2 = parseInt(element2.style.left);
-
-  const Y1 = parseInt(element1.style.top);
-  const Y2 = parseInt(element2.style.top);
-
-  if (
-    X1 + size >= X2 &&
-    X1 <= X2 + size &&
-    Y1 + size >= Y2 &&
-    Y1 <= Y2 + size
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-/* Randomize(shuffle) an array, algorithm */
-function shuffle(srcArray, amount) {
-  let rndArray = []; // random array
-
-  while (rndArray.length < amount) {
-    const random_index = Math.floor(Math.random() * srcArray.length);
-    if (
-      !rndArray.indexOf(random_index) >= 0 ||
-      !rndArray.includes(random_index)
-    ) {
-      rndArray.push(srcArray[random_index]);
-      srcArray.splice(random_index, 1);
-    }
-  }
-  return rndArray;
-}
-
-/* create circles from Circle object, algorithm */
-function createCircles(object) {
-  const circles = [];
-  let value = 0;
-  while (circles.length < 10) {
-    // object
-    let RandomX = randomInt(0, 260);
-    let RandomY = randomInt(0, 260);
-    let circle = new object(value, RandomX, RandomY);
-
-    // looping throught all existing locations
-    let overLapping = false;
-    for (let j = 0; j < circles.length; j++) {
-      let other = circles[j];
-      let collision = isColliding(circle.circle, other.circle);
-
-      if (collision) {
-        overLapping = true;
-        value--; // start again
-        break; // break the loop
-      }
-    }
-
-    if (!overLapping) {
-      circles.push(circle);
-    }
-
-    value++;
-  }
-  return circles;
-}
-
-/* retruns an array of sorted values of a none sorted array */
-function makeSortedModel(elements) {
-  const sortedValues = [];
-
-  elements.forEach(function (item) {
-    sortedValues.push(parseInt(item.circle.getAttribute("value")));
-  });
-
-  return sortedValues.sort();
-}
-
-/*
-
-  the above function is used to create a sorted sample array
-  of the randomized circles.
-
-*/
-
-/*---------- COMPONENTS ----------*/
-
-const colors = {
-  white: "#FFF",
-  transparent: "rgba(255, 255, 255, 0)",
-  darkGray: "#979797",
-  lightGray: "#D8D8D8",
-  mediumBlue: "#0000CD",
-  forestGreen: "#228B22",
-  royalBlue: "#4169E1",
-  lightBlue: "#0563CF",
-  deepBlue: "#053091",
-  dimGray: "#696969",
-  redOrange: "#E15821",
-};
-
-const SVG = {
-  closeIcon:
-    '<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="gCAPTCHA" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="iPhone-SE-Copy-7" transform="translate(-285.000000, -508.000000)"><g id="Group-4" transform="translate(285.000000, 508.000000)"><rect id="Rectangle-13-Copy-2" stroke="#F5A623" x="0.5" y="0.5" width="44" height="44" rx="10"></rect><path d="M24.7561385,23 L34.5327384,32.385536 C35.1557539,32.9836308 35.1557539,33.9533341 34.5327384,34.5514289 C33.909723,35.1495237 32.8996154,35.1495237 32.2766,34.5514289 L22.5,25.1658929 L12.7234,34.5514289 C12.1003846,35.1495237 11.090277,35.1495237 10.4672616,34.5514289 C9.84424614,33.9533341 9.84424614,32.9836308 10.4672616,32.385536 L20.2438615,23 L10.4672616,13.614464 C9.84424614,13.0163692 9.84424614,12.0466659 10.4672616,11.4485711 C11.090277,10.8504763 12.1003846,10.8504763 12.7234,11.4485711 L22.5,20.8341071 L32.2766,11.4485711 C32.8996154,10.8504763 33.909723,10.8504763 34.5327384,11.4485711 C35.1557539,12.0466659 35.1557539,13.0163692 34.5327384,13.614464 L24.7561385,23 Z" id="Combined-Shape" fill="#FFB63E"></path></g></g></g></svg>',
-
-  restartIcon:
-    '<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="gCAPTCHA" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="iPhone-SE-Copy-7" transform="translate(-175.000000, -508.000000)"><g id="Group-3" transform="translate(175.000000, 508.000000)"><rect id="Rectangle-13-Copy-3" stroke="#F5A623" x="0.5" y="0.5" width="44" height="44" rx="10"></rect><path d="M33,13.5687832 L33,12 C33,11.4477153 33.4477153,11 34,11 C34.5522847,11 35,11.4477153 35,12 L35,19 L28,19 C27.4477153,19 27,18.5522847 27,18 C27,17.4477153 27.4477153,17 28,17 L31.9980668,17 C29.9570923,14.0645375 26.4283798,12 22.8342321,12 C16.8310328,12 11.9644783,16.9248678 11.9644783,23 C11.9644783,29.0751322 16.8310328,34 22.8342321,34 C27.3825296,34 31.5100374,30.8345571 32.9949536,26.9172785 C34.4798698,23 36.7357623,25.6804553 35.7649787,27.9859113 C33.5334092,33.2855321 28.622423,37 22.8342321,37 C15.1937967,37 9,30.7319865 9,23 C9,15.2680135 15.1937967,9 22.8342321,9 C26.6882871,9 30.3872309,10.7814031 33,13.5687832 Z" id="Combined-Shape-Copy-2" fill="#F5A623"></path></g></g></g></svg>',
-};
-
 /* 2.1 - Anchor */
 function Anchor() {
   // common styles for checkBox element
@@ -183,10 +53,10 @@ function Anchor() {
 
     style.height = "30px";
     style.width = "30px";
-    style.border = "1px solid " + colors.darkGray;
+    style.border = "1px solid #999";
     style.borderRadius = "2px";
-    style.backgroundColor = colors.white;
-    style.color = colors.forestGreen;
+    style.backgroundColor = "fff";
+    style.color = "#00ff00";
     style.marginRight = "10px";
     style.padding = "0";
     style.fontSize = "30px";
@@ -218,9 +88,9 @@ function Anchor() {
   style.width = "300px";
   style.height = "80px";
   style.boxSizing = "border-box";
-  style.backgroundColor = colors.lightGray;
-  style.color = colors.mediumBlue;
-  style.border = "1px solid " + colors.darkGray;
+  style.backgroundColor = "#999";
+  style.color = "#0000ff";
+  style.border = "1px solid #0000ff";
   style.borderRadius = "8px";
   style.display = "flex";
   style.fontSize = "25px";
@@ -266,73 +136,6 @@ function Anchor() {
       checkbox.parentNode.replaceChild(checkedBox, checkbox);
       submit.setAttribute("disabled", "false");
     },
-  };
-}
-
-/* 2.2 = Buttons */
-function Icons() {
-  // general style for buttons
-  function btnStyle(button) {
-    const style = button.style;
-
-    style.width = "45px";
-    style.height = "45px";
-    style.padding = "0";
-    style.boxSizing = "border-box";
-    style.display = "inline-block";
-    style.cursor = "pointer";
-    //    style.margin = '0';
-    //    style.marginLeft = '60px';
-    //    style.marginRight = '60px';
-    style.borderRadius = "0";
-    style.opacity = "0.8";
-    style.border = "none";
-    style.transition = "all 0.3s";
-    style.backgroundColor = colors.transparent;
-
-    button.onmouseover = function () {
-      style.opacity = "1";
-      style.filter = "alpha(opacity=80)"; // IE
-      style.transform = "scale(1.1)";
-      style.msTransform = "scale(1.1)"; // IE
-    };
-
-    button.onmouseout = function () {
-      style.opacity = "0.8";
-      style.filter = "alpha(opacity=100)"; // IE
-      style.transform = "scale(1)";
-      style.msTransform = "scale(1)"; // IE
-    };
-
-    button.onfocus = function () {
-      style.outline = "none";
-    };
-  }
-
-  function createButton() {
-    const button = document.createElement("button");
-    button.setAttribute("type", "button");
-    btnStyle(button);
-    return button;
-  }
-
-  // icon names
-  const closeBtn = createButton();
-  const infoBtn = createButton();
-  const restartBtn = createButton();
-
-  closeBtn.innerHTML = SVG.closeIcon;
-  restartBtn.innerHTML = SVG.restartIcon;
-  infoBtn.innerHTML = SVG.infoIcon;
-
-  infoBtn.style.marginLeft = "65px";
-  infoBtn.style.marginRight = "30px";
-  restartBtn.style.marginRight = "30px";
-
-  return {
-    closeBtn,
-    restartBtn,
-    infoBtn,
   };
 }
 
@@ -468,7 +271,7 @@ function UIObject() {
     titleBlockStyle:
       "width: 100%; height: 70px; margin: 0; padding: 5px 0;" +
       "font-size: 26px; font-weight: bold; background-color: " +
-      colors.transparent +
+      "rgba(0,0,0,0)" +
       "; text-align: center;",
 
     titleStyle: "margin: 0; padding: 0; cursor: default; color: #F5A623",
@@ -477,7 +280,7 @@ function UIObject() {
     buttonBlockStyle:
       "width: 320; height: 60px; margin-top: 5px; padding: 0;" +
       "background-color: " +
-      colors.transparent +
+      "rgba(0,0,0,0)" +
       ";",
 
     // container style
@@ -490,7 +293,7 @@ function UIObject() {
       "width: 100px; height: 40px; border: 4px solid #F5A623; border-radius: 5px;" +
       "text-align: center; font-size: 28px; position: absolute; cursor: default; color: #F5A623;" +
       "background-color:" +
-      colors.transparent +
+      "rgba(0,0,0,0)" +
       "; font-weight: 500; padding: 8px;",
 
     popUPBlockStyle:
@@ -720,222 +523,6 @@ function UIObject() {
       fade(popUPBlock);
     },
   }; // return
-}
-
-/* 2.3 - Circle Object */
-function Circle(value, randomX, randomY) {
-  // Prototyping
-
-  this.value = value;
-  this.randomX = randomX;
-  this.randomY = randomY;
-
-  let moveCircle;
-
-  let circle = document.createElement("input");
-
-  circle.setAttribute("type", "button");
-  circle.setAttribute("value", value);
-
-  let cSTYLE =
-    "width: 60px; height: 60px; max-width: 60px; max-height: 60px;" +
-    "box-sizing: border-box; -webkit-box-sizing: border-box;" +
-    "font-size: 50px; border-radius: 100%; text-decoration: none;" +
-    "color: #F5A623; border: 4px solid #F5A623; cursor: pointer; position: absolute;" +
-    "left: " +
-    randomX +
-    "px;" +
-    "top: " +
-    randomY +
-    "px;" +
-    "transition: box-shadow 0.3s, background-color 0.5s;" +
-    "background-color: transparent;" +
-    "outline: 0; padding: 0; margin: 0; text-align: center;" +
-    "font-weight: 500;";
-
-  styleElem(circle, cSTYLE);
-
-  const style = circle.style;
-
-  /* chage style with hover effect */
-  circle.onmouseover = function () {
-    style.boxShadow = "0px 0px 20px #F5A623";
-  };
-
-  circle.onmouseout = function () {
-    style.boxShadow = "none";
-  };
-
-  circle.onfocus = function () {
-    style.outline = "none";
-  };
-
-  // disable circle
-  function disable() {
-    circle.setAttribute("disabled", "disabled");
-    style.opacity = "0.7";
-    style.cursor = "default";
-    style.boxShadow = "none";
-  }
-
-  /* properties for moving the object */
-
-  // frame per second
-  const FPS = 60;
-
-  // element size
-  // let elementSize = "60px";
-
-  // element x position, y Position
-  let elementXPos;
-  let elementYPos;
-
-  // element X speed, Y speed
-  let Xspeed;
-  let Yspeed;
-
-  // edges
-  let width = 260;
-  let height = 260;
-
-  // element starting position
-  elementXPos = randomX;
-  elementYPos = randomY;
-
-  // element speed
-  Xspeed = 15 / FPS;
-  Yspeed = 15 / FPS;
-
-  // random direction
-  if (randomInt(0, 1) == 0) {
-    Xspeed = -Xspeed;
-  }
-
-  if (randomInt(0, 1) == 0) {
-    Yspeed = -Yspeed;
-  }
-
-  // UPDATE FUNCTION
-  function update() {
-    elementXPos += Xspeed;
-    elementYPos += Yspeed;
-
-    circle.style.left = elementXPos + "px";
-    circle.style.top = elementYPos + "px";
-
-    // change direction randomly
-    if (randomInt(0, 150) == 1) {
-      Xspeed = -Xspeed;
-    }
-
-    if (randomInt(0, 150) == 1) {
-      Yspeed = -Yspeed;
-    }
-
-    // Horizontal movement
-    if (elementXPos < 0 && Xspeed < 0) {
-      Xspeed = -Xspeed;
-    }
-
-    if (elementXPos > width && Xspeed > 0) {
-      Xspeed = -Xspeed;
-    }
-
-    // Vertical movement
-    if (elementYPos < 0 && Yspeed < 0) {
-      Yspeed = -Yspeed;
-    }
-
-    if (elementYPos > height && Yspeed > 0) {
-      Yspeed = -Yspeed;
-    }
-  } // update
-
-  // methodes for the circle
-  return {
-    circle,
-
-    hideValue: function () {
-      style.fontSize = "0px";
-    },
-
-    showValue: function () {
-      style.fontSize = "54px";
-    },
-
-    move: function () {
-      moveCircle = setInterval(update, 800 / FPS);
-    },
-
-    stop: function () {
-      for (let i = 0; i < 100; i++) {
-        window.clearInterval(moveCircle);
-      }
-
-      disable();
-    },
-
-    rightPlay: function () {
-      disable();
-      //      style.backgroundColor = '#138b13';
-    },
-
-    wrongPlay: function () {
-      disable();
-      circle.setAttribute("value", "X");
-      //      style.backgroundColor = colors.redOrange;
-    },
-
-    disable: function () {
-      disable();
-    },
-  };
-}
-
-/* 2.4 handling sroll bar */
-function Scroll() {
-  // left: 37, up: 38, right: 39, down: 40,
-  // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
-  const keys = {
-    37: 1,
-    38: 1,
-    39: 1,
-    40: 1,
-  };
-
-  function preventDefault(e) {
-    e = e || window.event;
-    if (e.preventDefault) e.preventDefault();
-    e.returnValue = false;
-  }
-
-  function preventDefaultForScrollKeys(e) {
-    if (keys[e.keyCode]) {
-      preventDefault(e);
-      return false;
-    }
-  }
-
-  return {
-    disable: function () {
-      if (window.addEventListener)
-        // older FF
-        window.addEventListener("DOMMouseScroll", preventDefault, false);
-      window.onwheel = preventDefault; // modern standard
-      window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-      window.ontouchmove = preventDefault; // mobile
-      document.onkeydown = preventDefaultForScrollKeys;
-    },
-
-    enable: function () {
-      if (window.removeEventListener)
-        window.removeEventListener("DOMMouseScroll", preventDefault, false);
-      window.onmousewheel = document.onmousewheel = null;
-      window.onwheel = null;
-      window.ontouchmove = null;
-      document.onkeydown = null;
-    },
-  };
 }
 
 /* 2.5 SUBMIT button */
