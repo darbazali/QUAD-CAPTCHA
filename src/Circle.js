@@ -1,26 +1,20 @@
-
 /*
   CIRCLE OBJECT
 */
 
-
-
-import { randomInt } from "./globalFunctions"; 
+import { randomInt } from "./globalFunctions";
 
 export class Circle {
   constructor(value, randomX, randomY) {
-
     // Prototyping
     this.value = value;
     this.randomX = randomX;
     this.randomY = randomY;
 
-
     let moveCircle;
     let circle = document.createElement("input");
     circle.setAttribute("type", "button");
     circle.setAttribute("value", value);
-
 
     // STYLE OF THE CIRCLE
     const style = circle.style;
@@ -38,9 +32,6 @@ export class Circle {
     style.outline = "none";
     style.opacity = "0.8";
     style.transition = "box-shadow 0.3s, background-color 0.5s";
-    
-   
-
 
     /* chage style with hover effect */
     this.onmouseover = function () {
@@ -52,11 +43,6 @@ export class Circle {
     this.onfocus = function () {
       style.outline = "none";
     };
-
-  
-    
-    
-
 
     // disable circle
     function disable() {
@@ -125,11 +111,9 @@ export class Circle {
       circle,
       hideValue: function () {
         style.fontSize = "0px";
-
       },
       showValue: function () {
         style.fontSize = "54px";
-
       },
       move: function () {
         moveCircle = setInterval(update, 800 / FPS);
@@ -155,7 +139,3 @@ export class Circle {
     };
   }
 }
-
-
-
-

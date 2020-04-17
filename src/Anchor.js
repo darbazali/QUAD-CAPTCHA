@@ -67,8 +67,7 @@ export default function Anchor() {
     let wHeight = window.innerHeight;
     if (wHeight < 450) {
       alert("Please put your device in Portraite mode, and try again!");
-    }
-    else {
+    } else {
       UI.open();
       UI.centerUI();
       buildGame();

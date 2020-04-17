@@ -54,8 +54,6 @@ export const UI = new UIObject();
 export const SCROLL = new Scroll();
 const SUBMIT = new Submit();
 
-
-
 // start playing game with the circles.
 function game(elements) {
   /* sorted copy of the circles */

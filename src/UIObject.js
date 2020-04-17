@@ -1,8 +1,7 @@
 import { createDiv, styleElem, append } from "./globalFunctions";
 import { SVG } from "./SVG";
-import {  ICON, UI, SCROLL, reStart } from "./G-SHIELD";
-
-
+import { ICON, UI, SCROLL, reStart } from "./G-SHIELD";
+import UIStyle from "./UIStyle";
 
 /* 2.2 - UI */
 export function UIObject() {
@@ -15,8 +14,7 @@ export function UIObject() {
     if (styled == 0) {
       style.visibility = "visible";
       style.opacity = "1";
-    }
-    else {
+    } else {
       style.visibility = "hidden";
       style.opacity = "0";
     }
@@ -31,12 +29,10 @@ export function UIObject() {
       if (node.lastChild == element) {
         node.removeChild(element);
         func();
-      }
-      else {
+      } else {
         append(node, element);
       }
-    }
-    else {
+    } else {
       if (node.lastChild == element) {
         node.removeChild(element);
       }
@@ -52,13 +48,11 @@ export function UIObject() {
   function isInPage(node) {
     if (document.body.contains(node)) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
 
-  
   /*--------- creating elements --------*/
   const overlay = createDiv();
   const wrapper = createDiv();
@@ -74,93 +68,22 @@ export function UIObject() {
   const successPOPUP = createDiv();
   const failPOPUP = createDiv();
 
-//   const { overlay, wrapper, backGround, frame, container, titleBlock, timer, info, buttonBlock, popUPBlock, successPOPUP, failPOPUP } = document.createElement('div');
+  //   const { overlay, wrapper, backGround, frame, container, titleBlock, timer, info, buttonBlock, popUPBlock, successPOPUP, failPOPUP } = document.createElement('div');
 
-
-  /*--------- Styles of the UI --------*/
-  const STYLES = {
-    // styles / general
-    resetStyle: "font-family: Arial; paddng: 0; margin: 0; box-sizing: border-box;",
-    centerStyle: "left: 50%; top: 50%; transform: translate(-50%, -50%);",
-    boxShadow: "box-shadow: 0 0 20px #333333;",
-    absPos: "position: absolute;",
-    borderBox: "box-sizing: border-box; -webkit-box-sizing: border-box;",
-    // styles / specific
-    // overlay style
-    overlayStyle: "position: absolute;" +
-      "width: " +
-      window.innerWidth +
-      "px;" +
-      "height: " +
-      window.innerHeight +
-      "px;" +
-      "top: " +
-      window.pageYOffset +
-      "px;" +
-      "left: " +
-      window.pageXOffset +
-      "px;" +
-      "background-color: rgba(72, 72, 72, 0.8);" +
-      "color: #fff; font-family: Arial;",
-    // wrapper style
-    wrapperStyle: "width: 320px; height: 450px; border-radius: 30px;" +
-      "background-color: transparent;  position: relative;",
-    frameStyle: "width: 320px; height: 450px; border-radius: 30px;" +
-      " background-color: transparent;",
-    // info style
-    infoStyle: "width: 300px; height: 300px; font-size: 22px; text-align: left;" +
-      "margin: 5px 5px; border-radius: 10px; cursor: default; position: absolute;" +
-      "background-color: transparent; padding: 5px 10px; opacity: 0.9;" +
-      "color: #F5A623;",
-
-
-
-    infoSytle2: 
-    `
-        width: 300px;
-        height: 300px;
-        font-size: 22px;
-        texte-align: left;
-    `,
-
-
-
-    /* title style */
-    titleBlockStyle: "width: 100%; height: 70px; margin: 0; padding: 5px 0;" +
-      "font-size: 26px; font-weight: bold; background-color: " +
-      "rgba(0,0,0,0)" +
-      "; text-align: center;",
-    titleStyle: "margin: 0; padding: 0; cursor: default; color: #F5A623",
-    // button container style
-    buttonBlockStyle: "width: 320; height: 60px; margin-top: 5px; padding: 0;" +
-      "background-color: " +
-      "rgba(0,0,0,0)" +
-      ";",
-    // container style
-    containerStyle: "width: 320px; height: 320px; margin: 0 auto; position: relative;" +
-      "background-color: transparent;" +
-      "border-top: 1px solid #915f0b; border-bottom: 1px solid #915f0b;",
-    timerStyle: "width: 100px; height: 40px; border: 4px solid #F5A623; border-radius: 5px;" +
-      "text-align: center; font-size: 28px; position: absolute; cursor: default; color: #F5A623;" +
-      "background-color:" +
-      "rgba(0,0,0,0)" +
-      "; font-weight: 500; padding: 8px;",
-    popUPBlockStyle: "width: 320px; height: 320px; background-color: #4A4A4A;" +
-      "font-size: 32px;",
-    faded: "display: block; opacity: 0; visibility: hidden; transition: visibility .5s linear, opacity .5s linear;",
-  };
   // TODO: modify UI style
   // horizontal line breaker
-  const lineBreak = '<hr style="height:1px;border:none;color:#ccc;background-color:#F5A623; margin: 10px 0; opacity: 0.9;"/>';
+  const lineBreak =
+    '<hr style="height:1px;border:none;color:#ccc;background-color:#F5A623; margin: 10px 0; opacity: 0.9;"/>';
   /* 1. instruction message */
-  const infoMSG = "<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order." +
+  const infoMSG =
+    "<p>Look at the Circles for 3sec, after the numbers desapeard, click them One-by-One in the Ascending Order." +
     lineBreak +
     "Click on the reload button for new game.</p>" +
     lineBreak;
 
-
   // text for title
-  const titleMSg = "<p>Memorize the numbers<br/>" + " in the Ascending Order.</p>";
+  const titleMSg =
+    "<p>Memorize the numbers<br/>" + " in the Ascending Order.</p>";
   backGround.innerHTML = SVG.frameBack;
   info.innerHTML = infoMSG;
   successPOPUP.innerHTML = SVG.successPopUP;
@@ -181,19 +104,35 @@ export function UIObject() {
   titleBlock.innerHTML = titleMSg;
   const title = titleBlock.firstChild;
   /*--------- Styling the components --------*/
-  styleElem(overlay, STYLES.resetStyle + STYLES.overlayStyle + STYLES.borderBox);
-  styleElem(wrapper, STYLES.wrapperStyle + STYLES.centerStyle);
-  styleElem(backGround, STYLES.absPos + STYLES.frameStyle + STYLES.centerStyle);
-  styleElem(frame, STYLES.absPos + STYLES.frameStyle + STYLES.centerStyle);
-  styleElem(titleBlock, STYLES.titleBlockStyle + STYLES.resetStyle);
-  styleElem(title, STYLES.titleStyle);
-  styleElem(container, STYLES.containerStyle);
-  styleElem(buttonBlock, STYLES.resetStyle + STYLES.buttonBlockStyle);
-  styleElem(timer, STYLES.timerStyle + STYLES.centerStyle + STYLES.boxShadow);
-  styleElem(info, STYLES.infoStyle + STYLES.centerStyle);
-  styleElem(popUPBlock, STYLES.centerStyle + STYLES.absPos + STYLES.popUPBlockStyle + STYLES.faded);
-  styleElem(successPOPUP, STYLES.centerStyle + STYLES.absPos + STYLES.faded);
-  styleElem(failPOPUP, STYLES.centerStyle + STYLES.absPos + STYLES.faded);
+  styleElem(
+    overlay,
+    UIStyle.resetStyle + UIStyle.overlayStyle + UIStyle.borderBox
+  );
+  styleElem(wrapper, UIStyle.wrapperStyle + UIStyle.centerStyle);
+  styleElem(
+    backGround,
+    UIStyle.absPos + UIStyle.frameStyle + UIStyle.centerStyle
+  );
+  styleElem(frame, UIStyle.absPos + UIStyle.frameStyle + UIStyle.centerStyle);
+  styleElem(titleBlock, UIStyle.titleBlockStyle + UIStyle.resetStyle);
+  styleElem(title, UIStyle.titleStyle);
+  styleElem(container, UIStyle.containerStyle);
+  styleElem(buttonBlock, UIStyle.resetStyle + UIStyle.buttonBlockStyle);
+  styleElem(
+    timer,
+    UIStyle.timerStyle + UIStyle.centerStyle + UIStyle.boxShadow
+  );
+  styleElem(info, UIStyle.infoStyle + UIStyle.centerStyle);
+  styleElem(
+    popUPBlock,
+    UIStyle.centerStyle +
+      UIStyle.absPos +
+      UIStyle.popUPBlockStyle +
+      UIStyle.faded
+  );
+  styleElem(successPOPUP, UIStyle.centerStyle + UIStyle.absPos + UIStyle.faded);
+  styleElem(failPOPUP, UIStyle.centerStyle + UIStyle.absPos + UIStyle.faded);
+
   // Centering with resize event
   window.onresize = function () {
     // center the UI to the screen
@@ -271,7 +210,7 @@ export function UIObject() {
         document.body.removeChild(overlay);
       }
     },
-    
+
     ready: function (func) {
       popUPBlock.style.opacity = "1";
       popUPBlock.style.visibility = "visible";
