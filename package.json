@@ -1,0 +1,35 @@
+{
+  "name": "quad_captcha",
+  "version": "1.0.0",
+  "description": "Gamefied CAPTHCA app",
+  "main": "quad_captcha.js",
+  "scripts": {
+    "build": "parcel build dist/",
+    "dev": "parcel src/index.html",
+    "format": "prettier \"src/**/*.{js, html}\" --write",
+    "lint": "eslint \"src/**/*.{js, jsx}\" --quiet",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darbazz/G-SHIELD.git"
+  },
+  "keywords": [
+    "CAPTCHA"
+  ],
+  "author": "Darbaz Ali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/darbazz/G-SHIELD/issues"
+  },
+  "homepage": "https://github.com/darbazz/G-SHIELD#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^2.0.4"
+  }
+}

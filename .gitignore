@@ -2,12 +2,11 @@
 # https://help.github.com/articles/ignoring-files
 # Example .gitignore files: https://github.com/github/gitignore
 
-/css/main.css
-/css/normalize.min.css
-.gitignore
-d-captcha.min.js
-/testing/test.html
-/testing/svg.html
-/testing/svg.min.html
-index.html
+
+
+
+node_modules/
+dist/
+.cache/
+.vscode/
 
