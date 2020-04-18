@@ -26,40 +26,38 @@ export class Circle {
     style.top = randomY + "px";
     style.backgroundColor = Colos.colorCircle;
     style.color = Colos.colorWhite;
+    style.border = `1px solid ${Colos.colorWhite}`;
     style.fontSize = "54px";
     style.textAlign = "center";
     style.borderRadius = "100%";
     style.cursor = "pointer";
     style.outline = "none";
-    style.opacity = "0.95";
+    style.opacity = "0.99";
     style.transition = "box-shadow 0.3s, background-color 0.5s";
-
-    // Circle Value Style
-    // circle.value.style.textShadow = "0px 4px 11px rgba(255, 112, 46, 0.32)";
-    
-    // "font-family: Arial;
-    // font-weight: normal;
-    // font-size: 50px;
-    // text-align: center;
-    // color: #fff;
-    // text-shadow: 0px 3px 6px rgba(90, 51, 33, 0.15);
-    // "
+    // style.transition = "transform 0.3s";
+    style.textAlign = "center";
+    style.textShadow = "0px 4px 11px rgba(255, 112, 46, 0.6)";
+    style.fontWeight = "500";
 
     // width: 65px;
     // height: 65px;
     // background: #f77436;
+    // border: 1px solid #fff;
     // opacity: 0.88;
-    // filter: drop-shadow(0px 4px 11px rgba(255, 112, 46, 0.32));
+    // filter: drop-shadow(0px 0px 13px rgba(255, 112, 46, 0.64));
+
 
 
     /* chage style with hover effect */
-    this.onmouseover = function () {
-      style.boxShadow = "0px 4px 11px rgba(255, 112, 46, 0.32)";
+    circle.onmouseover = function () {
+      style.boxShadow = "0px 0px 13px rgba(255, 112, 46, 0.64)";
+      // style.transform = "scale(1.1)";
     };
-    this.onmouseout = function () {
+    circle.onmouseout = function () {
       style.boxShadow = "none";
+      // style.transform = "scale(1)";
     };
-    this.onfocus = function () {
+    circle.onfocus = function () {
       style.outline = "none";
     };
 
@@ -82,8 +80,8 @@ export class Circle {
     let Xspeed;
     let Yspeed;
     // edges
-    let width = 260;
-    let height = 260;
+    let width = 235;
+    let height = 355;
     // element starting position
     elementXPos = randomX;
     elementYPos = randomY;

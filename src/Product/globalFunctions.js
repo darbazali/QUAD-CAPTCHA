@@ -26,7 +26,7 @@ function append(nodeName, element) {
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
   // size of the element
-  const size = 60;
+  const size = 65;
   const X1 = parseInt(element1.style.left);
   const X2 = parseInt(element2.style.left);
   const Y1 = parseInt(element1.style.top);
@@ -63,8 +63,8 @@ function createCircles(object) {
   let value = 0;
   while (circles.length < 10) {
     // object
-    let RandomX = randomInt(0, 260);
-    let RandomY = randomInt(0, 260);
+    let RandomX = randomInt(0, 235);
+    let RandomY = randomInt(0, 355);
     let circle = new object(value, RandomX, RandomY);
     // looping throught all existing locations
     let overLapping = false;
