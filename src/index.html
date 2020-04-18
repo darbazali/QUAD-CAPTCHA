@@ -11,31 +11,20 @@
 
 <body>
     <div class="container">
+        <h1>Try QC your self</h1><br/>
         <form action="test.html">
-            <label for="fname">First Name</label>
-            <input type="text" id="fname" name="firstname" placeholder="Your name..">
+            <label for="fname">Name</label>
+            <input type="text" id="fname" name="firstname" placeholder="State your name..">
 
-            <label for="lname">Last Name</label>
-            <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+            <input type="checkbox" class="quad_captcha_checkbox">
+            <label for="check_box">Check Me if You Can</label>
 
-            <label for="country">Country</label>
-            <select id="country" name="country">
-              <option value="Iraq">Iraq</option>
-              <option value="australia">Australia</option>
-              <option value="canada">Canada</option>
-              <option value="usa">USA</option>
-            </select>
-
-            <label for="subject">Subject</label>
-            <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-
-            <!--  dCAPTCHA anchor div         -->
             <div class="d-captcha-div"> </div>
             <input type="submit" value="Submit" class="d-captcha-submit" disabled>
         </form>
     </div>
 
-    <script src="G-SHIELD.js"></script>
+    <script src="/product/G-SHIELD.js"></script>
 </body>
 
 </html>
