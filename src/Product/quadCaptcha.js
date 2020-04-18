@@ -28,8 +28,8 @@ import { Circle } from "./Circle";
 import { Scroll } from "./Scroll";
 import { Icons } from "./Icons";
 import Anchor from "./Anchor";
-import { Submit } from "../Submit";
-import { UIObject } from "../UIObject";
+import { Submit } from "./Submit";
+import { UIObject } from "./UIObject";
 
 //let println = console.log;
 

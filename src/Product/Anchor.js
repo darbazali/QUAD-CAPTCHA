@@ -1,5 +1,5 @@
 import { append } from "./globalFunctions";
-import { UI, buildGame, SCROLL } from "./G-SHIELD";
+import { UI, buildGame, SCROLL } from "./quadCaptcha";
 /* 2.1 - Anchor */
 export default function Anchor() {
   // common styles for checkBox element

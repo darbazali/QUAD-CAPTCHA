@@ -3,6 +3,7 @@
 */
 
 import { randomInt } from "./globalFunctions";
+import Colos from "./Colors";
 
 export class Circle {
   constructor(value, randomX, randomY) {
@@ -23,19 +24,37 @@ export class Circle {
     style.position = "absolute";
     style.left = randomX + "px";
     style.top = randomY + "px";
-    style.backgroundColor = "#f77436";
-    style.color = "#ffffff";
+    style.backgroundColor = Colos.colorCircle;
+    style.color = Colos.colorWhite;
     style.fontSize = "54px";
     style.textAlign = "center";
     style.borderRadius = "100%";
     style.cursor = "pointer";
     style.outline = "none";
-    style.opacity = "0.8";
+    style.opacity = "0.95";
     style.transition = "box-shadow 0.3s, background-color 0.5s";
+
+    // Circle Value Style
+    // circle.value.style.textShadow = "0px 4px 11px rgba(255, 112, 46, 0.32)";
+    
+    // "font-family: Arial;
+    // font-weight: normal;
+    // font-size: 50px;
+    // text-align: center;
+    // color: #fff;
+    // text-shadow: 0px 3px 6px rgba(90, 51, 33, 0.15);
+    // "
+
+    // width: 65px;
+    // height: 65px;
+    // background: #f77436;
+    // opacity: 0.88;
+    // filter: drop-shadow(0px 4px 11px rgba(255, 112, 46, 0.32));
+
 
     /* chage style with hover effect */
     this.onmouseover = function () {
-      style.boxShadow = "0px 4px 11px rgba(255, 112, 46, 0.32);";
+      style.boxShadow = "0px 4px 11px rgba(255, 112, 46, 0.32)";
     };
     this.onmouseout = function () {
       style.boxShadow = "none";

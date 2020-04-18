@@ -2,12 +2,12 @@
   "name": "quad_captcha",
   "version": "1.0.0",
   "description": "Gamefied CAPTHCA app",
-  "main": "quad_captcha.js",
+  "main": "quadCaptcha.js",
   "scripts": {
-    "build": "parcel build dist/G-SHIELD.js",
+    "build": "parcel build dist/index.html",
     "dev": "parcel src/index.html",
     "format": "prettier \"src/**/*.{js, html}\" --write",
-    "lint": "eslint \"src/**/*.{js, jsx}\" --quiet",
+    "lint": "eslint \"src/**/*.js\" --quiet",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
