@@ -1,4 +1,6 @@
 /*--------- Styles of the UI --------*/
+
+
 const UIStyle = {
   // styles / general
   resetStyle: `
@@ -30,16 +32,27 @@ const UIStyle = {
         background-color: rgba(72, 72, 72, 0.8);
     `,
 
+    // Style for playground element - Main section of the UI
+    playGround: `
+        width: 300px;
+        height: 417px;
+        background: #fcd8c7;
+        border: 1px solid #fff;
+        filter: drop-shadow(0px 2px 7px rgba(152, 77, 42, 0.31));
+    `,
+  
+    frameStyle: `
+        width: 300px;
+        height: 460px;
+        background: #c1d2ef;
+    `,
+
  
 
   // wrapper style
   wrapperStyle:
     "width: 320px; height: 450px; border-radius: 30px;" +
     "background-color: transparent;  position: relative;",
-  frameStyle:
-    "width: 320px; height: 450px; border-radius: 30px;" +
-    " background-color: transparent;",
-  // info style
 
 
 

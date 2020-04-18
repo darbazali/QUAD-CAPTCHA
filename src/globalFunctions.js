@@ -98,7 +98,6 @@ export {
   createDiv,
   styleElem,
   append,
-  isColliding,
   shuffle,
   createCircles,
   makeSortedModel,
