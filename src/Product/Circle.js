@@ -46,8 +46,6 @@ export class Circle {
     // opacity: 0.88;
     // filter: drop-shadow(0px 0px 13px rgba(255, 112, 46, 0.64));
 
-
-
     /* chage style with hover effect */
     circle.onmouseover = function () {
       style.boxShadow = "0px 0px 13px rgba(255, 112, 46, 0.64)";

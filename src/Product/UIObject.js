@@ -59,24 +59,15 @@ export function UIObject() {
   const frame = createDiv();
   const container = createDiv();
 
-
-
-
   const buttonBlock = createDiv();
-
-
 
   //   const { overlay, wrapper, backGround, frame, container, titleBlock, timer, info, buttonBlock, popUPBlock, successPOPUP, failPOPUP } = document.createElement('div');
 
   // TODO: modify UI style
- 
 
   // text for title
   const titleMSg =
     "<p>Memorize the numbers<br/>" + " in the Ascending Order.</p>";
-
-
-
 
   // Assembling
   append(overlay, wrapper);
@@ -87,10 +78,8 @@ export function UIObject() {
   append(frame, buttonBlock);
   //  append(frame, popUPBlock);
 
-
   append(buttonBlock, ICON.restartBtn);
   append(buttonBlock, ICON.closeBtn);
-
 
   /*--------- Styling the components --------*/
   styleElem(
@@ -101,7 +90,6 @@ export function UIObject() {
 
   styleElem(frame, UIStyle.absPos + UIStyle.frameStyle + UIStyle.centerStyle);
 
-
   styleElem(container, UIStyle.containerStyle);
   styleElem(buttonBlock, UIStyle.resetStyle + UIStyle.buttonBlockStyle);
 
@@ -111,7 +99,7 @@ export function UIObject() {
     style.height = window.innerHeight + "px";
     style.top = window.pageYOffset + "px";
     style.left = window.pageXOffset + "px";
-  }
+  };
 
   // Centering with resize event
   window.onresize = function () {
@@ -119,7 +107,6 @@ export function UIObject() {
     if (isInPage(overlay)) {
       fullScreen(overlay);
     }
-
 
     // close the game if width of the window is < 500px.
     if (window.innerHeight < 500) {
@@ -146,7 +133,6 @@ export function UIObject() {
     SCROLL.enable();
     this.style.transform = "scale(1)";
     this.style.opacity = "0.8";
-
   };
   // restart button action
   ICON.restartBtn.onclick = function () {
@@ -164,7 +150,7 @@ export function UIObject() {
     },
     centerUI: function () {
       if (isInPage(overlay)) {
-        fullScreen(overlay)
+        fullScreen(overlay);
       }
     },
     open: function () {
@@ -201,14 +187,13 @@ export function UIObject() {
       }
     },
 
-  //   removeTimer: function () {
-  //     toggle(wrapper, timer);
-  //   },
+    //   removeTimer: function () {
+    //     toggle(wrapper, timer);
+    //   },
 
-  //   fadeContainer: function () {
-  //     fade(popUPBlock);
-  //   },
-  // }; // return
-  }
-
+    //   fadeContainer: function () {
+    //     fade(popUPBlock);
+    //   },
+    // }; // return
+  };
 }

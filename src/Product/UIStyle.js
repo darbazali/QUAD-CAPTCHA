@@ -1,7 +1,6 @@
 /*--------- Styles of the UI --------*/
 import Colors from "./Colors";
 
-
 const UIStyle = {
   // styles / general
   resetStyle: `
