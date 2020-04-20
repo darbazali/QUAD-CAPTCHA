@@ -54,19 +54,18 @@ const UIStyle = {
     "width: 320px; height: 450px; border-radius: 30px;" +
     "background-color: transparent;  position: relative;",
 
-  /* title style */
-  titleBlockStyle:
-    "width: 100%; height: 70px; margin: 0; padding: 5px 0;" +
-    "font-size: 26px; font-weight: bold; background-color: " +
-    "rgba(0,0,0,0)" +
-    "; text-align: center;",
-  titleStyle: "margin: 0; padding: 0; cursor: default; color: #F5A623",
+
   // button container style
   buttonBlockStyle:
-    "width: 320; height: 60px; margin-top: 5px; padding: 0;" +
-    "background-color: " +
-    "rgba(0,0,0,0)" +
-    ";",
+    `
+      width: 60%;
+      height: 60px;
+      margin: 0 auto;
+      padding: 10px 0;
+      background-color: ${Colors.colorFrame};
+    `,
+
+    
   // container style
   containerStyle2:
     "width: 320px; height: 320px; margin: 0 auto; position: relative;" +

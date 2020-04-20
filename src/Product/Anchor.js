@@ -13,10 +13,9 @@ export default function Anchor() {
 
   const label = document.createElement("label");
   label.setAttribute("for", "quad_captcha_checkbox");
-  label.append("I'm Human")
+  label.append("I'm Human");
   label.style.fontSize = "16px";
   label.style.color = "#393939";
-
 
   // anchor element style
   const anchorStyle = anchor.style;
@@ -37,8 +36,6 @@ export default function Anchor() {
   checkStyle.backgroundColor = "#b7b7b7";
   checkStyle.marginRight = "10px";
 
-
-  
   append(anchor, checkbox);
   append(anchor, label);
   append(target, anchor);
@@ -65,8 +62,8 @@ export default function Anchor() {
   };
 
   return {
-    checked: function() {
-      return checkbox.checked = true;
-    }
+    checked: function () {
+      return (checkbox.checked = true);
+    },
   };
 }

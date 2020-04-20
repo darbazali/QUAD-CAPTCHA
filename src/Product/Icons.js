@@ -42,17 +42,13 @@ export function Icons() {
   }
   // icon names
   const closeBtn = createButton();
-  const infoBtn = createButton();
   const restartBtn = createButton();
   closeBtn.innerHTML = SVG.closeIcon;
   restartBtn.innerHTML = SVG.restartIcon;
-  infoBtn.innerHTML = SVG.infoIcon;
-  infoBtn.style.marginLeft = "65px";
-  infoBtn.style.marginRight = "30px";
-  restartBtn.style.marginRight = "30px";
+
+  restartBtn.style.marginRight = "20px";
   return {
     closeBtn,
     restartBtn,
-    infoBtn,
   };
 }
