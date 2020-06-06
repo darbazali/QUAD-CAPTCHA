@@ -1,6 +1,6 @@
 /*
 
-Software Name   : gCAPTCHA (game CAPTCHA)
+Software Name   : QUAD CAPTCHA
 Version         : 1.0
 Author          : Darbaz Ali
 Date            : july / 2018
@@ -8,11 +8,7 @@ Location        : Kurdistan / Iraq
 Technology      : javascript, Web
 Aim             : Internet Bot
 
-Description:
-
-gCAPTCHA is a brand new, GAME based
-CAPTCHA system that focuses on human thinking
-and memorizing.
+Description     : QUAD CAPTCHA is a gamefied quantum-proof CAPTCHA service.
 
 */
 
