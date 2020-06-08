@@ -108,7 +108,7 @@ export function UIObject() {
       fullScreen(overlay);
     }
 
-    // close the game if width of the window is < 500px.
+    // close the game if height of the window is < 500px.
     if (window.innerHeight < 500) {
       if (isInPage(overlay)) {
         UI.close();

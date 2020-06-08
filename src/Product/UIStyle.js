@@ -56,13 +56,15 @@ const UIStyle = {
 
 
   // button container style
-  buttonBlockStyle:
-    `
-      width: 60%;
+  buttonBlockStyle: `
+      width: 90%;
       height: 60px;
       margin: 0 auto;
-      padding: 10px 0;
+      padding: 20px 0;
       background-color: ${Colors.colorFrame};
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
     `,
 
     

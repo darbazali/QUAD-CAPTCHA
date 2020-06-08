@@ -4,18 +4,15 @@ export function Icons() {
   // general style for buttons
   function btnStyle(button) {
     const style = button.style;
-    style.width = "45px";
-    style.height = "45px";
-    style.padding = "0";
+    style.width = "32px";
+    style.height = "32px";
+    style.padding = "5px";
     style.boxSizing = "border-box";
     style.display = "inline-block";
     style.cursor = "pointer";
-    //    style.margin = '0';
-    //    style.marginLeft = '60px';
-    //    style.marginRight = '60px';
-    style.borderRadius = "0";
+    style.border= "1px solid #393939";
+    style.borderRadius = "5px";
     style.opacity = "0.8";
-    style.border = "none";
     style.transition = "all 0.3s";
     style.backgroundColor = "rgba(0,0,0,0)";
     button.onmouseover = function () {
