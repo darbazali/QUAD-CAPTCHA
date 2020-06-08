@@ -68,8 +68,8 @@ function game(elements) {
         element.showValue();
 
         if (sortedModel.length === 0) {
-          UI.fadeContainer();
-          UI.successPOPUp();
+          // UI.fadeContainer();
+          // UI.successPOPUp();
 
           setTimeout(function () {
             SUBMIT.enable();
@@ -88,12 +88,12 @@ function game(elements) {
         element.wrongPlay();
 
         setTimeout(function () {
-          UI.fadeContainer();
-          UI.failPOPUp();
+          //UI.fadeContainer();
+          // UI.failPOPUp();
 
           setTimeout(function () {
-            UI.failPOPUp();
-            UI.fadeContainer();
+            // UI.failPOPUp();
+            // UI.fadeContainer();
             reStart();
           }, 2000); // restart
         }, 200);
@@ -136,7 +136,7 @@ export function buildGame() {
   }
 
   // show the timer, then start game.
-  //UI.ready(startGame);
+  startGame();
 }
 
 /* restart the game with wrong play or restart button.*/
