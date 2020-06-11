@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="82px" height="82px" viewBox="0 0 82 82" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
-    <title>Error</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Error" transform="translate(1.000000, 1.000000)" stroke="#F85749" stroke-width="2.42424242">
-            <path d="M40,0.242424242 C18.0606061,0.242424242 0.242424242,18.0606061 0.242424242,40 C0.242424242,61.9393939 18.0606061,79.7575758 40,79.7575758 C61.9393939,79.7575758 79.6369784,61.9393939 79.6369784,40 C79.7575758,18.0606061 61.9393939,0.242424242 40,0.242424242 Z" id="Path"></path>
-            <path d="M54.0606061,25.9393939 L25.9393939,54.0606061 L54.0606061,25.9393939 Z" id="Path" stroke-linecap="round" stroke-linejoin="round"></path>
-            <path d="M54.0606061,54.0606061 L25.9393939,25.9393939 L54.0606061,54.0606061 Z" id="Path" stroke-linecap="round" stroke-linejoin="round"></path>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="81.82" height="81.939" viewBox="0 0 81.82 81.939"><g transform="translate(-0.03 -0.03)"><g transform="translate(1 1)"><path d="M40,.242A39.758,39.758,0,1,0,79.637,40,39.781,39.781,0,0,0,40,.242Z" fill="none" stroke="#f85749" stroke-width="2.424" fill-rule="evenodd"/><path d="M54.061,25.939,25.939,54.061Z" fill="none" stroke="#f85749" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.424" fill-rule="evenodd"/><path d="M54.061,54.061,25.939,25.939Z" fill="none" stroke="#f85749" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.424" fill-rule="evenodd"/></g></g></svg>
