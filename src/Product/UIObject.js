@@ -132,7 +132,7 @@ export function UIObject() {
     UI.close();
     SCROLL.enable();
     this.style.transform = "scale(1)";
-    this.style.opacity = "0.8";
+    // this.style.opacity = "0.8";
   };
   // restart button action
   ICON.restartBtn.onclick = function () {
