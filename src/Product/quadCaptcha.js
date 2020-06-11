@@ -24,7 +24,6 @@ import { Circle } from "./Circle";
 import { Scroll } from "./Scroll";
 import { Icons } from "./Icons";
 import Anchor from "./Anchor";
-import { Submit } from "./Submit";
 import { UIObject } from "./UIObject";
 
 //let println = console.log;
@@ -48,7 +47,6 @@ export const ICON = new Icons();
 const ANCHOR = new Anchor();
 export const UI = new UIObject();
 export const SCROLL = new Scroll();
-const SUBMIT = new Submit();
 
 // start playing game with the circles.
 function game(elements) {
@@ -72,7 +70,6 @@ function game(elements) {
           // UI.successPOPUp();
 
           setTimeout(function () {
-            SUBMIT.enable();
             UI.close();
             SCROLL.enable();
             ANCHOR.checked();

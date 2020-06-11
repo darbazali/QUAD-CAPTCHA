@@ -16,18 +16,19 @@ export default function Anchor() {
   label.append("I'm Human");
   label.style.fontSize = "16px";
   label.style.color = "#393939";
+  label.style.opacity = "1";
 
   // anchor element style
   const anchorStyle = anchor.style;
   anchorStyle.boxSizing = "border-box";
   anchorStyle.width = "100%";
   anchorStyle.minWidth = "280px";
-  anchorStyle.height = "40px";
+  anchorStyle.height = "48px";
   anchorStyle.borderRadius = "7px";
   anchorStyle.backgroundColor = "f0f0f0";
-  anchorStyle.border = "1px solid #c1d2ef";
+  anchorStyle.border = "1px solid #727272";
   anchorStyle.margin = "10px auto";
-  anchorStyle.padding = "10px 20px";
+  anchorStyle.padding = "15px 20px";
 
   // checkbox element style
   const checkStyle = checkbox.style;
