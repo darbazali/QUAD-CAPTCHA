@@ -1,15 +1,12 @@
 // random integer between tow numbers, min & max
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max + 1 - min) + min);
-}
+const randomInt = (min, max) => Math.floor(Math.random() * (max + 1 - min) + min);
+
 // creating element
-function createDiv() {
-  return document.createElement("div");
-}
+const createDiv = () => document.createElement("div");
+
 // styleing element
-function styleElem(element, style) {
-  element.setAttribute("style", style);
-}
+const styleElem = (element, style) => element.setAttribute("style", style);
+
 /* append element/elements to a node. */
 function append(nodeName, element) {
   /* for appending an array of elements */
