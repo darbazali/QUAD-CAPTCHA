@@ -3,6 +3,29 @@ import { SVG } from "./SVG";
 import { ICON, UI, SCROLL, reStart } from "./quadCaptcha";
 import UIStyle from "./UIStyle";
 
+
+// destruct all styles from UIStyle object
+const { 
+  resetStyle, 
+  centerStyle, 
+  boxShadow, 
+  absPos, 
+  borderBox ,
+  overlayStyle,
+  containerStyle,
+  frameStyle,
+  wrapperStyle,
+  buttonBlockStyle,
+  containerStyle2,
+  timerStyle,
+  popUPBlockStyle,
+  faded
+} = UIStyle;
+
+
+// destruct Icons from ICON
+
+
 /* 2.2 - UI */
 export function UIObject() {
   /*--------- private functions --------*/
@@ -53,6 +76,10 @@ export function UIObject() {
     }
   }
 
+   // text for title
+   const titleMSg =
+   "<p>Memorize the numbers<br/>" + " in the Ascending Order.</p>";
+
   /*--------- creating elements --------*/
   const overlay = createDiv();
   const wrapper = createDiv();
@@ -61,13 +88,17 @@ export function UIObject() {
 
   const buttonBlock = createDiv();
 
+
+  const titleBlock = createDiv();
+  const popUp = createDiv();
+  const timer = createDiv();
+  const info = createDiv();
+  const popUPBlock = createDiv();
+  const successPOPUP = createDiv();
+  const failPOPUP = createDiv();
+
   //   const { overlay, wrapper, backGround, frame, container, titleBlock, timer, info, buttonBlock, popUPBlock, successPOPUP, failPOPUP } = document.createElement('div');
 
-  // TODO: modify UI style
-
-  // text for title
-  const titleMSg =
-    "<p>Memorize the numbers<br/>" + " in the Ascending Order.</p>";
 
   // Assembling
   append(overlay, wrapper);
@@ -82,16 +113,12 @@ export function UIObject() {
   append(buttonBlock, ICON.closeBtn);
 
   /*--------- Styling the components --------*/
-  styleElem(
-    overlay,
-    UIStyle.resetStyle + UIStyle.overlayStyle + UIStyle.borderBox
-  );
-  styleElem(wrapper, UIStyle.wrapperStyle + UIStyle.centerStyle);
-
-  styleElem(frame, UIStyle.absPos + UIStyle.frameStyle + UIStyle.centerStyle);
-
-  styleElem(container, UIStyle.containerStyle);
-  styleElem(buttonBlock, UIStyle.resetStyle + UIStyle.buttonBlockStyle);
+  styleElem(overlay, resetStyle +  overlayStyle +  borderBox );
+  styleElem(wrapper,  wrapperStyle +  centerStyle);
+  styleElem(frame,  absPos +  frameStyle +  centerStyle);
+  styleElem(container,  containerStyle);
+  styleElem(buttonBlock,  resetStyle +  buttonBlockStyle);
+  styleElem(popUPBlock, popUPBlockStyle)
 
   const fullScreen = (element) => {
     let style = element.style;
