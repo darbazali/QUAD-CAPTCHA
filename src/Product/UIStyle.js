@@ -91,7 +91,6 @@ const UIStyle = {
     border-radius: 30px;
     color: #393939;
     font-size: 20px;
-    padding: 200px 20px;
   `,
   faded:
     "display: block; opacity: 0; visibility: hidden; transition: visibility .5s linear, opacity .5s linear;",

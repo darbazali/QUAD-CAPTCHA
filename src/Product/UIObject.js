@@ -23,62 +23,66 @@ const {
 } = UIStyle;
 
 
-// destruct Icons from ICON
-
-
 /* 2.2 - UI */
 export function UIObject() {
   /*--------- private functions --------*/
-  // function fade(element) {
-  //   let style = element.style;
-  //   let styled = window
-  //     .getComputedStyle(element, null)
-  //     .getPropertyValue("opacity");
-  //   if (styled == 0) {
-  //     style.visibility = "visible";
-  //     style.opacity = "1";
-  //   } else {
-  //     style.visibility = "hidden";
-  //     style.opacity = "0";
-  //   }
-  // }
+  function fade(element) {
+    let style = element.style;
+    let styled = window
+      .getComputedStyle(element, null)
+      .getPropertyValue("opacity");
+    if (styled == 0) {
+      style.visibility = "visible";
+      style.opacity = "1";
+    } else {
+      style.visibility = "hidden";
+      style.opacity = "0";
+    }
+  }
 
-  // function toggle(node, element, toggle, func) {
-  //   // node: parent node for the element.
-  //   // element: the element to be toggled.
-  //   // toggle: if true? toggle, else: remove element.
-  //   // func: a callback tha runs when elment is toggled.
-  //   if (toggle) {
-  //     if (node.lastChild == element) {
-  //       node.removeChild(element);
-  //       func();
-  //     } else {
-  //       append(node, element);
-  //     }
-  //   } else {
-  //     if (node.lastChild == element) {
-  //       node.removeChild(element);
-  //     }
-  //   }
-  // }
+
+
+  const toggleElement = (element, node, callback) => {
+
+      if (node.lastChild == element) {
+        node.removeChild(element);
+        callback();
+      } else {
+        append(node, element);
+      }
+  }
+
+  const removeElement = (element, node) => {
+      if ( node.lastChild == element ) {
+        node.removeChild(element);
+      }
+  }
+
+
   // clear all intervals
   function clearIntervals() {
     for (let i = 0; i < 100; i++) {
       window.clearInterval(i);
     }
   }
+
   // check if a node is in page
-  function isInPage(node) {
-    if (document.body.contains(node)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  const isInPage = node => document.body.contains(node);
+
+  const fullScreen = (element) => {
+    let style = element.style;
+    style.width = window.innerWidth + "px";
+    style.height = window.innerHeight + "px";
+    style.top = window.pageYOffset + "px";
+    style.left = window.pageXOffset + "px";
+  };
 
    // text for title
    const titleMSg =
    "<p>Memorize the numbers<br/>" + " in the Ascending Order.</p>";
+
+   const openMsg = "<h3>Let's Play a Game!</h3>";
+   
 
   /*--------- creating elements --------*/
   const overlay = createDiv();
@@ -96,8 +100,6 @@ export function UIObject() {
   const popUPBlock = createDiv();
   const successPOPUP = createDiv();
   const failPOPUP = createDiv();
-
-  //   const { overlay, wrapper, backGround, frame, container, titleBlock, timer, info, buttonBlock, popUPBlock, successPOPUP, failPOPUP } = document.createElement('div');
 
 
   // Assembling
@@ -118,15 +120,9 @@ export function UIObject() {
   styleElem(frame,  absPos +  frameStyle +  centerStyle);
   styleElem(container,  containerStyle);
   styleElem(buttonBlock,  resetStyle +  buttonBlockStyle);
-  styleElem(popUPBlock, popUPBlockStyle + resetStyle + absPos + centerStyle + borderBox)
+  styleElem(popUPBlock, popUPBlockStyle + resetStyle + absPos + centerStyle + borderBox);
 
-  const fullScreen = (element) => {
-    let style = element.style;
-    style.width = window.innerWidth + "px";
-    style.height = window.innerHeight + "px";
-    style.top = window.pageYOffset + "px";
-    style.left = window.pageXOffset + "px";
-  };
+  
 
   // Centering with resize event
   window.onresize = function () {
@@ -187,7 +183,8 @@ export function UIObject() {
       clearIntervals();
       if (isInPage(overlay)) {
         document.body.removeChild(overlay);
-        wrapper.removeChild(frame);
+        // wrapper.removeChild(frame);
+        removeElement(frame, wrapper);
       }
     },
 
@@ -196,7 +193,9 @@ export function UIObject() {
       popUPBlock.style.visibility = "visible";
       append(wrapper, popUPBlock);
       // timer.innerHTML = "Ready!";
-      popUPBlock.innerHTML = "Lest's Play a Game!";
+      // popUPBlock.innerHTML = "Lest's Play a Game!";
+      // append(popUPBlock, openMsg);
+      popUPBlock.innerHTML = openMsg;
       setTimeout(function () {
         // frame.removeChild(timer);
         append(wrapper, frame);
