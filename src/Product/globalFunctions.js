@@ -7,6 +7,8 @@ const createDiv = () => document.createElement("div");
 // styleing element
 const styleElem = (element, style) => element.setAttribute("style", style);
 
+
+
 /* append element/elements to a node. */
 function append(nodeName, element) {
   /* for appending an array of elements */
@@ -19,6 +21,8 @@ function append(nodeName, element) {
     nodeName.appendChild(element);
   }
 }
+
+
 
 /* collision detection (rect - rect) true or false, algorithm */
 function isColliding(element1, element2) {
