@@ -47,12 +47,19 @@ const UIStyle = {
         height: 500px;
         background: ${Colors.colorFrame};
         border-radius: 30px;
+        opacity: 1;
     `,
 
   // wrapper style
   wrapperStyle:
-    "width: 320px; height: 450px; border-radius: 30px;" +
-    "background-color: transparent;  position: relative;",
+      `
+        width: 320px;
+        height: 450px;
+        border-radius: 30px;
+        backgound-color: ${Colors.colorFrame};
+        position: relative;
+        opacity: 1;
+      `,
 
 
   // button container style
@@ -67,22 +74,25 @@ const UIStyle = {
       justify-content: center;
     `,
 
-    
-  // container style
-  containerStyle2:
-    "width: 320px; height: 320px; margin: 0 auto; position: relative;" +
-    "background-color: transparent;" +
-    "border-top: 1px solid #915f0b; border-bottom: 1px solid #915f0b;",
+  
 
-  timerStyle:
-    "width: 100px; height: 40px; border: 4px solid #F5A623; border-radius: 5px;" +
-    "text-align: center; font-size: 28px; position: absolute; cursor: default; color: #F5A623;" +
-    "background-color:" +
-    "rgba(0,0,0,0)" +
-    "; font-weight: 500; padding: 8px;",
-  popUPBlockStyle:
-    "width: 320px; height: 320px; background-color: #4A4A4A;" +
-    "font-size: 32px;",
+  // timerStyle:
+  //   "width: 100px; height: 40px; border: 4px solid #F5A623; border-radius: 5px;" +
+  //   "text-align: center; font-size: 28px; position: absolute; cursor: default; color: #F5A623;" +
+  //   "background-color:" +
+  //   "rgba(0,0,0,0)" +
+  //   "; font-weight: 500; padding: 8px;",
+
+  popUPBlockStyle: `
+    width: 300px;
+    height: 420px;
+    background: ${Colors.colorPlayground};
+    border: 1px solid #fff;
+    border-radius: 30px;
+    color: #393939;
+    font-size: 20px;
+    padding: 200px 20px;
+  `,
   faded:
     "display: block; opacity: 0; visibility: hidden; transition: visibility .5s linear, opacity .5s linear;",
 };

@@ -133,7 +133,7 @@ export function buildGame() {
   }
 
   // show the timer, then start game.
-  startGame();
+  UI.ready(startGame);
 }
 
 /* restart the game with wrong play or restart button.*/

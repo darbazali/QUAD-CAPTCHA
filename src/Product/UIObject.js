@@ -103,11 +103,11 @@ export function UIObject() {
   // Assembling
   append(overlay, wrapper);
 
-  append(wrapper, frame);
+  
 
   append(frame, container);
   append(frame, buttonBlock);
-  //  append(frame, popUPBlock);
+  // append(frame, popUPBlock);
 
   append(buttonBlock, ICON.restartBtn);
   append(buttonBlock, ICON.closeBtn);
@@ -118,7 +118,7 @@ export function UIObject() {
   styleElem(frame,  absPos +  frameStyle +  centerStyle);
   styleElem(container,  containerStyle);
   styleElem(buttonBlock,  resetStyle +  buttonBlockStyle);
-  styleElem(popUPBlock, popUPBlockStyle)
+  styleElem(popUPBlock, popUPBlockStyle + resetStyle + absPos + centerStyle + borderBox)
 
   const fullScreen = (element) => {
     let style = element.style;
@@ -187,21 +187,27 @@ export function UIObject() {
       clearIntervals();
       if (isInPage(overlay)) {
         document.body.removeChild(overlay);
+        wrapper.removeChild(frame);
       }
     },
 
-    // ready: function (func) {
-    //   popUPBlock.style.opacity = "1";
-    //   popUPBlock.style.visibility = "visible";
-    //   append(frame, timer);
-    //   timer.innerHTML = "Ready!";
-    //   setTimeout(function () {
-    //     frame.removeChild(timer);
-    //     popUPBlock.style.opacity = "0";
-    //     popUPBlock.style.visibility = "hidden";
-    //     func(); // start game after showing ready alert.
-    //   }, 1500);
-    // },
+    ready: function (callback) {
+      popUPBlock.style.opacity = "1";
+      popUPBlock.style.visibility = "visible";
+      append(wrapper, popUPBlock);
+      // timer.innerHTML = "Ready!";
+      popUPBlock.innerHTML = "Lest's Play a Game!";
+      setTimeout(function () {
+        // frame.removeChild(timer);
+        append(wrapper, frame);
+        popUPBlock.style.opacity = "0";
+        popUPBlock.style.visibility = "hidden";
+        setTimeout(() => {
+          callback(); // start game after showing ready alert.
+        }, 800);
+        
+      }, 1500);
+    },
     // failPOPUp: function () {
     //   fade(failPOPUP);
     // },
