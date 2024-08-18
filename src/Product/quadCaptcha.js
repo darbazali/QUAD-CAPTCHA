@@ -32,13 +32,15 @@ export const gCLink =
   'Home Page: <a href="https://darbaz.design/projects/g-shield.html" style="color: #F5A623">Learn More</a>';
 
 // IIFE: deploying viewport meta tag to the page.
-(function () {
-  let viewPort = document.createElement("meta");
-  viewPort.setAttribute("name", "viewport");
-  viewPort.setAttribute("content", "width=device-width, initial-scale=1.0");
+const deployViewPortMetaTag = () => {
+  const viewPort = document.createElement('meta');
+  viewPort.name = 'viewport';
+  viewPort.content = 'width=device-width, initial-scale=1.0';
 
-  document.getElementsByTagName("head")[0].appendChild(viewPort);
-})();
+  document.head.append(viewPort);
+}
+
+deployViewPortMetaTag();
 
 export const ICON = new Icons();
 
