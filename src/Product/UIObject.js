@@ -1,5 +1,4 @@
 import { createDiv, styleElem, append } from "./globalFunctions";
-import { SVG } from "./SVG";
 import { ICON, UI, SCROLL, reStart } from "./quadCaptcha";
 import UIStyle from "./UIStyle";
 
@@ -8,7 +7,6 @@ import UIStyle from "./UIStyle";
 const { 
   resetStyle, 
   centerStyle, 
-  boxShadow, 
   absPos, 
   borderBox ,
   overlayStyle,
@@ -16,41 +14,15 @@ const {
   frameStyle,
   wrapperStyle,
   buttonBlockStyle,
-  containerStyle2,
-  timerStyle,
-  popUPBlockStyle,
-  faded
-} = UIStyle;
+  popUPBlockStyle} = UIStyle;
 
 
 /* 2.2 - UI */
 export function UIObject() {
   /*--------- private functions --------*/
-  function fade(element) {
-    let style = element.style;
-    let styled = window
-      .getComputedStyle(element, null)
-      .getPropertyValue("opacity");
-    if (styled == 0) {
-      style.visibility = "visible";
-      style.opacity = "1";
-    } else {
-      style.visibility = "hidden";
-      style.opacity = "0";
-    }
-  }
 
 
 
-  const toggleElement = (element, node, callback) => {
-
-      if (node.lastChild == element) {
-        node.removeChild(element);
-        callback();
-      } else {
-        append(node, element);
-      }
-  }
 
   const removeElement = (element, node) => {
       if ( node.lastChild == element ) {
@@ -78,8 +50,6 @@ export function UIObject() {
   };
 
    // text for title
-   const titleMSg =
-   "<p>Memorize the numbers<br/>" + " in the Ascending Order.</p>";
 
    const openMsg = "<h3>Let's Play a Game!</h3>";
    
@@ -93,13 +63,7 @@ export function UIObject() {
   const buttonBlock = createDiv();
 
 
-  const titleBlock = createDiv();
-  const popUp = createDiv();
-  const timer = createDiv();
-  const info = createDiv();
   const popUPBlock = createDiv();
-  const successPOPUP = createDiv();
-  const failPOPUP = createDiv();
 
 
   // Assembling
@@ -155,18 +119,15 @@ export function UIObject() {
     UI.close();
     SCROLL.enable();
     this.style.transform = "scale(1)";
-    // this.style.opacity = "0.8";
   };
   // restart button action
   ICON.restartBtn.onclick = function () {
-    //    UI.removeTimer();
     UI.clearContainer();
     clearIntervals();
-    //    fadeCont(popUPBlock);
     reStart();
   };
 
-  /*--------- properties and methodes --------*/
+  /*--------- properties and methods --------*/
   return {
     container: function () {
       return container;
@@ -183,7 +144,6 @@ export function UIObject() {
       clearIntervals();
       if (isInPage(overlay)) {
         document.body.removeChild(overlay);
-        // wrapper.removeChild(frame);
         removeElement(frame, wrapper);
       }
     },
@@ -192,12 +152,8 @@ export function UIObject() {
       popUPBlock.style.opacity = "1";
       popUPBlock.style.visibility = "visible";
       append(wrapper, popUPBlock);
-      // timer.innerHTML = "Ready!";
-      // popUPBlock.innerHTML = "Lest's Play a Game!";
-      // append(popUPBlock, openMsg);
       popUPBlock.innerHTML = openMsg;
       setTimeout(function () {
-        // frame.removeChild(timer);
         append(wrapper, frame);
         popUPBlock.style.opacity = "0";
         popUPBlock.style.visibility = "hidden";
@@ -207,25 +163,11 @@ export function UIObject() {
         
       }, 1500);
     },
-    // failPOPUp: function () {
-    //   fade(failPOPUP);
-    // },
-    // successPOPUp: function () {
-    //   fade(successPOPUP);
-    // },
+
     clearContainer: function () {
       while (container.firstChild) {
         container.removeChild(container.firstChild);
       }
     },
-
-    //   removeTimer: function () {
-    //     toggle(wrapper, timer);
-    //   },
-
-    //   fadeContainer: function () {
-    //     fade(popUPBlock);
-    //   },
-    // }; // return
   };
 }
